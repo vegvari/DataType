@@ -2,12 +2,14 @@
 
 namespace Data\Type;
 
-abstract class Type implements TypeInterface
+abstract class Type
 {
     protected $value;
 
     /**
-     * @see TypeInterface
+     * Constructor
+     *
+     * @param Mixed
      */
     public function __construct($value)
     {
@@ -15,7 +17,10 @@ abstract class Type implements TypeInterface
     }
 
     /**
-     * @see TypeInterface
+     * Create a new instance
+     *
+     * @param  Mixed $value
+     * @return Type
      */
     public static function create($value)
     {
@@ -24,7 +29,10 @@ abstract class Type implements TypeInterface
     }
 
     /**
-     * @see TypeInterface
+     * Create a new instance and return the value itself
+     *
+     * @param  Mixed $value
+     * @return Mixed
      */
     public static function cast($value)
     {
@@ -33,7 +41,10 @@ abstract class Type implements TypeInterface
     }
 
     /**
-     * @see TypeInterface
+     * Accept null
+     *
+     * @param  Mixed $value
+     * @return Mixed
      */
     public static function castNullable($value)
     {
@@ -45,7 +56,10 @@ abstract class Type implements TypeInterface
     }
 
     /**
-     * @see TypeInterface
+     * Return null if the value invalid
+     *
+     * @param  Mixed $value
+     * @return Mixed
      */
     public static function castSilent($value)
     {
@@ -57,7 +71,10 @@ abstract class Type implements TypeInterface
     }
 
     /**
-     * @see TypeInterface
+     * Check the value
+     *
+     * @param  Mixed $value
+     * @return Mixed
      */
     public function check($value)
     {
@@ -69,7 +86,9 @@ abstract class Type implements TypeInterface
     }
 
     /**
-     * @see TypeInterface
+     * Return the value
+     *
+     * @return Mixed
      */
     public function value()
     {
@@ -77,90 +96,16 @@ abstract class Type implements TypeInterface
     }
 
     /**
-     * Create new Bool instance using the value
-     *
-     * @return Bool
-     */
-    public function toBool()
-    {
-        return new Bool($this->value);
-    }
-
-    /**
-     * Return bool value
-     *
-     * @return bool
-     */
-    public function boolValue()
-    {
-        return (new Bool($this->value))->value();
-    }
-
-    /**
-     * Create new Float instance using the value
-     *
-     * @return bool
-     */
-    public function toFloat()
-    {
-        return new Float($this->value);
-    }
-
-    /**
-     * Return float value
-     *
-     * @return float
-     */
-    public function floatValue()
-    {
-        return (new Float($this->value))->value();
-    }
-
-    /**
-     * Create new Int instance using the value
-     *
-     * @return Int
-     */
-    public function toInt()
-    {
-        return new Int($this->value);
-    }
-
-    /**
-     * Return int value
-     *
-     * @return int
-     */
-    public function intValue()
-    {
-        return (new Int($this->value))->value();
-    }
-
-    /**
-     * Create new String instance using the value
-     *
-     * @return String
-     */
-    public function toString()
-    {
-        return new String($this->value);
-    }
-
-    /**
-     * Return string value
+     * Cast instance to string
      *
      * @return string
      */
-    public function stringValue()
-    {
-        return (new String($this->value))->value();
-    }
-
-    /**
-     * @see typeInterface::__toString
-     */
     public function __toString()
     {
+        if ($this->value === false) {
+            return '0';
+        }
+
         return (string) $this->value;
     }
 }
