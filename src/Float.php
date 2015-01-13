@@ -31,6 +31,8 @@ class Float extends Type
      */
     public static function rand($min = 0, $max = null)
     {
+        $min = self::cast($min);
+
         try {
             $max = self::cast($max);
         } catch (\InvalidArgumentException $e) {
@@ -39,7 +41,7 @@ class Float extends Type
 
         mt_srand();
 
-        return self::create(mt_rand(self::cast($min), $max));
+        return self::create(mt_rand($min, $max));
     }
 
     /**
