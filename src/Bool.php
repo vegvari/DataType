@@ -2,7 +2,7 @@
 
 namespace Data\Type;
 
-class Bool extends Type
+class Bool extends Basic
 {
     /**
      * @see Type

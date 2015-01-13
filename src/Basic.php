@@ -2,7 +2,7 @@
 
 namespace Data\Type;
 
-abstract class Type
+abstract class Basic
 {
     protected $value;
 

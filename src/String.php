@@ -2,7 +2,7 @@
 
 namespace Data\Type;
 
-class String extends Type implements \ArrayAccess, \Iterator
+class String extends Basic implements \ArrayAccess, \Iterator
 {
     protected $length = 0;
     protected $iteratorPosition = 0;

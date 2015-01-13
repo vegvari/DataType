@@ -2,7 +2,7 @@
 
 namespace Data\Type;
 
-class Float extends Type
+class Float extends Basic
 {
     /**
      * @see Type
