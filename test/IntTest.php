@@ -2,7 +2,7 @@
 
 namespace Data\Type;
 
-class intTest extends \PHPUnit_Framework_TestCase
+class IntTest extends \PHPUnit_Framework_TestCase
 {
 	public function testInstantiateWithoutArg()
 	{

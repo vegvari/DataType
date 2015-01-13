@@ -2,7 +2,7 @@
 
 namespace Data\Type;
 
-class naturalTest extends \PHPUnit_Framework_TestCase
+class NaturalTest extends \PHPUnit_Framework_TestCase
 {
 	public function testInstantiateWithoutArg()
 	{

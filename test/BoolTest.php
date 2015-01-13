@@ -2,7 +2,7 @@
 
 namespace Data\Type;
 
-class boolTest extends \PHPUnit_Framework_TestCase
+class BoolTest extends \PHPUnit_Framework_TestCase
 {
 	public function testInstantiateWithoutArg()
 	{

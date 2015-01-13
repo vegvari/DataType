@@ -2,7 +2,7 @@
 
 namespace Data\Type;
 
-class stringTest extends \PHPUnit_Framework_TestCase
+class StringTest extends \PHPUnit_Framework_TestCase
 {
 	public function testInstantiateWithoutArg()
 	{
