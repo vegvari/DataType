@@ -8,7 +8,7 @@ class String extends Type implements \ArrayAccess, \Iterator
     protected $iteratorPosition = 0;
 
     /**
-     * @see TypeInterface
+     * @see Type
      */
     public function __construct($value)
     {
@@ -17,7 +17,7 @@ class String extends Type implements \ArrayAccess, \Iterator
     }
 
     /**
-     * @see TypeInterface
+     * @see Type
      */
     public function check($value)
     {
@@ -31,7 +31,7 @@ class String extends Type implements \ArrayAccess, \Iterator
             return '1';
         }
 
-        if ($value === null) {
+        if ($value === null || is_array($value) || is_object($value) || is_resource($value)) {
             throw new \InvalidArgumentException();
         }
 
@@ -60,7 +60,7 @@ class String extends Type implements \ArrayAccess, \Iterator
         $from = Natural::cast($from);
         $length = Natural::castNullable($length);
 
-        if ($this->length() <= $from) {
+        if ($this->length() < $from || $this->length() < $length) {
             throw new \LengthException();
         }
 
@@ -112,9 +112,9 @@ class String extends Type implements \ArrayAccess, \Iterator
      */
     public function offsetExists($offset)
     {
-        $offset = Int::cast($offset);
+        $offset = Int::castNullable($offset);
 
-        if ($offset >= 0 && $this->length() > $offset)
+        if ($offset !== null && $offset >= 0 && $this->length() > $offset)
         {
             return true;
         }
@@ -127,9 +127,11 @@ class String extends Type implements \ArrayAccess, \Iterator
      */
     public function offsetGet($offset)
     {
-        $offset = Natural::cast($offset);
+        if ($this->offsetExists($offset) === false) {
+            throw new \InvalidArgumentException();
+        }
 
-        return $this->substr($offset, 1)->value();
+        return $this->substr($offset, 1);
     }
 
     /**

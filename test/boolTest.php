@@ -56,7 +56,7 @@ class boolTest extends \PHPUnit_Framework_TestCase
      */
 	public function testValid($data, $expected)
 	{
-		$instance = new Bool($data);
+		$instance = Bool::create($data);
 		$this->assertSame($expected, $instance->value());
 	}
 
@@ -82,7 +82,7 @@ class boolTest extends \PHPUnit_Framework_TestCase
 	public function testInvalid($data, $expected)
 	{
 		$this->setExpectedException($expected);
-		$instance = new Bool($data);
+		$instance = Bool::create($data);
 	}
 
 	public function invalidDataProvider()
