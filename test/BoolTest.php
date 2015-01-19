@@ -63,16 +63,21 @@ class BoolTest extends \PHPUnit_Framework_TestCase
 	public function validDataProvider()
 	{
 		return array(
-			array(Bool::create(false), false),
-			array(Bool::create(true),  true),
-			array(false,               false),
-			array(true,                true),
-			array(0.0,                 false),
-			array(1.0,                 true),
-			array(0,                   false),
-			array(1,                   true),
-			array('0',                 false),
-			array('1',                 true),
+			array(Bool::create(1),            true),
+			array(Float::create(1),           true),
+			array(Int::create(1),             true),
+			array(Natural::create(1),         true),
+			array(NaturalPositive::create(1), true),
+			array(String::create(1),          true),
+			array(Bool::create(false),        false),
+			array(false,                      false),
+			array(true,                       true),
+			array(0.0,                        false),
+			array(1.0,                        true),
+			array(0,                          false),
+			array(1,                          true),
+			array('0',                        false),
+			array('1',                        true),
 		);
 	}
 
