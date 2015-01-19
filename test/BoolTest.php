@@ -2,36 +2,18 @@
 
 namespace Data\Type;
 
-class boolTest extends \PHPUnit_Framework_TestCase
+class BoolTest extends \PHPUnit_Framework_TestCase
 {
-	/**
-     * @dataProvider validDataProvider
-     */
-	public function testValid($data, $expected)
-	{
-		$instance = new Bool($data);
-		$this->assertSame($expected, $instance->value());
-	}
-
-	/**
-     * @dataProvider invalidDataProvider
-     */
-	public function testInvalid($data, $expected)
-	{
-		$this->setExpectedException($expected);
-		$instance = new Bool($data);
-	}
-
 	public function testInstantiateWithoutArg()
 	{
 		$this->setExpectedException('PHPUnit_Framework_Error_Warning');
-		$data = new Bool();
+		$instance = new Bool();
 	}
 
 	public function testCreate()
 	{
-		$data = Bool::create(true);
-		$this->assertSame(true, $data->value());
+		$instance = Bool::create(true);
+		$this->assertSame(true, $instance->value());
 	}
 
 	public function testCast()
@@ -52,6 +34,32 @@ class boolTest extends \PHPUnit_Framework_TestCase
 		$this->assertSame(null, $data);
 	}
 
+	/**
+     * @dataProvider toStringDataProvider
+     */
+	public function testToString($data, $expected)
+	{
+		$instance = Bool::create($data);
+		$this->assertSame($expected, (string) $instance);
+	}
+
+	public function toStringDataProvider()
+	{
+		return array(
+			array(false, '0'),
+			array(true,  '1'),
+		);
+	}
+
+	/**
+     * @dataProvider validDataProvider
+     */
+	public function testValid($data, $expected)
+	{
+		$instance = Bool::create($data);
+		$this->assertSame($expected, $instance->value());
+	}
+
 	public function validDataProvider()
 	{
 		return array(
@@ -66,6 +74,15 @@ class boolTest extends \PHPUnit_Framework_TestCase
 			array('0',                 false),
 			array('1',                 true),
 		);
+	}
+
+	/**
+     * @dataProvider invalidDataProvider
+     */
+	public function testInvalid($data, $expected)
+	{
+		$this->setExpectedException($expected);
+		$instance = Bool::create($data);
 	}
 
 	public function invalidDataProvider()

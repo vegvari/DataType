@@ -5,7 +5,7 @@ namespace Data\Type;
 class Int extends Float
 {
     /**
-     * @see TypeInterface
+     * @see Type
      */
     public function check($value)
     {

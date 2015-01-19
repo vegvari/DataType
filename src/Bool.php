@@ -2,10 +2,10 @@
 
 namespace Data\Type;
 
-class Bool extends Type
+class Bool extends Basic
 {
     /**
-     * @see TypeInterface
+     * @see Type
      */
     public function check($value)
     {
