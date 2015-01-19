@@ -78,7 +78,7 @@ abstract class Basic
      */
     public function check($value)
     {
-        if ($value instanceof Type) {
+        if ($value instanceof Basic) {
             return $value->value();
         }
 
