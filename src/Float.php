@@ -5,7 +5,7 @@ namespace Data\Type;
 class Float extends Basic
 {
     /**
-     * @see Type
+     * @see Basic
      */
     public function check($value)
     {
@@ -47,7 +47,7 @@ class Float extends Basic
     /**
      * Negation
      *
-     * @return Type
+     * @return Basic
      */
     public function neg()
     {
@@ -138,5 +138,10 @@ class Float extends Basic
     public function root($value)
     {
         return Float::create(pow($this->value, 1 / Float::cast($value)));
+    }
+
+    public static function __callStatic($name, array $args = array())
+    {
+        var_dump($name, $args);
     }
 }

@@ -5,7 +5,7 @@ namespace Data\Type;
 class Natural extends Int
 {
     /**
-     * @see Type
+     * @see Basic
      */
     public function check($value)
     {

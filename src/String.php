@@ -8,7 +8,7 @@ class String extends Basic implements \ArrayAccess, \Iterator
     protected $iteratorPosition = 0;
 
     /**
-     * @see Type
+     * @see Basic
      */
     public function __construct($value)
     {
@@ -17,7 +17,7 @@ class String extends Basic implements \ArrayAccess, \Iterator
     }
 
     /**
-     * @see Type
+     * @see Basic
      */
     public function check($value)
     {
