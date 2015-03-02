@@ -4,22 +4,31 @@ namespace Data\Type;
 
 class Float extends Basic
 {
-    /**
-     * @see Type
-     */
-    public function check($value)
+    public static function castNatural($value)
     {
-        $value = parent::check($value);
+        $class = get_called_class();
 
-        if ($value === false) {
-            return 0.0;
-        }
+        $instance = new $class($value);
 
-        if (filter_var($value, FILTER_VALIDATE_FLOAT) === false) {
+        if ($instance->value < 0) {
             throw new \InvalidArgumentException();
         }
 
-        return (float) $value;
+        return $instance->value;
+    }
+
+    public static function castPositive($value)
+    {
+        $class = get_called_class();
+
+        $instance = new $class($value);
+
+        $value = (float) $instance->value;
+        if ($value < 0 || $value === 0.0) {
+            throw new \InvalidArgumentException();
+        }
+
+        return $instance->value;
     }
 
     /**
@@ -45,9 +54,27 @@ class Float extends Basic
     }
 
     /**
+     * @see Basic
+     */
+    public function check($value)
+    {
+        $value = parent::check($value);
+
+        if ($value === false) {
+            return 0.0;
+        }
+
+        if (filter_var($value, FILTER_VALIDATE_FLOAT) === false) {
+            throw new \InvalidArgumentException();
+        }
+
+        return (float) $value;
+    }
+
+    /**
      * Negation
      *
-     * @return Type
+     * @return Basic
      */
     public function neg()
     {

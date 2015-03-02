@@ -8,16 +8,16 @@ class String extends Basic implements \ArrayAccess, \Iterator
     protected $iteratorPosition = 0;
 
     /**
-     * @see Type
+     * @see Basic
      */
-    public function __construct($value)
+    public function __construct($value = null)
     {
         parent::__construct($value);
         $this->length = mb_strlen($this->value, 'UTF-8');
     }
 
     /**
-     * @see Type
+     * @see Basic
      */
     public function check($value)
     {
@@ -39,16 +39,6 @@ class String extends Basic implements \ArrayAccess, \Iterator
     }
 
     /**
-     * Length
-     *
-     * @return int
-     */
-    public function length()
-    {
-        return $this->length;
-    }
-
-    /**
      * Substring
      *
      * @param  int $from
@@ -57,10 +47,10 @@ class String extends Basic implements \ArrayAccess, \Iterator
      */
     public function substr($from, $length = null)
     {
-        $from = Natural::cast($from);
-        $length = Natural::castNullable($length);
+        $from = Int::cast($from);
+        $length = Int::castNullable($length);
 
-        if ($this->length() < $from || $this->length() < $length) {
+        if ($this->length < $from || $this->length < $length) {
             throw new \LengthException();
         }
 
@@ -114,7 +104,7 @@ class String extends Basic implements \ArrayAccess, \Iterator
     {
         $offset = Int::castNullable($offset);
 
-        if ($offset !== null && $offset >= 0 && $this->length() > $offset)
+        if ($offset !== null && $offset >= 0 && $this->length > $offset)
         {
             return true;
         }

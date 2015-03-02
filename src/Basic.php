@@ -9,90 +9,94 @@ abstract class Basic
     /**
      * Constructor
      *
-     * @param Mixed
+     * @param mixed
      */
-    public function __construct($value)
+    public function __construct($value = null)
     {
-        $this->value = $this->check($value);
+        if ($value !== null) {
+            $this->value = $this->check($value);
+        }
     }
 
     /**
      * Create a new instance
      *
-     * @param  Mixed $value
+     * @param  mixed $value
      * @return Type
      */
-    public static function create($value)
+    public static function create($value = null)
     {
         $class = get_called_class();
         return new $class($value);
     }
 
     /**
-     * Create a new instance and return the value itself
+     * Create a new instance and return the value
      *
-     * @param  Mixed $value
-     * @return Mixed
+     * @param  mixed $value
+     * @return mixed
      */
     public static function cast($value)
     {
-        $value = self::create($value)->value();
-        return $value;
-    }
-
-    /**
-     * Accept null
-     *
-     * @param  Mixed $value
-     * @return Mixed
-     */
-    public static function castNullable($value)
-    {
         if ($value === null) {
-            return;
+            throw new \InvalidArgumentException();
         }
 
-        return self::cast($value);
+        return self::create($value)->value;
+    }
+
+    public static function castNullable($value)
+    {
+        return self::create($value)->value;
     }
 
     /**
-     * Return null if the value invalid
+     * Null if the value invalid
      *
-     * @param  Mixed $value
-     * @return Mixed
+     * @param  mixed $value
+     * @return mixed
      */
     public static function castSilent($value)
     {
         try {
             return self::cast($value);
         } catch (\InvalidArgumentException $e) {
-            $value = null;
         }
-    }
-
-    /**
-     * Check the value
-     *
-     * @param  Mixed $value
-     * @return Mixed
-     */
-    public function check($value)
-    {
-        if ($value instanceof Basic) {
-            return $value->value();
-        }
-
-        return $value;
     }
 
     /**
      * Return the value
      *
-     * @return Mixed
+     * @return mixed
      */
-    public function value()
+    public function __get($name)
     {
-        return $this->value;
+        return $this->$name;
+    }
+
+    /**
+     * Create a new instance
+     *
+     * @return mixed
+     */
+    public function set($value)
+    {
+        return $this->create($value);
+    }
+
+    /**
+     * Check the value
+     *
+     * @param  mixed $value
+     * @return mixed
+     */
+    public function check($value)
+    {
+        if ($value instanceof Basic) {
+            return $value->value;
+        }
+
+        return $value;
     }
 
     /**

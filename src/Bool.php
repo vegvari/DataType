@@ -5,7 +5,7 @@ namespace Data\Type;
 class Bool extends Basic
 {
     /**
-     * @see Type
+     * @see Basic
      */
     public function check($value)
     {
