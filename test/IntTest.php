@@ -6,14 +6,14 @@ class IntTest extends \PHPUnit_Framework_TestCase
 {
 	public function testInstantiateWithoutArg()
 	{
-		$this->setExpectedException('PHPUnit_Framework_Error_Warning');
 		$instance = new Int();
+		$this->assertSame(null, $instance->value);
 	}
 
 	public function testCreate()
 	{
 		$instance = Int::create(1);
-		$this->assertSame(1, $instance->value());
+		$this->assertSame(1, $instance->value);
 	}
 
 	public function testCast()
@@ -57,55 +57,53 @@ class IntTest extends \PHPUnit_Framework_TestCase
 	public function testValid($data, $expected)
 	{
 		$instance = Int::create($data);
-		$this->assertSame($expected, $instance->value());
+		$this->assertSame($expected, $instance->value);
 	}
 
 	public function validDataProvider()
 	{
 		return array(
-			array(Bool::create(1),            1),
-			array(Float::create(1),           1),
-			array(Int::create(1),             1),
-			array(Natural::create(1),         1),
-			array(NaturalPositive::create(1), 1),
-			array(String::create(1),          1),
-			array(Int::create(0.0),           0),
-			array(false,                      0),
-			array(true,                       1),
-			array(0.0,                        0),
-			array(1.0,                        1),
-			array(0,                          0),
-			array(1,                          1),
-			array('0',                        0),
-			array('1',                        1),
+			array(Bool::create(1),   1),
+			array(Float::create(1),  1),
+			array(Int::create(1),    1),
+			array(String::create(1), 1),
+			array(Int::create(0.0),  0),
+			array(false,             0),
+			array(true,              1),
+			array(0.0,               0),
+			array(1.0,               1),
+			array(0,                 0),
+			array(1,                 1),
+			array('0',               0),
+			array('1',               1),
 
-			array(-1.0,                       -1),
-			array(2.0,                        2),
-			array(-1,                         -1),
-			array(2,                          2),
+			array(-1.0,              -1),
+			array(2.0,               2),
+			array(-1,                -1),
+			array(2,                 2),
 
-			array('-1',                       -1),
-			array('2',                        2),
+			array('-1',              -1),
+			array('2',               2),
 
-			array('000',                      0),
-			array('000.000',                  0),
-			array('-1.00000',                 -1),
-			array('2.000000',                 2),
+			array('000',             0),
+			array('000.000',         0),
+			array('-1.00000',        -1),
+			array('2.000000',        2),
 
-			array('1e2',                      100),
-			array('-1e2',                     -100),
-			array('1E2',                      100),
-			array('-1E2',                     -100),
-			array('1e+2',                     100),
-			array('-1e+2',                    -100),
-			array('1E+2',                     100),
-			array('-1E+2',                    -100),
+			array('1e2',             100),
+			array('-1e2',            -100),
+			array('1E2',             100),
+			array('-1E2',            -100),
+			array('1e+2',            100),
+			array('-1e+2',           -100),
+			array('1E+2',            100),
+			array('-1E+2',           -100),
 
-			array('0e0',                      0),
-			array('000e000',                  0),
-			array('1e0',                      1),
-			array('1e000',                    1),
-			array('1e001',                    10),
+			array('0e0',             0),
+			array('000e000',         0),
+			array('1e0',             1),
+			array('1e000',           1),
+			array('1e001',           10),
 		);
 	}
 
@@ -121,7 +119,6 @@ class IntTest extends \PHPUnit_Framework_TestCase
 	public function invalidDataProvider()
 	{
 		return array(
-			array(null,                 '\InvalidArgumentException'),
 			array(array(),              '\InvalidArgumentException'),
 			array(new \stdClass(),      '\InvalidArgumentException'),
 			array(fopen(__FILE__, 'r'), '\InvalidArgumentException'),

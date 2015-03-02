@@ -6,14 +6,14 @@ class BoolTest extends \PHPUnit_Framework_TestCase
 {
 	public function testInstantiateWithoutArg()
 	{
-		$this->setExpectedException('PHPUnit_Framework_Error_Warning');
 		$instance = new Bool();
+		$this->assertSame(null, $instance->value);
 	}
 
 	public function testCreate()
 	{
 		$instance = Bool::create(true);
-		$this->assertSame(true, $instance->value());
+		$this->assertSame(true, $instance->value);
 	}
 
 	public function testCast()
@@ -57,27 +57,25 @@ class BoolTest extends \PHPUnit_Framework_TestCase
 	public function testValid($data, $expected)
 	{
 		$instance = Bool::create($data);
-		$this->assertSame($expected, $instance->value());
+		$this->assertSame($expected, $instance->value);
 	}
 
 	public function validDataProvider()
 	{
 		return array(
-			array(Bool::create(1),            true),
-			array(Float::create(1),           true),
-			array(Int::create(1),             true),
-			array(Natural::create(1),         true),
-			array(NaturalPositive::create(1), true),
-			array(String::create(1),          true),
-			array(Bool::create(false),        false),
-			array(false,                      false),
-			array(true,                       true),
-			array(0.0,                        false),
-			array(1.0,                        true),
-			array(0,                          false),
-			array(1,                          true),
-			array('0',                        false),
-			array('1',                        true),
+			array(Bool::create(1),     true),
+			array(Float::create(1),    true),
+			array(Int::create(1),      true),
+			array(String::create(1),   true),
+			array(Bool::create(false), false),
+			array(false,               false),
+			array(true,                true),
+			array(0.0,                 false),
+			array(1.0,                 true),
+			array(0,                   false),
+			array(1,                   true),
+			array('0',                 false),
+			array('1',                 true),
 		);
 	}
 
@@ -93,7 +91,6 @@ class BoolTest extends \PHPUnit_Framework_TestCase
 	public function invalidDataProvider()
 	{
 		return array(
-			array(null,                 '\InvalidArgumentException'),
 			array(array(),              '\InvalidArgumentException'),
 			array(new \stdClass(),      '\InvalidArgumentException'),
 			array(fopen(__FILE__, 'r'), '\InvalidArgumentException'),
