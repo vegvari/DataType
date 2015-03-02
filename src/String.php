@@ -54,7 +54,7 @@ class String extends Basic implements \ArrayAccess, \Iterator
             throw new \LengthException();
         }
 
-        return self::create(mb_substr($this->value, $from, $length, 'UTF-8'));
+        return self::make(mb_substr($this->value, $from, $length, 'UTF-8'));
     }
 
     /**
@@ -64,7 +64,7 @@ class String extends Basic implements \ArrayAccess, \Iterator
      */
     public function toLower()
     {
-        return self::create(mb_strtolower($this->value, 'UTF-8'));
+        return self::make(mb_strtolower($this->value, 'UTF-8'));
     }
 
     /**
@@ -74,7 +74,7 @@ class String extends Basic implements \ArrayAccess, \Iterator
      */
     public function toUpper()
     {
-        return self::create(mb_strtoupper($this->value, 'UTF-8'));
+        return self::make(mb_strtoupper($this->value, 'UTF-8'));
     }
 
     /**
@@ -84,7 +84,7 @@ class String extends Basic implements \ArrayAccess, \Iterator
      */
     public function upperFirst()
     {
-        return self::create(mb_strtoupper(mb_substr($this->value, 0, 1, 'UTF-8'), 'UTF-8') . mb_substr($this->value, 1, null, 'UTF-8'));
+        return self::make(mb_strtoupper(mb_substr($this->value, 0, 1, 'UTF-8'), 'UTF-8') . mb_substr($this->value, 1, null, 'UTF-8'));
     }
 
     /**
@@ -94,7 +94,7 @@ class String extends Basic implements \ArrayAccess, \Iterator
      */
     public function upperWords()
     {
-        return self::create(mb_convert_case($this->value, MB_CASE_TITLE, 'UTF-8'));
+        return self::make(mb_convert_case($this->value, MB_CASE_TITLE, 'UTF-8'));
     }
 
     /**

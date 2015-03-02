@@ -10,9 +10,9 @@ class BoolTest extends \PHPUnit_Framework_TestCase
 		$this->assertSame(null, $instance->value);
 	}
 
-	public function testCreate()
+	public function testMake()
 	{
-		$instance = Bool::create(true);
+		$instance = Bool::make(true);
 		$this->assertSame(true, $instance->value);
 	}
 
@@ -20,12 +20,6 @@ class BoolTest extends \PHPUnit_Framework_TestCase
 	{
 		$data = Bool::cast(true);
 		$this->assertSame(true, $data);
-	}
-
-	public function testCastNullable()
-	{
-		$data = Bool::castNullable(null);
-		$this->assertSame(null, $data);
 	}
 
 	public function testCastSilent()
@@ -39,7 +33,7 @@ class BoolTest extends \PHPUnit_Framework_TestCase
      */
 	public function testToString($data, $expected)
 	{
-		$instance = Bool::create($data);
+		$instance = Bool::make($data);
 		$this->assertSame($expected, (string) $instance);
 	}
 
@@ -56,18 +50,18 @@ class BoolTest extends \PHPUnit_Framework_TestCase
      */
 	public function testValid($data, $expected)
 	{
-		$instance = Bool::create($data);
+		$instance = Bool::make($data);
 		$this->assertSame($expected, $instance->value);
 	}
 
 	public function validDataProvider()
 	{
 		return array(
-			array(Bool::create(1),     true),
-			array(Float::create(1),    true),
-			array(Int::create(1),      true),
-			array(String::create(1),   true),
-			array(Bool::create(false), false),
+			array(Bool::make(1),     true),
+			array(Float::make(1),    true),
+			array(Int::make(1),      true),
+			array(String::make(1),   true),
+			array(Bool::make(false), false),
 			array(false,               false),
 			array(true,                true),
 			array(0.0,                 false),
@@ -85,7 +79,7 @@ class BoolTest extends \PHPUnit_Framework_TestCase
 	public function testInvalid($data, $expected)
 	{
 		$this->setExpectedException($expected);
-		$instance = Bool::create($data);
+		$instance = Bool::make($data);
 	}
 
 	public function invalidDataProvider()

@@ -10,9 +10,9 @@ class IntTest extends \PHPUnit_Framework_TestCase
 		$this->assertSame(null, $instance->value);
 	}
 
-	public function testCreate()
+	public function testMake()
 	{
-		$instance = Int::create(1);
+		$instance = Int::make(1);
 		$this->assertSame(1, $instance->value);
 	}
 
@@ -20,12 +20,6 @@ class IntTest extends \PHPUnit_Framework_TestCase
 	{
 		$data = Int::cast(1);
 		$this->assertSame(1, $data);
-	}
-
-	public function testCastNullable()
-	{
-		$data = Int::castNullable(null);
-		$this->assertSame(null, $data);
 	}
 
 	public function testCastSilent()
@@ -39,7 +33,7 @@ class IntTest extends \PHPUnit_Framework_TestCase
      */
 	public function testToString($data, $expected)
 	{
-		$instance = Int::create($data);
+		$instance = Int::make($data);
 		$this->assertSame($expected, (string) $instance);
 	}
 
@@ -56,18 +50,18 @@ class IntTest extends \PHPUnit_Framework_TestCase
      */
 	public function testValid($data, $expected)
 	{
-		$instance = Int::create($data);
+		$instance = Int::make($data);
 		$this->assertSame($expected, $instance->value);
 	}
 
 	public function validDataProvider()
 	{
 		return array(
-			array(Bool::create(1),   1),
-			array(Float::create(1),  1),
-			array(Int::create(1),    1),
-			array(String::create(1), 1),
-			array(Int::create(0.0),  0),
+			array(Bool::make(1),   1),
+			array(Float::make(1),  1),
+			array(Int::make(1),    1),
+			array(String::make(1), 1),
+			array(Int::make(0.0),  0),
 			array(false,             0),
 			array(true,              1),
 			array(0.0,               0),
@@ -113,7 +107,7 @@ class IntTest extends \PHPUnit_Framework_TestCase
 	public function testInvalid($data, $expected)
 	{
 		$this->setExpectedException($expected);
-		$instance = Int::create($data);
+		$instance = Int::make($data);
 	}
 
 	public function invalidDataProvider()
@@ -146,25 +140,25 @@ class IntTest extends \PHPUnit_Framework_TestCase
 
 	public function testIsEven()
 	{
-		$instance = Int::create(0);
+		$instance = Int::make(0);
 		$this->assertSame(true, $instance->isEven());
 
-		$instance = Int::create(1);
+		$instance = Int::make(1);
 		$this->assertSame(false, $instance->isEven());
 
-		$instance = Int::create(2);
+		$instance = Int::make(2);
 		$this->assertSame(true, $instance->isEven());
 	}
 
 	public function testIsOdd()
 	{
-		$instance = Int::create(0);
+		$instance = Int::make(0);
 		$this->assertSame(false, $instance->isOdd());
 
-		$instance = Int::create(1);
+		$instance = Int::make(1);
 		$this->assertSame(true, $instance->isOdd());
 
-		$instance = Int::create(2);
+		$instance = Int::make(2);
 		$this->assertSame(false, $instance->isOdd());
 	}
 
@@ -173,7 +167,7 @@ class IntTest extends \PHPUnit_Framework_TestCase
      */
 	public function testIsPrime($data, $expected)
 	{
-		$instance = Int::create($data);
+		$instance = Int::make($data);
 		$this->assertSame($expected, $instance->isPrime());
 	}
 
