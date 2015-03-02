@@ -50,7 +50,7 @@ class Float extends Basic
 
         mt_srand();
 
-        return self::create(mt_rand($min, $max));
+        return self::make(mt_rand($min, $max));
     }
 
     /**
@@ -78,7 +78,7 @@ class Float extends Basic
      */
     public function neg()
     {
-        return self::create(-$this->value);
+        return self::make(-$this->value);
     }
 
     /**
@@ -89,7 +89,7 @@ class Float extends Basic
      */
     public function add($value)
     {
-        return self::create($this->value + Float::cast($value));
+        return self::make($this->value + Float::cast($value));
     }
 
     /**
@@ -100,7 +100,7 @@ class Float extends Basic
      */
     public function sub($value)
     {
-        return Float::create($this->value - Float::cast($value));
+        return Float::make($this->value - Float::cast($value));
     }
 
     /**
@@ -111,7 +111,7 @@ class Float extends Basic
      */
     public function mul($value)
     {
-        return Float::create($this->value * Float::cast($value));
+        return Float::make($this->value * Float::cast($value));
     }
 
     /**
@@ -122,7 +122,7 @@ class Float extends Basic
      */
     public function div($value)
     {
-        return Float::create($this->value / Float::cast($value));
+        return Float::make($this->value / Float::cast($value));
     }
 
     /**
@@ -133,7 +133,7 @@ class Float extends Basic
      */
     public function mod($value)
     {
-        return Float::create($this->value % Float::cast($value));
+        return Float::make($this->value % Float::cast($value));
     }
 
     /**
@@ -144,7 +144,7 @@ class Float extends Basic
      */
     public function exp($value)
     {
-        return Float::create(pow($this->value, Float::cast($value)));
+        return Float::make(pow($this->value, Float::cast($value)));
     }
 
     /**
@@ -154,7 +154,7 @@ class Float extends Basic
      */
     public function sqrt()
     {
-        return Float::create(sqrt($this->value));
+        return Float::make(sqrt($this->value));
     }
 
     /**
@@ -164,6 +164,6 @@ class Float extends Basic
      */
     public function root($value)
     {
-        return Float::create(pow($this->value, 1 / Float::cast($value)));
+        return Float::make(pow($this->value, 1 / Float::cast($value)));
     }
 }

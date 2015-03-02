@@ -2,14 +2,12 @@
 
 namespace Data\Type;
 
-abstract class Basic
+abstract class Basic implements BasicInterface
 {
     protected $value;
 
     /**
-     * Constructor
-     *
-     * @param mixed
+     * @see BasicInterface
      */
     public function __construct($value = null)
     {
@@ -19,22 +17,16 @@ abstract class Basic
     }
 
     /**
-     * Create a new instance
-     *
-     * @param  mixed $value
-     * @return Type
+     * @see BasicInterface
      */
-    public static function create($value = null)
+    public static function make($value = null)
     {
         $class = get_called_class();
         return new $class($value);
     }
 
     /**
-     * Create a new instance and return the value
-     *
-     * @param  mixed $value
-     * @return mixed
+     * @see BasicInterface
      */
     public static function cast($value)
     {
@@ -42,19 +34,19 @@ abstract class Basic
             throw new \InvalidArgumentException();
         }
 
-        return self::create($value)->value;
-    }
-
-    public static function castNullable($value)
-    {
-        return self::create($value)->value;
+        return self::make($value)->value;
     }
 
     /**
-     * Null if the value invalid
-     *
-     * @param  mixed $value
-     * @return mixed
+     * @see BasicInterface
+     */
+    public static function castNullable($value)
+    {
+        return self::make($value)->value;
+    }
+
+    /**
+     * @see BasicInterface
      */
     public static function castSilent($value)
     {
@@ -65,9 +57,7 @@ abstract class Basic
     }
 
     /**
-     * Return the value
-     *
-     * @return mixed
+     * @see BasicInterface
      */
     public function __get($name)
     {
@@ -75,20 +65,15 @@ abstract class Basic
     }
 
     /**
-     * Create a new instance
-     *
-     * @return mixed
+     * @see BasicInterface
      */
     public function set($value)
     {
-        return $this->create($value);
+        return $this->make($value);
     }
 
     /**
-     * Check the value
-     *
-     * @param  mixed $value
-     * @return mixed
+     * @see BasicInterface
      */
     public function check($value)
     {
@@ -100,9 +85,7 @@ abstract class Basic
     }
 
     /**
-     * Cast instance to string
-     *
-     * @return string
+     * @see BasicInterface
      */
     public function __toString()
     {
