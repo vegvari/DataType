@@ -2,7 +2,7 @@
 
 namespace Data\Type;
 
-class DateTime extends \Carbon\Carbon implements BasicInterface
+class DateTime extends \Carbon\Carbon
 {
     protected $value;
 
@@ -18,17 +18,17 @@ class DateTime extends \Carbon\Carbon implements BasicInterface
     	parent::__construct($value, $timezone);
 
     	if ($value !== null) {
-    		$this->value = $this->format('c');
+    		$this->value = (string) $this;
     	}
     }
 
 	/**
      * @see BasicInterface
      */
-    public static function make($value = null)
+    public static function make($value = null, $timezone = null)
     {
         $class = get_called_class();
-        return new $class($value);
+        return new $class($value, $timezone);
     }
 
     /**
@@ -70,9 +70,13 @@ class DateTime extends \Carbon\Carbon implements BasicInterface
     /**
      * @see BasicInterface
      */
-    public function set($value)
+    public function set($value, \DateTimeZone $timezone = null)
     {
-        return $this->make($value);
+        if ($timezone === null) {
+            $timezone = $this->getTimezone();
+        }
+
+        return $this->make($value, $timezone);
     }
 
     /**
@@ -87,11 +91,9 @@ class DateTime extends \Carbon\Carbon implements BasicInterface
         return $value;
     }
 
-	/**
-     * @see BasicInterface
-     */
-    public function __toString()
+    public function setTimezone(\DateTimeZone $timezone)
     {
-        return (string) $this->value;
+        parent::setTimezone($timezone);
+        $this->value = (string) $this;
     }
 }
