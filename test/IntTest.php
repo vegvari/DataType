@@ -7,13 +7,13 @@ class IntTest extends \PHPUnit_Framework_TestCase
 	public function testInstantiateWithoutArg()
 	{
 		$instance = new Int();
-		$this->assertSame(null, $instance->value);
+		$this->assertSame(null, $instance->value());
 	}
 
 	public function testMake()
 	{
 		$instance = Int::make(1);
-		$this->assertSame(1, $instance->value);
+		$this->assertSame(1, $instance->value());
 	}
 
 	public function testCast()
@@ -51,7 +51,7 @@ class IntTest extends \PHPUnit_Framework_TestCase
 	public function testValid($data, $expected)
 	{
 		$instance = Int::make($data);
-		$this->assertSame($expected, $instance->value);
+		$this->assertSame($expected, $instance->value());
 	}
 
 	public function validDataProvider()

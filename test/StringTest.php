@@ -7,13 +7,13 @@ class StringTest extends \PHPUnit_Framework_TestCase
 	public function testInstantiateWithoutArg()
 	{
 		$instance = new String();
-		$this->assertSame(null, $instance->value);
+		$this->assertSame(null, $instance->value());
 	}
 
 	public function testMake()
 	{
 		$instance = String::make(1);
-		$this->assertSame('1', $instance->value);
+		$this->assertSame('1', $instance->value());
 	}
 
 	public function testCast()
@@ -51,7 +51,7 @@ class StringTest extends \PHPUnit_Framework_TestCase
 	public function testValid($data, $expected)
 	{
 		$instance = String::make($data);
-		$this->assertSame($expected, $instance->value);
+		$this->assertSame($expected, $instance->value());
 	}
 
 	public function validDataProvider()
@@ -98,14 +98,14 @@ class StringTest extends \PHPUnit_Framework_TestCase
 	public function testLength()
 	{
 		$instance = String::make('árvíztűrő tükörfúrógép');
-		$this->assertSame(22, $instance->length);
+		$this->assertSame(22, $instance->length());
 	}
 
 	public function testSubstr()
 	{
 		$instance = String::make('árvíztűrő tükörfúrógép');
 		$this->assertTrue($instance->substr(0) instanceof String);
-		$this->assertSame('árvíztűrő tükörfúrógép', $instance->substr(0)->value);
+		$this->assertSame('árvíztűrő tükörfúrógép', $instance->substr(0)->value());
 	}
 
 	public function testSubstrMissingFrom()
@@ -126,42 +126,42 @@ class StringTest extends \PHPUnit_Framework_TestCase
 	{
 		$this->setExpectedException('\LengthException');
 		$instance = String::make('árvíztűrő tükörfúrógép');
-		$instance->substr($instance->length + 1);
+		$instance->substr($instance->length() + 1);
 	}
 
 	public function testSubstrOutOfRangeLength()
 	{
 		$this->setExpectedException('\LengthException');
 		$instance = String::make('árvíztűrő tükörfúrógép');
-		$instance->substr(0, $instance->length + 1);
+		$instance->substr(0, $instance->length() + 1);
 	}
 
 	public function testToLower()
 	{
 		$instance = String::make('ÁRVÍZTŰRŐ TÜKÖRFÚRÓGÉP');
 		$this->assertTrue($instance->toLower() instanceof String);
-		$this->assertSame('árvíztűrő tükörfúrógép', $instance->toLower()->value);
+		$this->assertSame('árvíztűrő tükörfúrógép', $instance->toLower()->value());
 	}
 
 	public function testToUpper()
 	{
 		$instance = String::make('árvíztűrő tükörfúrógép');
 		$this->assertTrue($instance->toUpper() instanceof String);
-		$this->assertSame('ÁRVÍZTŰRŐ TÜKÖRFÚRÓGÉP', $instance->toUpper()->value);
+		$this->assertSame('ÁRVÍZTŰRŐ TÜKÖRFÚRÓGÉP', $instance->toUpper()->value());
 	}
 
 	public function testUpperFirst()
 	{
 		$instance = String::make('árvíztűrő tükörfúrógép');
 		$this->assertTrue($instance->upperFirst() instanceof String);
-		$this->assertSame('Árvíztűrő tükörfúrógép', $instance->upperFirst()->value);
+		$this->assertSame('Árvíztűrő tükörfúrógép', $instance->upperFirst()->value());
 	}
 
 	public function testUpperWords()
 	{
 		$instance = String::make('árvíztűrő tükörfúrógép');
 		$this->assertTrue($instance->upperWords() instanceof String);
-		$this->assertSame('Árvíztűrő Tükörfúrógép', $instance->upperWords()->value);
+		$this->assertSame('Árvíztűrő Tükörfúrógép', $instance->upperWords()->value());
 	}
 
 	public function testArrayAccess()
@@ -169,14 +169,14 @@ class StringTest extends \PHPUnit_Framework_TestCase
 		$instance = String::make('árvíztűrő tükörfúrógép');
 
 		// isset
-		for($n = 0; $n < $instance->length; $n++)
+		for($n = 0; $n < $instance->length(); $n++)
 		{
 			$this->assertSame(true, isset($instance[$n]));
 		}
 
 		// isset invalid offset
 		$this->assertSame(false, isset($instance[-1]));
-		$this->assertSame(false, isset($instance[$instance->length + 1]));
+		$this->assertSame(false, isset($instance[$instance->length() + 1]));
 		$this->assertSame(false, isset($instance[null]));
 
 		// get
@@ -215,7 +215,7 @@ class StringTest extends \PHPUnit_Framework_TestCase
 	{
 		$this->setExpectedException('\InvalidArgumentException');
 		$instance = String::make('árvíztűrő tükörfúrógép');
-		$test = $instance[$instance->length];
+		$test = $instance[$instance->length()];
 	}
 
 	public function testArrayAccessInvalidOffset3()

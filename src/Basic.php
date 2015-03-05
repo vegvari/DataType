@@ -59,9 +59,9 @@ abstract class Basic implements BasicInterface
     /**
      * @see BasicInterface
      */
-    public function __get($name)
+    public function value()
     {
-        return $this->$name;
+        return $this->value;
     }
 
     /**

@@ -7,13 +7,13 @@ class FloatTest extends \PHPUnit_Framework_TestCase
 	public function testInstantiateWithoutArg()
 	{
 		$instance = new Float();
-		$this->assertSame(null, $instance->value);
+		$this->assertSame(null, $instance->value());
 	}
 
 	public function testMake()
 	{
 		$instance = Float::make(1.0);
-		$this->assertSame(1.0, $instance->value);
+		$this->assertSame(1.0, $instance->value());
 	}
 
 	public function testCast()
@@ -51,7 +51,7 @@ class FloatTest extends \PHPUnit_Framework_TestCase
 	public function testValid($data, $expected)
 	{
 		$instance = Float::make($data);
-		$this->assertSame($expected, $instance->value);
+		$this->assertSame($expected, $instance->value());
 	}
 
 	public function validDataProvider()
@@ -148,87 +148,87 @@ class FloatTest extends \PHPUnit_Framework_TestCase
 	{
 		$instance = Float::make(1);
 		$this->assertTrue($instance->neg() instanceof Float);
-		$this->assertSame(-1.0, $instance->neg()->value);
+		$this->assertSame(-1.0, $instance->neg()->value());
 
 		$instance = Float::make(-1);
 		$this->assertTrue($instance->neg() instanceof Float);
-		$this->assertSame(1.0, $instance->neg()->value);
+		$this->assertSame(1.0, $instance->neg()->value());
 	}
 
 	public function testAdd()
 	{
 		$instance = Float::make(1);
 		$this->assertTrue($instance->add(1) instanceof Float);
-		$this->assertSame(2.0, $instance->add(1)->value);
+		$this->assertSame(2.0, $instance->add(1)->value());
 
 		$this->assertTrue($instance->add(Float::make(1)) instanceof Float);
-		$this->assertSame(2.0, $instance->add(Float::make(1))->value);
+		$this->assertSame(2.0, $instance->add(Float::make(1))->value());
 	}
 
 	public function testSub()
 	{
 		$instance = Float::make(1);
 		$this->assertTrue($instance->sub(1) instanceof Float);
-		$this->assertSame(0.0, $instance->sub(1)->value);
+		$this->assertSame(0.0, $instance->sub(1)->value());
 
 		$this->assertTrue($instance->sub(Float::make(1)) instanceof Float);
-		$this->assertSame(0.0, $instance->sub(Float::make(1))->value);
+		$this->assertSame(0.0, $instance->sub(Float::make(1))->value());
 	}
 
 	public function testMul()
 	{
 		$instance = Float::make(2);
 		$this->assertTrue($instance->mul(5) instanceof Float);
-		$this->assertSame(10.0, $instance->mul(5)->value);
+		$this->assertSame(10.0, $instance->mul(5)->value());
 
 		$this->assertTrue($instance->mul(Float::make(5)) instanceof Float);
-		$this->assertSame(10.0, $instance->mul(Float::make(5))->value);
+		$this->assertSame(10.0, $instance->mul(Float::make(5))->value());
 	}
 
 	public function testDiv()
 	{
 		$instance = Float::make(10);
 		$this->assertTrue($instance->div(2) instanceof Float);
-		$this->assertSame(5.0, $instance->div(2)->value);
+		$this->assertSame(5.0, $instance->div(2)->value());
 
 		$this->assertTrue($instance->div(Float::make(2)) instanceof Float);
-		$this->assertSame(5.0, $instance->div(Float::make(2))->value);
+		$this->assertSame(5.0, $instance->div(Float::make(2))->value());
 	}
 
 	public function testMod()
 	{
 		$instance = Float::make(10);
 		$this->assertTrue($instance->mod(2) instanceof Float);
-		$this->assertSame(0.0, $instance->mod(2)->value);
+		$this->assertSame(0.0, $instance->mod(2)->value());
 
 		$this->assertTrue($instance->mod(Float::make(2)) instanceof Float);
-		$this->assertSame(0.0, $instance->mod(Float::make(2))->value);
+		$this->assertSame(0.0, $instance->mod(Float::make(2))->value());
 	}
 
 	public function testExp()
 	{
 		$instance = Float::make(10);
 		$this->assertTrue($instance->exp(2) instanceof Float);
-		$this->assertSame(100.0, $instance->exp(2)->value);
+		$this->assertSame(100.0, $instance->exp(2)->value());
 
 		$this->assertTrue($instance->exp(Float::make(2)) instanceof Float);
-		$this->assertSame(100.0, $instance->exp(Float::make(2))->value);
+		$this->assertSame(100.0, $instance->exp(Float::make(2))->value());
 	}
 
 	public function testSqrt()
 	{
 		$instance = Float::make(100);
 		$this->assertTrue($instance->sqrt() instanceof Float);
-		$this->assertSame(10.0, $instance->sqrt()->value);
+		$this->assertSame(10.0, $instance->sqrt()->value());
 	}
 
 	public function testRoot()
 	{
 		$instance = Float::make(27);
 		$this->assertTrue($instance->root(3) instanceof Float);
-		$this->assertSame(3.0, $instance->root(3)->value);
+		$this->assertSame(3.0, $instance->root(3)->value());
 
 		$this->assertTrue($instance->root(Float::make(3)) instanceof Float);
-		$this->assertSame(3.0, $instance->root(Float::make(3))->value);
+		$this->assertSame(3.0, $instance->root(Float::make(3))->value());
 	}
 }

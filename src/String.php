@@ -4,7 +4,6 @@ namespace Data\Type;
 
 class String extends Basic implements \ArrayAccess, \Iterator
 {
-    protected $length = 0;
     protected $iteratorPosition = 0;
 
     /**
@@ -13,7 +12,6 @@ class String extends Basic implements \ArrayAccess, \Iterator
     public function __construct($value = null)
     {
         parent::__construct($value);
-        $this->length = mb_strlen($this->value, 'UTF-8');
     }
 
     /**
@@ -38,6 +36,11 @@ class String extends Basic implements \ArrayAccess, \Iterator
         return mb_convert_encoding($value, 'UTF-8', 'UTF-8');
     }
 
+    public function length()
+    {
+        return mb_strlen($this->value, 'UTF-8');
+    }
+
     /**
      * Substring
      *
@@ -50,7 +53,7 @@ class String extends Basic implements \ArrayAccess, \Iterator
         $from = Int::cast($from);
         $length = Int::castNullable($length);
 
-        if ($this->length < $from || $this->length < $length) {
+        if ($this->length() < $from || $this->length() < $length) {
             throw new \LengthException();
         }
 
@@ -104,7 +107,7 @@ class String extends Basic implements \ArrayAccess, \Iterator
     {
         $offset = Int::castNullable($offset);
 
-        if ($offset !== null && $offset >= 0 && $this->length > $offset)
+        if ($offset !== null && $offset >= 0 && $this->length() > $offset)
         {
             return true;
         }

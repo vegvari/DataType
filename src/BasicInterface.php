@@ -48,7 +48,7 @@ interface BasicInterface
      *
      * @return mixed
      */
-    public function __get($name);
+    public function value();
 
     /**
      * Create a new instance

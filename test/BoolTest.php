@@ -7,13 +7,13 @@ class BoolTest extends \PHPUnit_Framework_TestCase
 	public function testInstantiateWithoutArg()
 	{
 		$instance = new Bool();
-		$this->assertSame(null, $instance->value);
+		$this->assertSame(null, $instance->value());
 	}
 
 	public function testMake()
 	{
 		$instance = Bool::make(true);
-		$this->assertSame(true, $instance->value);
+		$this->assertSame(true, $instance->value());
 	}
 
 	public function testCast()
@@ -51,7 +51,7 @@ class BoolTest extends \PHPUnit_Framework_TestCase
 	public function testValid($data, $expected)
 	{
 		$instance = Bool::make($data);
-		$this->assertSame($expected, $instance->value);
+		$this->assertSame($expected, $instance->value());
 	}
 
 	public function validDataProvider()
