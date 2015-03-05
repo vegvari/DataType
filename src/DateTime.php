@@ -93,7 +93,7 @@ class DateTime extends \Carbon\Carbon
 
     public function setTimezone($value)
     {
-        parent::setTimezone($timezone);
+        parent::setTimezone($value);
         if ($this->value !== null) {
             $this->value = (string) $this;
         }
