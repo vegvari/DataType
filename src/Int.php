@@ -2,14 +2,29 @@
 
 namespace Data\Type;
 
-class Int extends Float
+class Int extends Number
 {
     /**
-     * @see Basic
+     * @see TypeInterface
      */
     public function check($value)
     {
-        $value = parent::check($value);
+        if ($value === false || $value === 0 || $value === 0.0 || $value === '0') {
+            return 0;
+        } elseif ($value === true || $value === 1 || $value === 1.0 || $value === '1') {
+            return 1;
+        } elseif (is_int($value)) {
+            return $value;
+        } elseif ($value instanceof Int) {
+            return $value->value();
+        } elseif ($value instanceof Basic) {
+            $value = $value->value();
+        }
+
+        if (filter_var($value, FILTER_VALIDATE_FLOAT) === false) {
+            throw new \InvalidArgumentException();
+        }
+        $value = (float) $value;
 
         if (filter_var($value, FILTER_VALIDATE_INT) === false) {
             throw new \InvalidArgumentException();

@@ -2,14 +2,19 @@
 
 namespace Data\Type;
 
-abstract class Basic implements BasicInterface
+abstract class Basic implements TypeInterface
 {
+    /**
+     * @var mixed
+     */
     protected $value;
 
     /**
-     * @see BasicInterface
+     * Constructor
+     *
+     * @param mixed $value
      */
-    public function __construct($value = null)
+    protected function __construct($value = null)
     {
         if ($value !== null) {
             $this->value = $this->check($value);
@@ -17,7 +22,10 @@ abstract class Basic implements BasicInterface
     }
 
     /**
-     * @see BasicInterface
+     * Instance factory
+     *
+     * @param  mixed $value
+     * @return Basic
      */
     public static function make($value = null)
     {
@@ -26,7 +34,10 @@ abstract class Basic implements BasicInterface
     }
 
     /**
-     * @see BasicInterface
+     * Casting to the type, null not allowed
+     *
+     * @param  mixed $value
+     * @return Basic
      */
     public static function cast($value)
     {
@@ -34,19 +45,25 @@ abstract class Basic implements BasicInterface
             throw new \InvalidArgumentException();
         }
 
-        return self::make($value)->value;
+        return self::make($value)->value();
     }
 
     /**
-     * @see BasicInterface
+     * Casting to the type, null allowed
+     *
+     * @param  mixed $value
+     * @return Basic
      */
     public static function castNullable($value)
     {
-        return self::make($value)->value;
+        return self::make($value)->value();
     }
 
     /**
-     * @see BasicInterface
+     * Casting to the type, hide exception if any (return null)
+     *
+     * @param  mixed $value
+     * @return Basic
      */
     public static function castSilent($value)
     {
@@ -57,7 +74,7 @@ abstract class Basic implements BasicInterface
     }
 
     /**
-     * @see BasicInterface
+     * @see TypeInterface
      */
     public function value()
     {
@@ -65,27 +82,33 @@ abstract class Basic implements BasicInterface
     }
 
     /**
-     * @see BasicInterface
+     * @see TypeInterface
      */
     public function set($value)
     {
-        return $this->make($value);
+        if ($value !== null) {
+            $value = $this->check($value);
+        }
+
+        $this->value = $value;
+
+        return $this;
     }
 
     /**
-     * @see BasicInterface
+     * @see TypeInterface
      */
     public function check($value)
     {
         if ($value instanceof Basic) {
-            return $value->value;
+            $value = $value->value;
         }
 
         return $value;
     }
 
     /**
-     * @see BasicInterface
+     * @see TypeInterface
      */
     public function __toString()
     {

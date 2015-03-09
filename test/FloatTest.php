@@ -4,9 +4,9 @@ namespace Data\Type;
 
 class FloatTest extends \PHPUnit_Framework_TestCase
 {
-	public function testInstantiateWithoutArg()
+	public function testNull()
 	{
-		$instance = new Float();
+		$instance = Float::make();
 		$this->assertSame(null, $instance->value());
 	}
 
@@ -61,51 +61,51 @@ class FloatTest extends \PHPUnit_Framework_TestCase
 			array(Float::make(1),  1.0),
 			array(Int::make(1),    1.0),
 			array(String::make(1), 1.0),
-			array(false,             0.0),
-			array(true,              1.0),
-			array(0.0,               0.0),
-			array(1.0,               1.0),
-			array(0,                 0.0),
-			array(1,                 1.0),
-			array('0',               0.0),
-			array('1',               1.0),
+			array(false,           0.0),
+			array(true,            1.0),
+			array(0.0,             0.0),
+			array(1.0,             1.0),
+			array(0,               0.0),
+			array(1,               1.0),
+			array('0',             0.0),
+			array('1',             1.0),
 
-			array(-1.0,              -1.0),
-			array(2.0,               2.0),
-			array(-1,                -1.0),
-			array(2,                 2.0),
+			array(-1.0,            -1.0),
+			array(2.0,             2.0),
+			array(-1,              -1.0),
+			array(2,               2.0),
 
-			array('-1',              -1.0),
-			array('2',               2.0),
+			array('-1',            -1.0),
+			array('2',             2.0),
 
-			array('000',             0.0),
-			array('000.000',         0.0),
-			array('-1.00000',        -1.0),
-			array('2.000000',        2.0),
+			array('000',           0.0),
+			array('000.000',       0.0),
+			array('-1.00000',      -1.0),
+			array('2.000000',      2.0),
 
-			array('1e2',             100.0),
-			array('-1e2',            -100.0),
-			array('1E2',             100.0),
-			array('-1E2',            -100.0),
-			array('1e+2',            100.0),
-			array('-1e+2',           -100.0),
-			array('1E+2',            100.0),
-			array('-1E+2',           -100.0),
+			array('1e2',           100.0),
+			array('-1e2',          -100.0),
+			array('1E2',           100.0),
+			array('-1E2',          -100.0),
+			array('1e+2',          100.0),
+			array('-1e+2',         -100.0),
+			array('1E+2',          100.0),
+			array('-1E+2',         -100.0),
 
-			array('0e0',             0.0),
-			array('000e000',         0.0),
-			array('1e0',             1.0),
-			array('1e000',           1.0),
-			array('1e001',           10.0),
+			array('0e0',           0.0),
+			array('000e000',       0.0),
+			array('1e0',           1.0),
+			array('1e000',         1.0),
+			array('1e001',         10.0),
 
-			array('1e-2',             0.01),
-			array('-1e-2',            -0.01),
-			array('1E-2',             0.01),
-			array('-1E-2',            -0.01),
-			array('0.1',             0.1),
-			array('-0.1',            -0.1),
-			array('10.1',            10.1),
-			array('-10.1',           -10.1),
+			array('1e-2',          0.01),
+			array('-1e-2',         -0.01),
+			array('1E-2',          0.01),
+			array('-1E-2',         -0.01),
+			array('0.1',           0.1),
+			array('-0.1',          -0.1),
+			array('10.1',          10.1),
+			array('-10.1',         -10.1),
 		);
 	}
 

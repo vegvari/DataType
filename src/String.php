@@ -7,35 +7,30 @@ class String extends Basic implements \ArrayAccess, \Iterator
     protected $iteratorPosition = 0;
 
     /**
-     * @see Basic
-     */
-    public function __construct($value = null)
-    {
-        parent::__construct($value);
-    }
-
-    /**
-     * @see Basic
+     * @see TypeInterface
      */
     public function check($value)
     {
-        $value = parent::check($value);
-
-        if ($value === false) {
+        if ($value === false || $value === 0 || $value === 0.0 || $value === '0') {
             return '0';
-        }
-
-        if ($value === true) {
+        } elseif ($value === true || $value === 1 || $value === 1.0 || $value === '1') {
             return '1';
-        }
-
-        if ($value === null || is_array($value) || is_object($value) || is_resource($value)) {
+        } elseif ($value instanceof String) {
+            return $value->value();
+        } elseif ($value instanceof Basic) {
+            $value = $value->value();
+        } elseif (is_array($value) || is_object($value) || is_resource($value)) {
             throw new \InvalidArgumentException();
         }
 
         return mb_convert_encoding($value, 'UTF-8', 'UTF-8');
     }
 
+    /**
+     * Returns the length of the string
+     *
+     * @return int
+     */
     public function length()
     {
         return mb_strlen($this->value, 'UTF-8');

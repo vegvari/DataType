@@ -4,9 +4,9 @@ namespace Data\Type;
 
 class StringTest extends \PHPUnit_Framework_TestCase
 {
-	public function testInstantiateWithoutArg()
+	public function testNull()
 	{
-		$instance = new String();
+		$instance = String::make();
 		$this->assertSame(null, $instance->value());
 	}
 
@@ -57,11 +57,11 @@ class StringTest extends \PHPUnit_Framework_TestCase
 	public function validDataProvider()
 	{
 		return array(
-			array(Bool::make(1),          '1'),
-			array(Float::make(1),         '1'),
-			array(Int::make(1),           '1'),
-			array(String::make(1),        '1'),
-			array(String::make(0),        '0'),
+			array(Bool::make(1),            '1'),
+			array(Float::make(1),           '1'),
+			array(Int::make(1),             '1'),
+			array(String::make(1),          '1'),
+			array(String::make(0),          '0'),
 			array(false,                    '0'),
 			array(true,                     '1'),
 			array(0.0,                      '0'),

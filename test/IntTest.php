@@ -4,9 +4,9 @@ namespace Data\Type;
 
 class IntTest extends \PHPUnit_Framework_TestCase
 {
-	public function testInstantiateWithoutArg()
+	public function testNull()
 	{
-		$instance = new Int();
+		$instance = Int::make();
 		$this->assertSame(null, $instance->value());
 	}
 
@@ -57,47 +57,50 @@ class IntTest extends \PHPUnit_Framework_TestCase
 	public function validDataProvider()
 	{
 		return array(
-			array(Bool::make(1),   1),
-			array(Float::make(1),  1),
-			array(Int::make(1),    1),
-			array(String::make(1), 1),
-			array(Int::make(0.0),  0),
-			array(false,             0),
-			array(true,              1),
-			array(0.0,               0),
-			array(1.0,               1),
-			array(0,                 0),
-			array(1,                 1),
-			array('0',               0),
-			array('1',               1),
+			array(Bool::make(1),    1),
+			array(Float::make(1),   1),
+			array(Int::make(1),     1),
+			array(String::make(1),  1),
+			array(Int::make(0.0),   0),
+			array(false,            0),
+			array(true,             1),
+			array(0.0,              0),
+			array(1.0,              1),
+			array(0,                0),
+			array(1,                1),
+			array('0',              0),
+			array('1',              1),
 
-			array(-1.0,              -1),
-			array(2.0,               2),
-			array(-1,                -1),
-			array(2,                 2),
+			array(-1.0,             -1),
+			array(2.0,              2),
+			array(-1,               -1),
+			array(2,                2),
 
-			array('-1',              -1),
-			array('2',               2),
+			array('-1',             -1),
+			array('2',              2),
 
-			array('000',             0),
-			array('000.000',         0),
-			array('-1.00000',        -1),
-			array('2.000000',        2),
+			array('000',            0),
+			array('000.000',        0),
+			array('-1.00000',       -1),
+			array('2.000000',       2),
 
-			array('1e2',             100),
-			array('-1e2',            -100),
-			array('1E2',             100),
-			array('-1E2',            -100),
-			array('1e+2',            100),
-			array('-1e+2',           -100),
-			array('1E+2',            100),
-			array('-1E+2',           -100),
+			array('1e2',            100),
+			array('-1e2',           -100),
+			array('1E2',            100),
+			array('-1E2',           -100),
+			array('1e+2',           100),
+			array('-1e+2',          -100),
+			array('1E+2',           100),
+			array('-1E+2',          -100),
 
-			array('0e0',             0),
-			array('000e000',         0),
-			array('1e0',             1),
-			array('1e000',           1),
-			array('1e001',           10),
+			array('0e0',            0),
+			array('000e000',        0),
+			array('1e0',            1),
+			array('1e000',          1),
+			array('1e001',          10),
+
+			array(PHP_INT_MAX,      PHP_INT_MAX),
+			array(-PHP_INT_MAX - 1, -PHP_INT_MAX - 1),
 		);
 	}
 

@@ -4,9 +4,9 @@ namespace Data\Type;
 
 class BoolTest extends \PHPUnit_Framework_TestCase
 {
-	public function testInstantiateWithoutArg()
+	public function testNull()
 	{
-		$instance = new Bool();
+		$instance = Bool::make();
 		$this->assertSame(null, $instance->value());
 	}
 
@@ -62,14 +62,14 @@ class BoolTest extends \PHPUnit_Framework_TestCase
 			array(Int::make(1),      true),
 			array(String::make(1),   true),
 			array(Bool::make(false), false),
-			array(false,               false),
-			array(true,                true),
-			array(0.0,                 false),
-			array(1.0,                 true),
-			array(0,                   false),
-			array(1,                   true),
-			array('0',                 false),
-			array('1',                 true),
+			array(false,             false),
+			array(true,              true),
+			array(0.0,               false),
+			array(1.0,               true),
+			array(0,                 false),
+			array(1,                 true),
+			array('0',               false),
+			array('1',               true),
 		);
 	}
 
