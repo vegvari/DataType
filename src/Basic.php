@@ -2,8 +2,10 @@
 
 namespace Data\Type;
 
-abstract class Basic implements TypeInterface
+abstract class Basic implements \SplSubject
 {
+    use SplSubject;
+
     /**
      * @var mixed
      */
@@ -16,9 +18,7 @@ abstract class Basic implements TypeInterface
      */
     protected function __construct($value = null)
     {
-        if ($value !== null) {
-            $this->value = $this->check($value);
-        }
+        $this->set($value);
     }
 
     /**
@@ -27,10 +27,9 @@ abstract class Basic implements TypeInterface
      * @param  mixed $value
      * @return Basic
      */
-    public static function make($value = null)
+    public static function create($value = null)
     {
-        $class = get_called_class();
-        return new $class($value);
+        return new static($value);
     }
 
     /**
@@ -41,11 +40,13 @@ abstract class Basic implements TypeInterface
      */
     public static function cast($value)
     {
+        $value = static::create($value)->value();
+
         if ($value === null) {
-            throw new \InvalidArgumentException();
+            throw new \InvalidArgumentException('Value is not nullable');
         }
 
-        return self::make($value)->value();
+        return $value;
     }
 
     /**
@@ -56,7 +57,7 @@ abstract class Basic implements TypeInterface
      */
     public static function castNullable($value)
     {
-        return self::make($value)->value();
+        return static::create($value)->value();
     }
 
     /**
@@ -68,21 +69,16 @@ abstract class Basic implements TypeInterface
     public static function castSilent($value)
     {
         try {
-            return self::cast($value);
+            return static::cast($value);
         } catch (\InvalidArgumentException $e) {
         }
     }
 
     /**
-     * @see TypeInterface
-     */
-    public function value()
-    {
-        return $this->value;
-    }
-
-    /**
-     * @see TypeInterface
+     * Set the value
+     *
+     * @param  mixed $value
+     * @return this
      */
     public function set($value)
     {
@@ -90,13 +86,29 @@ abstract class Basic implements TypeInterface
             $value = $this->check($value);
         }
 
-        $this->value = $value;
+        if ($value !== $this->value) {
+            $this->value = $value;
+            $this->notify();
+        }
 
         return $this;
     }
 
     /**
-     * @see TypeInterface
+     * Get the value
+     *
+     * @return mixed
+     */
+    public function value()
+    {
+        return $this->value;
+    }
+
+    /**
+     * Check the value
+     *
+     * @param  mixed $value
+     * @return mixed
      */
     public function check($value)
     {
@@ -108,7 +120,9 @@ abstract class Basic implements TypeInterface
     }
 
     /**
-     * @see TypeInterface
+     * Cast instance to string
+     *
+     * @return string
      */
     public function __toString()
     {

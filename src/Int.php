@@ -2,10 +2,13 @@
 
 namespace Data\Type;
 
-class Int extends Number
+class Int extends Float
 {
     /**
-     * @see TypeInterface
+     * Check the value
+     *
+     * @param  mixed $value
+     * @return int
      */
     public function check($value)
     {
@@ -22,12 +25,12 @@ class Int extends Number
         }
 
         if (filter_var($value, FILTER_VALIDATE_FLOAT) === false) {
-            throw new \InvalidArgumentException();
+            throw new \InvalidArgumentException('Invalid int');
         }
         $value = (float) $value;
 
         if (filter_var($value, FILTER_VALIDATE_INT) === false) {
-            throw new \InvalidArgumentException();
+            throw new \InvalidArgumentException('Invalid int');
         }
 
         return (int) $value;
@@ -72,16 +75,16 @@ class Int extends Number
             return false;
         }
 
-        if($this->value === 2) {
+        if ($this->value === 2) {
             return true;
         }
 
-        if($this->isEven()) {
+        if ($this->isEven()) {
             return false;
         }
 
-        for($i = 3; $i <= ceil(sqrt($this->value)); $i = $i + 2) {
-            if($this->value % $i == 0) {
+        for ($i = 3; $i <= ceil(sqrt($this->value)); $i = $i + 2) {
+            if ($this->value % $i == 0) {
                 return false;
             }
         }

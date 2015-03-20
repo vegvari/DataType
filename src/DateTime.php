@@ -2,57 +2,87 @@
 
 namespace Data\Type;
 
-class DateTime extends \Carbon\Carbon
+class DateTime extends \Carbon\Carbon implements \SplSubject
 {
-    protected $value;
+    use SplSubject;
 
-    protected function __construct($value = null, $timezone = null)
+    /**
+     * @see DateTime::setDate
+     */
+    public function setDate($year, $month, $day)
     {
-    	if ($value !== null) {
-    		$value = $this->check($value);
-    	}
-
-    	parent::__construct($value, $timezone);
-
-    	if ($value !== null) {
-    		$this->value = (string) $this;
-    	}
+        $result = parent::setDate($year, $month, $day);
+        $this->notify();
+        return $result;
     }
 
-    public static function make($value = null, $timezone = null)
+    /**
+     * @see DateTime::setISODate
+     */
+    public function setISODate($year, $week, $day = null)
     {
-        $class = get_called_class();
-        return new $class($value, $timezone);
+        $result = parent::setISODate($year, $month, $day);
+        $this->notify();
+        return $result;
     }
 
-    public function value()
+    /**
+     * @see DateTime::setTime
+     */
+    public function setTime($hour, $minute, $second = null)
     {
-        return $this->value;
+        $result = parent::setTime($hour, $minute, $second);
+        $this->notify();
+        return $result;
     }
 
-    public function set($value, \DateTimeZone $timezone = null)
+    /**
+     * @see DateTime::setTimestamp
+     */
+    public function setTimestamp($unixtimestamp)
     {
-        if ($timezone === null) {
-            $timezone = $this->getTimezone();
-        }
-
-        return $this->make($value, $timezone);
+        $result = parent::setTimestamp($unixtimestamp);
+        $this->notify();
+        return $result;
     }
 
-    public function check($value)
-    {
-        if ($value instanceof \DateTime) {
-            return $value->value;
-        }
-
-        return $value;
-    }
-
+    /**
+     * @see DateTime::setTimezone
+     */
     public function setTimezone($value)
     {
-        parent::setTimezone($value);
-        if ($this->value !== null) {
-            $this->value = (string) $this;
-        }
+        $result = parent::setTimezone($value);
+        $this->notify();
+        return $result;
+    }
+
+    /**
+     * @see DateTime::modify
+     */
+    public function modify($modify)
+    {
+        $result = parent::modify($modify);
+        $this->notify();
+        return $result;
+    }
+
+    /**
+     * @see DateTime::add
+     */
+    public function add($interval)
+    {
+        $result = parent::add($interval);
+        $this->notify();
+        return $result;
+    }
+
+    /**
+     * @see DateTime::sub
+     */
+    public function sub($interval)
+    {
+        $result = parent::sub($interval);
+        $this->notify();
+        return $result;
     }
 }

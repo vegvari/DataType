@@ -5,7 +5,20 @@ namespace Data\Type;
 class Bool extends Basic
 {
     /**
-     * @see TypeInterface
+     * Get the value
+     *
+     * @return mixed
+     */
+    public function value()
+    {
+        return $this->value;
+    }
+
+    /**
+     * Check the value
+     *
+     * @param  mixed $value
+     * @return bool
      */
     public function check($value)
     {
@@ -25,6 +38,6 @@ class Bool extends Basic
             return true;
         }
 
-        throw new \InvalidArgumentException();
+        throw new \InvalidArgumentException('Invalid bool');
     }
 }

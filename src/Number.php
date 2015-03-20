@@ -22,7 +22,7 @@ abstract class Number extends Basic
 
         mt_srand();
 
-        return self::make(mt_rand($min, $max));
+        return self::create(mt_rand($min, $max));
     }
 
     /**
@@ -92,10 +92,10 @@ abstract class Number extends Basic
     public function neg()
     {
         if ($this->value === null) {
-            return Float::make($this->value);
+            return Float::create($this->value);
         }
 
-        return Float::make($this->value * -1);
+        return Float::create($this->value * -1);
     }
 
     /**
@@ -109,10 +109,10 @@ abstract class Number extends Basic
         $value = self::cast($value);
 
         if ($this->value === null) {
-            return Float::make($this->value);
+            return Float::create($this->value);
         }
 
-        return Float::make($this->value + $value);
+        return Float::create($this->value + $value);
     }
 
     /**
@@ -126,10 +126,10 @@ abstract class Number extends Basic
         $value = self::cast($value);
 
         if ($this->value === null) {
-            return Float::make($this->value);
+            return Float::create($this->value);
         }
 
-        return Float::make($this->value - $value);
+        return Float::create($this->value - $value);
     }
 
     /**
@@ -143,10 +143,10 @@ abstract class Number extends Basic
         $value = self::cast($value);
 
         if ($this->value === null) {
-            return Float::make($this->value);
+            return Float::create($this->value);
         }
 
-        return Float::make($this->value * $value);
+        return Float::create($this->value * $value);
     }
 
     /**
@@ -164,10 +164,10 @@ abstract class Number extends Basic
         }
 
         if ($this->value === null) {
-            return Float::make($this->value);
+            return Float::create($this->value);
         }
 
-        return Float::make($this->value / $value);
+        return Float::create($this->value / $value);
     }
 
     /**
@@ -185,10 +185,10 @@ abstract class Number extends Basic
         }
 
         if ($this->value === null) {
-            return Float::make($this->value);
+            return Float::create($this->value);
         }
 
-        return Float::make($this->value % $value);
+        return Float::create($this->value % $value);
     }
 
     /**
@@ -202,10 +202,10 @@ abstract class Number extends Basic
         $value = self::cast($value);
 
         if ($this->value === null) {
-            return Float::make($this->value);
+            return Float::create($this->value);
         }
 
-        return Float::make(pow($this->value, $value));
+        return Float::create(pow($this->value, $value));
     }
 
     /**
@@ -225,10 +225,10 @@ abstract class Number extends Basic
     public function sqrt()
     {
         if ($this->value === null) {
-            return Float::make($this->value);
+            return Float::create($this->value);
         }
 
-        return Float::make(sqrt($this->value));
+        return Float::create(sqrt($this->value));
     }
 
     /**
@@ -241,10 +241,10 @@ abstract class Number extends Basic
         $value = self::cast($value);
 
         if ($this->value === null) {
-            return Float::make($this->value);
+            return Float::create($this->value);
         }
 
-        return Float::make(pow($this->value, 1 / $value));
+        return Float::create(pow($this->value, 1 / $value));
     }
 
     /**

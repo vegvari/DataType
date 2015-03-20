@@ -22,7 +22,7 @@ class Float extends Number
         }
 
         if (filter_var($value, FILTER_VALIDATE_FLOAT) === false) {
-            throw new \InvalidArgumentException();
+            throw new \InvalidArgumentException('Invalid float');
         }
 
         return (float) $value;

@@ -6,13 +6,13 @@ class BoolTest extends \PHPUnit_Framework_TestCase
 {
 	public function testNull()
 	{
-		$instance = Bool::make();
+		$instance = Bool::create();
 		$this->assertSame(null, $instance->value());
 	}
 
 	public function testMake()
 	{
-		$instance = Bool::make(true);
+		$instance = Bool::create(true);
 		$this->assertSame(true, $instance->value());
 	}
 
@@ -33,7 +33,7 @@ class BoolTest extends \PHPUnit_Framework_TestCase
      */
 	public function testToString($data, $expected)
 	{
-		$instance = Bool::make($data);
+		$instance = Bool::create($data);
 		$this->assertSame($expected, (string) $instance);
 	}
 
@@ -50,26 +50,26 @@ class BoolTest extends \PHPUnit_Framework_TestCase
      */
 	public function testValid($data, $expected)
 	{
-		$instance = Bool::make($data);
+		$instance = Bool::create($data);
 		$this->assertSame($expected, $instance->value());
 	}
 
 	public function validDataProvider()
 	{
 		return array(
-			array(Bool::make(1),     true),
-			array(Float::make(1),    true),
-			array(Int::make(1),      true),
-			array(String::make(1),   true),
-			array(Bool::make(false), false),
-			array(false,             false),
-			array(true,              true),
-			array(0.0,               false),
-			array(1.0,               true),
-			array(0,                 false),
-			array(1,                 true),
-			array('0',               false),
-			array('1',               true),
+			array(Bool::create(1),     true),
+			array(Float::create(1),    true),
+			array(Int::create(1),      true),
+			array(String::create(1),   true),
+			array(Bool::create(false), false),
+			array(false,               false),
+			array(true,                true),
+			array(0.0,                 false),
+			array(1.0,                 true),
+			array(0,                   false),
+			array(1,                   true),
+			array('0',                 false),
+			array('1',                 true),
 		);
 	}
 
@@ -79,7 +79,7 @@ class BoolTest extends \PHPUnit_Framework_TestCase
 	public function testInvalid($data, $expected)
 	{
 		$this->setExpectedException($expected);
-		$instance = Bool::make($data);
+		$instance = Bool::create($data);
 	}
 
 	public function invalidDataProvider()
