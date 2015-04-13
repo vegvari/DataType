@@ -5,16 +5,6 @@ namespace Data\Type;
 class _bool extends Basic
 {
     /**
-     * Get the value
-     *
-     * @return mixed
-     */
-    public function value()
-    {
-        return $this->value;
-    }
-
-    /**
      * Check the value
      *
      * @param  mixed $value

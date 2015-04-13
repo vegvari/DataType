@@ -181,6 +181,100 @@ class IntTest extends \PHPUnit_Framework_TestCase implements \SplObserver
 		);
 	}
 
+	public function testRand()
+	{
+		$instance = _int::rand();
+		$this->assertTrue($instance instanceof _int);
+	}
+
+	public function testNeg()
+	{
+		$instance = _int::create(1);
+		$this->assertTrue($instance->neg() instanceof _float);
+		$this->assertSame(-1.0, $instance->neg()->value());
+
+		$instance = _int::create(-1);
+		$this->assertTrue($instance->neg() instanceof _float);
+		$this->assertSame(1.0, $instance->neg()->value());
+	}
+
+	public function testAdd()
+	{
+		$instance = _int::create(1);
+		$this->assertTrue($instance->add(1) instanceof _float);
+		$this->assertSame(2.0, $instance->add(1)->value());
+
+		$this->assertTrue($instance->add(_float::create(1)) instanceof _float);
+		$this->assertSame(2.0, $instance->add(_float::create(1))->value());
+	}
+
+	public function testSub()
+	{
+		$instance = _int::create(1);
+		$this->assertTrue($instance->sub(1) instanceof _float);
+		$this->assertSame(0.0, $instance->sub(1)->value());
+
+		$this->assertTrue($instance->sub(_float::create(1)) instanceof _float);
+		$this->assertSame(0.0, $instance->sub(_float::create(1))->value());
+	}
+
+	public function testMul()
+	{
+		$instance = _int::create(2);
+		$this->assertTrue($instance->mul(5) instanceof _float);
+		$this->assertSame(10.0, $instance->mul(5)->value());
+
+		$this->assertTrue($instance->mul(_float::create(5)) instanceof _float);
+		$this->assertSame(10.0, $instance->mul(_float::create(5))->value());
+	}
+
+	public function testDiv()
+	{
+		$instance = _int::create(10);
+		$this->assertTrue($instance->div(2) instanceof _float);
+		$this->assertSame(5.0, $instance->div(2)->value());
+
+		$this->assertTrue($instance->div(_float::create(2)) instanceof _float);
+		$this->assertSame(5.0, $instance->div(_float::create(2))->value());
+	}
+
+	public function testMod()
+	{
+		$instance = _int::create(10);
+		$this->assertTrue($instance->mod(2) instanceof _float);
+		$this->assertSame(0.0, $instance->mod(2)->value());
+
+		$this->assertTrue($instance->mod(_float::create(2)) instanceof _float);
+		$this->assertSame(0.0, $instance->mod(_float::create(2))->value());
+	}
+
+	public function testExp()
+	{
+		$instance = _int::create(10);
+		$this->assertTrue($instance->exp(2) instanceof _float);
+		$this->assertSame(100.0, $instance->exp(2)->value());
+
+		$this->assertTrue($instance->exp(_float::create(2)) instanceof _float);
+		$this->assertSame(100.0, $instance->exp(_float::create(2))->value());
+	}
+
+	public function testSqrt()
+	{
+		$instance = _int::create(100);
+		$this->assertTrue($instance->sqrt() instanceof _float);
+		$this->assertSame(10.0, $instance->sqrt()->value());
+	}
+
+	public function testRoot()
+	{
+		$instance = _int::create(27);
+		$this->assertTrue($instance->root(3) instanceof _float);
+		$this->assertSame(3.0, $instance->root(3)->value());
+
+		$this->assertTrue($instance->root(_float::create(3)) instanceof _float);
+		$this->assertSame(3.0, $instance->root(_float::create(3))->value());
+	}
+
 	public function testIsEven()
 	{
 		$instance = _int::create(0);

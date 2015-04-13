@@ -33,9 +33,7 @@ abstract class Number extends Basic
      */
     public static function castNatural($value)
     {
-        $class = get_called_class();
-
-        $instance = new $class($value);
+        $instance = new static($value);
 
         if ($instance->value < 0) {
             throw new \InvalidArgumentException();
@@ -52,9 +50,7 @@ abstract class Number extends Basic
      */
     public static function castPositive($value)
     {
-        $class = get_called_class();
-
-        $instance = new $class($value);
+        $instance = new static($value);
 
         $value = (float) $instance->value;
         if ($value < 0 || $value === 0.0) {
@@ -72,9 +68,7 @@ abstract class Number extends Basic
      */
     public static function castNegative($value)
     {
-        $class = get_called_class();
-
-        $instance = new $class($value);
+        $instance = new static($value);
 
         $value = (float) $instance->value;
         if ($value > 0 || $value === 0.0) {
@@ -85,9 +79,9 @@ abstract class Number extends Basic
     }
 
     /**
-     * Negation. Product is always Float.
+     * Negation. Product is always _float.
      *
-     * @return Float
+     * @return _float
      */
     public function neg()
     {
@@ -99,10 +93,10 @@ abstract class Number extends Basic
     }
 
     /**
-     * Addition. Product is always Float.
+     * Addition. Product is always _float.
      *
      * @param  mixed $value
-     * @return Float
+     * @return _float
      */
     public function add($value)
     {
@@ -116,10 +110,10 @@ abstract class Number extends Basic
     }
 
     /**
-     * Subtraction. Product is always Float.
+     * Subtraction. Product is always _float.
      *
      * @param  mixed $value
-     * @return Float
+     * @return _float
      */
     public function sub($value)
     {
@@ -133,10 +127,10 @@ abstract class Number extends Basic
     }
 
     /**
-     * Multiplication. Product is always Float.
+     * Multiplication. Product is always _float.
      *
      * @param  mixed $value
-     * @return Float
+     * @return _float
      */
     public function mul($value)
     {
@@ -150,10 +144,10 @@ abstract class Number extends Basic
     }
 
     /**
-     * Division. Product is always Float.
+     * Division. Product is always _float.
      *
      * @param  mixed $value
-     * @return Float
+     * @return _float
      */
     public function div($value)
     {
@@ -171,10 +165,10 @@ abstract class Number extends Basic
     }
 
     /**
-     * Modulus. Product is always Float.
+     * Modulus. Product is always _float.
      *
      * @param  mixed $value
-     * @return Float
+     * @return _float
      */
     public function mod($value)
     {
@@ -192,10 +186,10 @@ abstract class Number extends Basic
     }
 
     /**
-     * Exponentiation. Product is always Float.
+     * Exponentiation. Product is always _float.
      *
      * @param  mixed $value
-     * @return Float
+     * @return _float
      */
     public function exp($value)
     {
@@ -218,9 +212,9 @@ abstract class Number extends Basic
     }
 
     /**
-     * Square root. Product is always Float.
+     * Square root. Product is always _float.
      *
-     * @return Float
+     * @return _float
      */
     public function sqrt()
     {
@@ -232,9 +226,9 @@ abstract class Number extends Basic
     }
 
     /**
-     * Nth root. Product is always Float.
+     * Nth root. Product is always _float.
      *
-     * @return Float
+     * @return _float
      */
     public function root($value)
     {
