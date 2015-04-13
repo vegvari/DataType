@@ -2,7 +2,7 @@
 
 namespace Data\Type;
 
-class Float extends Number
+class _float extends Number
 {
     /**
      * @see TypeInterface

@@ -2,7 +2,7 @@
 
 namespace Data\Type;
 
-class String extends Basic implements \ArrayAccess, \Iterator, \Countable
+class _string extends Basic implements \ArrayAccess, \Iterator, \Countable
 {
     protected static $supported_encodings;
 
@@ -217,8 +217,8 @@ class String extends Basic implements \ArrayAccess, \Iterator, \Countable
      */
     public function substr($from, $length = null)
     {
-        $from = Int::cast($from);
-        $length = Int::castNullable($length);
+        $from = _int::cast($from);
+        $length = _int::castNullable($length);
 
         if ($this->length() < $from) {
             throw new \LengthException('From parameter must be smaller than the length of the string');
@@ -280,7 +280,7 @@ class String extends Basic implements \ArrayAccess, \Iterator, \Countable
      */
     public function offsetExists($offset)
     {
-        $offset = Int::castNullable($offset);
+        $offset = _int::castNullable($offset);
 
         if ($offset !== null && $offset >= 0 && $this->length() > $offset)
         {

@@ -2,7 +2,7 @@
 
 namespace Data\Type;
 
-class Int extends Float
+class _int extends _float
 {
     /**
      * Check the value
@@ -18,7 +18,7 @@ class Int extends Float
             return 1;
         } elseif (is_int($value)) {
             return $value;
-        } elseif ($value instanceof Int) {
+        } elseif ($value instanceof _int) {
             return $value->value();
         } elseif ($value instanceof Basic) {
             $value = $value->value();

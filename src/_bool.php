@@ -2,7 +2,7 @@
 
 namespace Data\Type;
 
-class Bool extends Basic
+class _bool extends Basic
 {
     /**
      * Get the value
