@@ -444,7 +444,7 @@ class IntTest extends \PHPUnit_Framework_TestCase implements \SplObserver
 	}
 
 	/**
-     * @dataProvider primeDataPrivider
+     * @dataProvider primeDataProvider
      */
 	public function testIsPrime($data, $expected)
 	{
@@ -452,7 +452,7 @@ class IntTest extends \PHPUnit_Framework_TestCase implements \SplObserver
 		$this->assertSame($expected, $instance->isPrime());
 	}
 
-	public function primeDataPrivider()
+	public function primeDataProvider()
 	{
 		return array(
 			array(-1, false),
