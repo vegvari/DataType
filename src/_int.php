@@ -12,22 +12,27 @@ class _int extends _float
      */
     public function check($value)
     {
-        if ($value === false || $value === 0 || $value === 0.0 || $value === '0') {
-            return 0;
-        } elseif ($value === true || $value === 1 || $value === 1.0 || $value === '1') {
-            return 1;
-        } elseif (is_int($value)) {
+        if (is_int($value)) {
             return $value;
-        } elseif ($value instanceof _int) {
+        }
+
+        if ($value === false || $value === 0.0 || $value === '0') {
+            return 0;
+        }
+
+        if ($value === true || $value === 1.0 || $value === '1') {
+            return 1;
+        }
+
+        if ($value instanceof _int) {
             return $value->value();
-        } elseif ($value instanceof Basic) {
+        }
+
+        if ($value instanceof Basic) {
             $value = $value->value();
         }
 
-        if (filter_var($value, FILTER_VALIDATE_FLOAT) === false) {
-            throw new \InvalidArgumentException('Invalid int');
-        }
-        $value = (float) $value;
+        $value = parent::check($value);
 
         if (filter_var($value, FILTER_VALIDATE_INT) === false) {
             throw new \InvalidArgumentException('Invalid int');

@@ -103,11 +103,21 @@ class _string extends Basic implements \ArrayAccess, \Iterator, \Countable
     {
         if ($value === false || $value === 0 || $value === 0.0 || $value === '0') {
             return '0';
-        } elseif ($value === true || $value === 1 || $value === 1.0 || $value === '1') {
+        }
+
+        if ($value === true || $value === 1 || $value === 1.0 || $value === '1') {
             return '1';
-        } elseif ($value instanceof Basic) {
+        }
+
+        if ($value instanceof _string) {
             return $value->value($this->encoding);
-        } elseif (is_array($value) || is_object($value) || is_resource($value)) {
+        }
+
+        if ($value instanceof Basic) {
+            return $value->value();
+        }
+
+        if (is_array($value) || is_object($value) || is_resource($value)) {
             throw new \InvalidArgumentException('Invalid string');
         }
 

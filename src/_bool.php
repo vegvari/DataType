@@ -14,17 +14,25 @@ class _bool extends Basic
     {
         if ($value === false || $value === 0 || $value === 0.0 || $value === '0') {
             return false;
-        } elseif ($value === true || $value === 1 || $value === 1.0 || $value === '1') {
+        }
+
+        if ($value === true || $value === 1 || $value === 1.0 || $value === '1') {
             return true;
-        } elseif ($value instanceof Bool) {
+        }
+
+        if ($value instanceof _bool) {
             return $value->value();
-        } elseif ($value instanceof Basic) {
+        }
+
+        if ($value instanceof Basic) {
             $value = $value->value();
         }
 
-        if ($value === false || $value === 0 || $value === 0.0 || $value === '0') {
+        if ($value === 0 || $value === 0.0 || $value === '0') {
             return false;
-        } elseif ($value === true || $value === 1 || $value === 1.0 || $value === '1') {
+        }
+
+        if ($value === 1 || $value === 1.0 || $value === '1') {
             return true;
         }
 
