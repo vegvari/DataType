@@ -2,7 +2,7 @@
 
 namespace Data\Type;
 
-class _int extends _float
+class IntType extends FloatType
 {
     /**
      * Check the value
@@ -24,7 +24,7 @@ class _int extends _float
             return 1;
         }
 
-        if ($value instanceof _int) {
+        if ($value instanceof IntType) {
             return $value->value();
         }
 

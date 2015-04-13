@@ -2,7 +2,7 @@
 
 namespace Data\Type;
 
-class _bool extends Basic
+class BoolType extends Basic
 {
     /**
      * Check the value
@@ -20,7 +20,7 @@ class _bool extends Basic
             return true;
         }
 
-        if ($value instanceof _bool) {
+        if ($value instanceof BoolType) {
             return $value->value();
         }
 

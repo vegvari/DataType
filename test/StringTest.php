@@ -15,7 +15,7 @@ class StringTest extends \PHPUnit_Framework_TestCase implements \SplObserver
 	{
 		$this->observer_helper_value = null;
 
-		$instance = _string::create('test');
+		$instance = StringType::create('test');
 		$instance->attach($this);
 		$this->assertSame('test', $this->observer_helper_value);
 	}
@@ -24,14 +24,14 @@ class StringTest extends \PHPUnit_Framework_TestCase implements \SplObserver
 	{
 		$this->observer_helper_value = 'no update';
 
-		$instance = _string::create();
+		$instance = StringType::create();
 		$instance->attach($this);
 		$this->assertSame('no update', $this->observer_helper_value);
 	}
 
 	public function testObserverUpdateOnChange()
 	{
-		$instance = _string::create();
+		$instance = StringType::create();
 		$instance->attach($this);
 
 		$instance->set('test');
@@ -46,25 +46,25 @@ class StringTest extends \PHPUnit_Framework_TestCase implements \SplObserver
 
 	public function testNull()
 	{
-		$instance = _string::create();
+		$instance = StringType::create();
 		$this->assertSame(null, $instance->value());
 	}
 
 	public function testMake()
 	{
-		$instance = _string::create(1);
+		$instance = StringType::create(1);
 		$this->assertSame('1', $instance->value());
 	}
 
 	public function testCast()
 	{
-		$data = _string::cast(1);
+		$data = StringType::cast(1);
 		$this->assertSame('1', $data);
 	}
 
 	public function testCastSilent()
 	{
-		$data = _string::castSilent(null);
+		$data = StringType::castSilent(null);
 		$this->assertSame(null, $data);
 	}
 
@@ -73,7 +73,7 @@ class StringTest extends \PHPUnit_Framework_TestCase implements \SplObserver
      */
 	public function testToString($data, $expected)
 	{
-		$instance = _string::create($data);
+		$instance = StringType::create($data);
 		$this->assertSame($expected, (string) $instance);
 	}
 
@@ -90,18 +90,18 @@ class StringTest extends \PHPUnit_Framework_TestCase implements \SplObserver
      */
 	public function testValid($data, $expected)
 	{
-		$instance = _string::create($data);
+		$instance = StringType::create($data);
 		$this->assertSame($expected, $instance->value());
 	}
 
 	public function validDataProvider()
 	{
 		return array(
-			array(_bool::create(1),         '1'),
-			array(_float::create(1),        '1'),
-			array(_int::create(1),          '1'),
-			array(_string::create(1),       '1'),
-			array(_string::create(0),       '0'),
+			array(BoolType::create(1),      '1'),
+			array(FloatType::create(1),     '1'),
+			array(IntType::create(1),       '1'),
+			array(StringType::create(1),    '1'),
+			array(StringType::create(0),    '0'),
 			array(false,                    '0'),
 			array(true,                     '1'),
 			array(0.0,                      '0'),
@@ -123,7 +123,7 @@ class StringTest extends \PHPUnit_Framework_TestCase implements \SplObserver
 	public function testInvalid($data, $expected)
 	{
 		$this->setExpectedException($expected);
-		$instance = _string::create($data);
+		$instance = StringType::create($data);
 	}
 
 	public function invalidDataProvider()
@@ -137,75 +137,75 @@ class StringTest extends \PHPUnit_Framework_TestCase implements \SplObserver
 
 	public function testLength()
 	{
-		$instance = _string::create('árvíztűrő tükörfúrógép', 'UTF-8');
+		$instance = StringType::create('árvíztűrő tükörfúrógép', 'UTF-8');
 		$this->assertSame(22, $instance->length());
 	}
 
 	public function testSubstr()
 	{
-		$instance = _string::create('árvíztűrő tükörfúrógép', 'UTF-8');
+		$instance = StringType::create('árvíztűrő tükörfúrógép', 'UTF-8');
 		$this->assertSame('árvíztűrő tükörfúrógép', $instance->substr(0));
 	}
 
 	public function testSubstrMissingFrom()
 	{
 		$this->setExpectedException('PHPUnit_Framework_Error_Warning');
-		$instance = _string::create('árvíztűrő tükörfúrógép');
+		$instance = StringType::create('árvíztűrő tükörfúrógép');
 		$instance->substr();
 	}
 
 	public function testSubstrInvalidLength()
 	{
 		$this->setExpectedException('\InvalidArgumentException');
-		$instance = _string::create('árvíztűrő tükörfúrógép');
+		$instance = StringType::create('árvíztűrő tükörfúrógép');
 		$instance->substr(0, 'test');
 	}
 
 	public function testSubstrOutOfRangeFrom()
 	{
 		$this->setExpectedException('\LengthException');
-		$instance = _string::create('árvíztűrő tükörfúrógép');
+		$instance = StringType::create('árvíztűrő tükörfúrógép');
 		$instance->substr($instance->length() + 1);
 	}
 
 	public function testSubstrOutOfRangeLength()
 	{
 		$this->setExpectedException('\LengthException');
-		$instance = _string::create('árvíztűrő tükörfúrógép');
+		$instance = StringType::create('árvíztűrő tükörfúrógép');
 		$instance->substr(0, $instance->length() + 1);
 	}
 
 	public function testToLower()
 	{
-		$instance = _string::create('ÁRVÍZTŰRŐ TÜKÖRFÚRÓGÉP', 'UTF-8');
-		$this->assertTrue($instance->toLower() instanceof _string);
+		$instance = StringType::create('ÁRVÍZTŰRŐ TÜKÖRFÚRÓGÉP', 'UTF-8');
+		$this->assertTrue($instance->toLower() instanceof StringType);
 		$this->assertSame('árvíztűrő tükörfúrógép', $instance->toLower()->value());
 	}
 
 	public function testToUpper()
 	{
-		$instance = _string::create('árvíztűrő tükörfúrógép', 'UTF-8');
-		$this->assertTrue($instance->toUpper() instanceof _string);
+		$instance = StringType::create('árvíztűrő tükörfúrógép', 'UTF-8');
+		$this->assertTrue($instance->toUpper() instanceof StringType);
 		$this->assertSame('ÁRVÍZTŰRŐ TÜKÖRFÚRÓGÉP', $instance->toUpper()->value());
 	}
 
 	public function testUpperFirst()
 	{
-		$instance = _string::create('árvíztűrő tükörfúrógép', 'UTF-8');
-		$this->assertTrue($instance->upperFirst() instanceof _string);
+		$instance = StringType::create('árvíztűrő tükörfúrógép', 'UTF-8');
+		$this->assertTrue($instance->upperFirst() instanceof StringType);
 		$this->assertSame('Árvíztűrő tükörfúrógép', $instance->upperFirst()->value());
 	}
 
 	public function testUpperWords()
 	{
-		$instance = _string::create('árvíztűrő tükörfúrógép', 'UTF-8');
-		$this->assertTrue($instance->upperWords() instanceof _string);
+		$instance = StringType::create('árvíztűrő tükörfúrógép', 'UTF-8');
+		$this->assertTrue($instance->upperWords() instanceof StringType);
 		$this->assertSame('Árvíztűrő Tükörfúrógép', $instance->upperWords()->value());
 	}
 
 	public function testArrayAccess()
 	{
-		$instance = _string::create('árvíztűrő tükörfúrógép', 'UTF-8');
+		$instance = StringType::create('árvíztűrő tükörfúrógép', 'UTF-8');
 
 		// isset
 		for($n = 0; $n < $instance->length(); $n++)
@@ -246,27 +246,27 @@ class StringTest extends \PHPUnit_Framework_TestCase implements \SplObserver
 	public function testArrayAccessInvalidOffset1()
 	{
 		$this->setExpectedException('\InvalidArgumentException');
-		$instance = _string::create('árvíztűrő tükörfúrógép');
+		$instance = StringType::create('árvíztűrő tükörfúrógép');
 		$test = $instance[-1];
 	}
 
 	public function testArrayAccessInvalidOffset2()
 	{
 		$this->setExpectedException('\InvalidArgumentException');
-		$instance = _string::create('árvíztűrő tükörfúrógép');
+		$instance = StringType::create('árvíztűrő tükörfúrógép');
 		$test = $instance[$instance->length()];
 	}
 
 	public function testArrayAccessInvalidOffset3()
 	{
 		$this->setExpectedException('\InvalidArgumentException');
-		$instance = _string::create('árvíztűrő tükörfúrógép');
+		$instance = StringType::create('árvíztűrő tükörfúrógép');
 		$test = $instance[null];
 	}
 
 	public function testIterator()
 	{
-		$instance = _string::create('𐆖 árvíztűrő tükörfúrógép 𐆖');
+		$instance = StringType::create('𐆖 árvíztűrő tükörfúrógép 𐆖');
 
 		$n = 0;
 		foreach ($instance as $key => $value) {

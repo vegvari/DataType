@@ -2,7 +2,7 @@
 
 namespace Data\Type;
 
-class _float extends Number
+class FloatType extends Number
 {
     /**
      * @see TypeInterface
@@ -29,7 +29,7 @@ class _float extends Number
             return $value->value();
         }
 
-        if ($value instanceof _int) {
+        if ($value instanceof IntType) {
             return (float) $value->value();
         }
 

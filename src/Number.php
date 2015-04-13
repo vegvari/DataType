@@ -79,75 +79,75 @@ abstract class Number extends Basic
     }
 
     /**
-     * Negation. Product is always _float.
+     * Negation. Product is always FloatType.
      *
-     * @return _float
+     * @return FloatType
      */
     public function neg()
     {
         if ($this->value === null) {
-            return _float::create($this->value);
+            return FloatType::create($this->value);
         }
 
-        return _float::create($this->value * -1);
+        return FloatType::create($this->value * -1);
     }
 
     /**
-     * Addition. Product is always _float.
+     * Addition. Product is always FloatType.
      *
      * @param  mixed $value
-     * @return _float
+     * @return FloatType
      */
     public function add($value)
     {
         $value = self::cast($value);
 
         if ($this->value === null) {
-            return _float::create($this->value);
+            return FloatType::create($this->value);
         }
 
-        return _float::create($this->value + $value);
+        return FloatType::create($this->value + $value);
     }
 
     /**
-     * Subtraction. Product is always _float.
+     * Subtraction. Product is always FloatType.
      *
      * @param  mixed $value
-     * @return _float
+     * @return FloatType
      */
     public function sub($value)
     {
         $value = self::cast($value);
 
         if ($this->value === null) {
-            return _float::create($this->value);
+            return FloatType::create($this->value);
         }
 
-        return _float::create($this->value - $value);
+        return FloatType::create($this->value - $value);
     }
 
     /**
-     * Multiplication. Product is always _float.
+     * Multiplication. Product is always FloatType.
      *
      * @param  mixed $value
-     * @return _float
+     * @return FloatType
      */
     public function mul($value)
     {
         $value = self::cast($value);
 
         if ($this->value === null) {
-            return _float::create($this->value);
+            return FloatType::create($this->value);
         }
 
-        return _float::create($this->value * $value);
+        return FloatType::create($this->value * $value);
     }
 
     /**
-     * Division. Product is always _float.
+     * Division. Product is always FloatType.
      *
      * @param  mixed $value
-     * @return _float
+     * @return FloatType
      */
     public function div($value)
     {
@@ -158,17 +158,17 @@ abstract class Number extends Basic
         }
 
         if ($this->value === null) {
-            return _float::create($this->value);
+            return FloatType::create($this->value);
         }
 
-        return _float::create($this->value / $value);
+        return FloatType::create($this->value / $value);
     }
 
     /**
-     * Modulus. Product is always _float.
+     * Modulus. Product is always FloatType.
      *
      * @param  mixed $value
-     * @return _float
+     * @return FloatType
      */
     public function mod($value)
     {
@@ -179,27 +179,27 @@ abstract class Number extends Basic
         }
 
         if ($this->value === null) {
-            return _float::create($this->value);
+            return FloatType::create($this->value);
         }
 
-        return _float::create($this->value % $value);
+        return FloatType::create($this->value % $value);
     }
 
     /**
-     * Exponentiation. Product is always _float.
+     * Exponentiation. Product is always FloatType.
      *
      * @param  mixed $value
-     * @return _float
+     * @return FloatType
      */
     public function exp($value)
     {
         $value = self::cast($value);
 
         if ($this->value === null) {
-            return _float::create($this->value);
+            return FloatType::create($this->value);
         }
 
-        return _float::create(pow($this->value, $value));
+        return FloatType::create(pow($this->value, $value));
     }
 
     /**
@@ -212,33 +212,33 @@ abstract class Number extends Basic
     }
 
     /**
-     * Square root. Product is always _float.
+     * Square root. Product is always FloatType.
      *
-     * @return _float
+     * @return FloatType
      */
     public function sqrt()
     {
         if ($this->value === null) {
-            return _float::create($this->value);
+            return FloatType::create($this->value);
         }
 
-        return _float::create(sqrt($this->value));
+        return FloatType::create(sqrt($this->value));
     }
 
     /**
-     * Nth root. Product is always _float.
+     * Nth root. Product is always FloatType.
      *
-     * @return _float
+     * @return FloatType
      */
     public function root($value)
     {
         $value = self::cast($value);
 
         if ($this->value === null) {
-            return _float::create($this->value);
+            return FloatType::create($this->value);
         }
 
-        return _float::create(pow($this->value, 1 / $value));
+        return FloatType::create(pow($this->value, 1 / $value));
     }
 
     /**

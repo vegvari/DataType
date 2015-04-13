@@ -15,7 +15,7 @@ class BoolTest extends \PHPUnit_Framework_TestCase implements \SplObserver
 	{
 		$this->observer_helper_value = null;
 
-		$instance = _bool::create(true);
+		$instance = BoolType::create(true);
 		$instance->attach($this);
 		$this->assertSame(true, $this->observer_helper_value);
 	}
@@ -24,7 +24,7 @@ class BoolTest extends \PHPUnit_Framework_TestCase implements \SplObserver
 	{
 		$this->observer_helper_value = 'no update';
 
-		$instance = _bool::create();
+		$instance = BoolType::create();
 		$instance->attach($this);
 		$this->assertSame('no update', $this->observer_helper_value);
 	}
@@ -33,7 +33,7 @@ class BoolTest extends \PHPUnit_Framework_TestCase implements \SplObserver
 	{
 		$this->observer_helper_value = null;
 
-		$instance = _bool::create();
+		$instance = BoolType::create();
 		$instance->attach($this);
 
 		$instance->set(true);
@@ -48,25 +48,25 @@ class BoolTest extends \PHPUnit_Framework_TestCase implements \SplObserver
 
 	public function testNull()
 	{
-		$instance = _bool::create();
+		$instance = BoolType::create();
 		$this->assertSame(null, $instance->value());
 	}
 
 	public function testMake()
 	{
-		$instance = _bool::create(true);
+		$instance = BoolType::create(true);
 		$this->assertSame(true, $instance->value());
 	}
 
 	public function testCast()
 	{
-		$data = _bool::cast(true);
+		$data = BoolType::cast(true);
 		$this->assertSame(true, $data);
 	}
 
 	public function testCastSilent()
 	{
-		$data = _bool::castSilent('test');
+		$data = BoolType::castSilent('test');
 		$this->assertSame(null, $data);
 	}
 
@@ -75,7 +75,7 @@ class BoolTest extends \PHPUnit_Framework_TestCase implements \SplObserver
      */
 	public function testToString($data, $expected)
 	{
-		$instance = _bool::create($data);
+		$instance = BoolType::create($data);
 		$this->assertSame($expected, (string) $instance);
 	}
 
@@ -92,26 +92,26 @@ class BoolTest extends \PHPUnit_Framework_TestCase implements \SplObserver
      */
 	public function testValid($data, $expected)
 	{
-		$instance = _bool::create($data);
+		$instance = BoolType::create($data);
 		$this->assertSame($expected, $instance->value());
 	}
 
 	public function validDataProvider()
 	{
 		return array(
-			array(_bool::create(1),     true),
-			array(_float::create(1),    true),
-			array(_int::create(1),      true),
-			array(_string::create(1),   true),
-			array(_bool::create(false), false),
-			array(false,                false),
-			array(true,                 true),
-			array(0.0,                  false),
-			array(1.0,                  true),
-			array(0,                    false),
-			array(1,                    true),
-			array('0',                  false),
-			array('1',                  true),
+			array(BoolType::create(1),     true),
+			array(FloatType::create(1),    true),
+			array(IntType::create(1),      true),
+			array(StringType::create(1),   true),
+			array(BoolType::create(false), false),
+			array(false,                   false),
+			array(true,                    true),
+			array(0.0,                     false),
+			array(1.0,                     true),
+			array(0,                       false),
+			array(1,                       true),
+			array('0',                     false),
+			array('1',                     true),
 		);
 	}
 
@@ -121,7 +121,7 @@ class BoolTest extends \PHPUnit_Framework_TestCase implements \SplObserver
 	public function testInvalid($data, $expected)
 	{
 		$this->setExpectedException($expected);
-		$instance = _bool::create($data);
+		$instance = BoolType::create($data);
 	}
 
 	public function invalidDataProvider()
