@@ -249,7 +249,7 @@ abstract class Number extends Basic
      */
     public function eq($value)
     {
-        $value = self::cast($value);
+        $value = self::castNullable($value);
 
         if ($this->value === $value) {
             return true;
@@ -266,7 +266,7 @@ abstract class Number extends Basic
      */
     public function ne($value)
     {
-        $value = self::cast($value);
+        $value = self::castNullable($value);
 
         if ($this->value !== $value) {
             return true;

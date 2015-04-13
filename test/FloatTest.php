@@ -325,4 +325,94 @@ class FloatTest extends \PHPUnit_Framework_TestCase implements \SplObserver
 		$this->assertTrue($instance->root(_float::create(3)) instanceof _float);
 		$this->assertSame(3.0, $instance->root(_float::create(3))->value());
 	}
+
+	public function testEq()
+	{
+		$instance = _float::create(1);
+		$this->assertSame(false, $instance->eq(null));
+		$this->assertSame(false, $instance->eq(0));
+		$this->assertSame(true,  $instance->eq(1));
+		$this->assertSame(false, $instance->eq(2));
+	}
+
+	public function testEqWithNull()
+	{
+		$instance = _float::create();
+		$this->assertSame(true, $instance->eq(null));
+	}
+
+	public function testNe()
+	{
+		$instance = _float::create(1);
+		$this->assertSame(true,  $instance->ne(null));
+		$this->assertSame(true,  $instance->ne(0));
+		$this->assertSame(false, $instance->ne(1));
+		$this->assertSame(true,  $instance->ne(2));
+	}
+
+	public function testNeWithNull()
+	{
+		$instance = _float::create();
+		$this->assertSame(false, $instance->eq(1));
+	}
+
+	public function testGt()
+	{
+		$instance = _float::create(1);
+		$this->assertSame(true,  $instance->gt(0));
+		$this->assertSame(false, $instance->gt(1));
+		$this->assertSame(false, $instance->gt(2));
+	}
+
+	public function testGtWithNull()
+	{
+		$this->setExpectedException('\InvalidArgumentException');
+		$instance = _float::create(1);
+		$instance->gt(null);
+	}
+
+	public function testGte()
+	{
+		$instance = _float::create(1);
+		$this->assertSame(true,  $instance->gte(0));
+		$this->assertSame(true,  $instance->gte(1));
+		$this->assertSame(false, $instance->gte(2));
+	}
+
+	public function testGteWithNull()
+	{
+		$this->setExpectedException('\InvalidArgumentException');
+		$instance = _float::create(1);
+		$instance->gte(null);
+	}
+
+	public function testLt()
+	{
+		$instance = _float::create(1);
+		$this->assertSame(false, $instance->lt(0));
+		$this->assertSame(false, $instance->lt(1));
+		$this->assertSame(true,  $instance->lt(2));
+	}
+
+	public function testLtWithNull()
+	{
+		$this->setExpectedException('\InvalidArgumentException');
+		$instance = _float::create(1);
+		$instance->lt(null);
+	}
+
+	public function testLte()
+	{
+		$instance = _float::create(1);
+		$this->assertSame(false, $instance->lte(0));
+		$this->assertSame(true,  $instance->lte(1));
+		$this->assertSame(true,  $instance->lte(2));
+	}
+
+	public function testLteWithNull()
+	{
+		$this->setExpectedException('\InvalidArgumentException');
+		$instance = _float::create(1);
+		$instance->lte(null);
+	}
 }
