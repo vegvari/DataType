@@ -6,6 +6,18 @@ class DateTime extends \Carbon\Carbon implements \SplSubject
 {
     use SplSubject;
 
+    protected $value;
+
+    /**
+     * Get the value
+     *
+     * @return mixed
+     */
+    public function value()
+    {
+        return $this->value;
+    }
+
     /**
      * @see DateTime::setDate
      */
@@ -13,6 +25,7 @@ class DateTime extends \Carbon\Carbon implements \SplSubject
     {
         $result = parent::setDate($year, $month, $day);
         $this->notify();
+        $this->value = (string) $this;
         return $result;
     }
 
@@ -23,6 +36,7 @@ class DateTime extends \Carbon\Carbon implements \SplSubject
     {
         $result = parent::setISODate($year, $month, $day);
         $this->notify();
+        $this->value = (string) $this;
         return $result;
     }
 
@@ -33,6 +47,7 @@ class DateTime extends \Carbon\Carbon implements \SplSubject
     {
         $result = parent::setTime($hour, $minute, $second);
         $this->notify();
+        $this->value = (string) $this;
         return $result;
     }
 
@@ -43,6 +58,7 @@ class DateTime extends \Carbon\Carbon implements \SplSubject
     {
         $result = parent::setTimestamp($unixtimestamp);
         $this->notify();
+        $this->value = (string) $this;
         return $result;
     }
 
@@ -53,6 +69,7 @@ class DateTime extends \Carbon\Carbon implements \SplSubject
     {
         $result = parent::setTimezone($value);
         $this->notify();
+        $this->value = (string) $this;
         return $result;
     }
 
@@ -63,6 +80,7 @@ class DateTime extends \Carbon\Carbon implements \SplSubject
     {
         $result = parent::modify($modify);
         $this->notify();
+        $this->value = (string) $this;
         return $result;
     }
 
@@ -73,6 +91,7 @@ class DateTime extends \Carbon\Carbon implements \SplSubject
     {
         $result = parent::add($interval);
         $this->notify();
+        $this->value = (string) $this;
         return $result;
     }
 
@@ -83,6 +102,7 @@ class DateTime extends \Carbon\Carbon implements \SplSubject
     {
         $result = parent::sub($interval);
         $this->notify();
+        $this->value = (string) $this;
         return $result;
     }
 }

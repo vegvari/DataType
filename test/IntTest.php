@@ -2,8 +2,48 @@
 
 namespace Data\Type;
 
-class IntTest extends \PHPUnit_Framework_TestCase
+class IntTest extends \PHPUnit_Framework_TestCase implements \SplObserver
 {
+	public $observer_helper_value;
+
+	public function update(\SplSubject $subject)
+	{
+		$this->observer_helper_value = $subject->value();
+	}
+
+	public function testObserverUpdateOnAttach()
+	{
+		$this->observer_helper_value = null;
+
+		$instance = Int::create(1);
+		$instance->attach($this);
+		$this->assertSame(1, $this->observer_helper_value);
+	}
+
+	public function testObserverUpdateOnAttachExceptNull()
+	{
+		$this->observer_helper_value = 'no update';
+
+		$instance = Int::create();
+		$instance->attach($this);
+		$this->assertSame('no update', $this->observer_helper_value);
+	}
+
+	public function testObserverUpdateOnChange()
+	{
+		$instance = Int::create();
+		$instance->attach($this);
+
+		$instance->set(1);
+		$this->assertSame(1, $this->observer_helper_value);
+
+		$instance->set(2);
+		$this->assertSame(2, $this->observer_helper_value);
+
+		$instance->set(null);
+		$this->assertSame(null, $this->observer_helper_value);
+	}
+
 	public function testNull()
 	{
 		$instance = Int::create();

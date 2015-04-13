@@ -2,8 +2,48 @@
 
 namespace Data\Type;
 
-class FloatTest extends \PHPUnit_Framework_TestCase
+class FloatTest extends \PHPUnit_Framework_TestCase implements \SplObserver
 {
+	public $observer_helper_value;
+
+	public function update(\SplSubject $subject)
+	{
+		$this->observer_helper_value = $subject->value();
+	}
+
+	public function testObserverUpdateOnAttach()
+	{
+		$this->observer_helper_value = null;
+
+		$instance = Float::create(1.0);
+		$instance->attach($this);
+		$this->assertSame(1.0, $this->observer_helper_value);
+	}
+
+	public function testObserverUpdateOnAttachExceptNull()
+	{
+		$this->observer_helper_value = 'no update';
+
+		$instance = Float::create();
+		$instance->attach($this);
+		$this->assertSame('no update', $this->observer_helper_value);
+	}
+
+	public function testObserverUpdateOnChange()
+	{
+		$instance = Float::create();
+		$instance->attach($this);
+
+		$instance->set(1.0);
+		$this->assertSame(1.0, $this->observer_helper_value);
+
+		$instance->set(2.0);
+		$this->assertSame(2.0, $this->observer_helper_value);
+
+		$instance->set(null);
+		$this->assertSame(null, $this->observer_helper_value);
+	}
+
 	public function testNull()
 	{
 		$instance = Float::create();

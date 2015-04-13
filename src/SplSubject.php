@@ -19,6 +19,10 @@ trait SplSubject
         }
 
         $this->observers->attach($observer);
+
+        if ($this->value !== null) {
+            $this->notify();
+        }
     }
 
     /**

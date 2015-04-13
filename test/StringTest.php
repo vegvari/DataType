@@ -2,8 +2,48 @@
 
 namespace Data\Type;
 
-class StringTest extends \PHPUnit_Framework_TestCase
+class StringTest extends \PHPUnit_Framework_TestCase implements \SplObserver
 {
+	public $observer_helper_value;
+
+	public function update(\SplSubject $subject)
+	{
+		$this->observer_helper_value = $subject->value();
+	}
+
+	public function testObserverUpdateOnAttach()
+	{
+		$this->observer_helper_value = null;
+
+		$instance = String::create('test');
+		$instance->attach($this);
+		$this->assertSame('test', $this->observer_helper_value);
+	}
+
+	public function testObserverUpdateOnAttachExceptNull()
+	{
+		$this->observer_helper_value = 'no update';
+
+		$instance = String::create();
+		$instance->attach($this);
+		$this->assertSame('no update', $this->observer_helper_value);
+	}
+
+	public function testObserverUpdateOnChange()
+	{
+		$instance = String::create();
+		$instance->attach($this);
+
+		$instance->set('test');
+		$this->assertSame('test', $this->observer_helper_value);
+
+		$instance->set('test2');
+		$this->assertSame('test2', $this->observer_helper_value);
+
+		$instance->set(null);
+		$this->assertSame(null, $this->observer_helper_value);
+	}
+
 	public function testNull()
 	{
 		$instance = String::create();
