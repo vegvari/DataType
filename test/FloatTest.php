@@ -68,6 +68,60 @@ class FloatTest extends \PHPUnit_Framework_TestCase implements \SplObserver
 		$this->assertSame(null, $data);
 	}
 
+	public function testCastNaturalWithZero()
+	{
+		$data = _float::castNatural(0);
+		$this->assertSame(0.0, $data);
+	}
+
+	public function testCastNaturalWithPositive()
+	{
+		$data = _float::castNatural(1);
+		$this->assertSame(1.0, $data);
+	}
+
+	public function testCastNaturalWithNegative()
+	{
+		$this->setExpectedException('\InvalidArgumentException');
+		$data = _float::castNatural(-1.0);
+	}
+
+	public function testCastPositiveWithZero()
+	{
+		$this->setExpectedException('\InvalidArgumentException');
+		$data = _float::castPositive(0.0);
+	}
+
+	public function testCastPositiveWithPositive()
+	{
+		$data = _float::castPositive(1);
+		$this->assertSame(1.0, $data);
+	}
+
+	public function testCastPositiveWithNegative()
+	{
+		$this->setExpectedException('\InvalidArgumentException');
+		$data = _float::castPositive(-1.0);
+	}
+
+	public function testCastNegativeWithZero()
+	{
+		$this->setExpectedException('\InvalidArgumentException');
+		$data = _float::castNegative(0.0);
+	}
+
+	public function testCastNegativeWithPositive()
+	{
+		$this->setExpectedException('\InvalidArgumentException');
+		$data = _float::castNegative(1.0);
+	}
+
+	public function testCastNegativeWithNegative()
+	{
+		$data = _float::castNegative(-1);
+		$this->assertSame(-1.0, $data);
+	}
+
 	/**
      * @dataProvider toStringDataProvider
      */

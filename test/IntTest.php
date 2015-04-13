@@ -68,6 +68,60 @@ class IntTest extends \PHPUnit_Framework_TestCase implements \SplObserver
 		$this->assertSame(null, $data);
 	}
 
+	public function testCastNaturalWithZero()
+	{
+		$data = _int::castNatural(0);
+		$this->assertSame(0, $data);
+	}
+
+	public function testCastNaturalWithPositive()
+	{
+		$data = _int::castNatural(1);
+		$this->assertSame(1, $data);
+	}
+
+	public function testCastNaturalWithNegative()
+	{
+		$this->setExpectedException('\InvalidArgumentException');
+		$data = _int::castNatural(-1);
+	}
+
+	public function testCastPositiveWithZero()
+	{
+		$this->setExpectedException('\InvalidArgumentException');
+		$data = _int::castPositive(0);
+	}
+
+	public function testCastPositiveWithPositive()
+	{
+		$data = _int::castPositive(1);
+		$this->assertSame(1, $data);
+	}
+
+	public function testCastPositiveWithNegative()
+	{
+		$this->setExpectedException('\InvalidArgumentException');
+		$data = _int::castPositive(-1);
+	}
+
+	public function testCastNegativeWithZero()
+	{
+		$this->setExpectedException('\InvalidArgumentException');
+		$data = _int::castNegative(0);
+	}
+
+	public function testCastNegativeWithPositive()
+	{
+		$this->setExpectedException('\InvalidArgumentException');
+		$data = _int::castNegative(1);
+	}
+
+	public function testCastNegativeWithNegative()
+	{
+		$data = _int::castNegative(-1);
+		$this->assertSame(-1, $data);
+	}
+
 	/**
      * @dataProvider toStringDataProvider
      */

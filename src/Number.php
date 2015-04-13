@@ -36,7 +36,7 @@ abstract class Number extends Basic
         $instance = new static($value);
 
         if ($instance->value < 0) {
-            throw new \InvalidArgumentException();
+            throw new \InvalidArgumentException('Natural must be >= 0: "' . $value . '"');
         }
 
         return $instance->value;
@@ -54,7 +54,7 @@ abstract class Number extends Basic
 
         $value = (float) $instance->value;
         if ($value < 0 || $value === 0.0) {
-            throw new \InvalidArgumentException();
+            throw new \InvalidArgumentException('Positive must be > 0: "' . $value . '"');
         }
 
         return $instance->value;
@@ -72,7 +72,7 @@ abstract class Number extends Basic
 
         $value = (float) $instance->value;
         if ($value > 0 || $value === 0.0) {
-            throw new \InvalidArgumentException();
+            throw new \InvalidArgumentException('Negative must be < 0: "' . $value . '"');
         }
 
         return $instance->value;

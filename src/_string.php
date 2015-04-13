@@ -195,7 +195,7 @@ class _string extends Basic implements \ArrayAccess, \Iterator, \Countable
             return static::supportedEncodings()[$encoding];
         }
 
-        throw new \Exception('Encoding is not supported (' . $encoding . ')');
+        throw new \Exception('Encoding is not supported: "' . $encoding . '"');
     }
 
     /**
@@ -296,7 +296,7 @@ class _string extends Basic implements \ArrayAccess, \Iterator, \Countable
     public function offsetGet($offset)
     {
         if ($this->offsetExists($offset) === false) {
-            throw new \InvalidArgumentException('Invalid offset (' . $offset . ')');
+            throw new \InvalidArgumentException('Invalid offset "' . $offset . '"');
         }
 
         return $this->substr($offset, 1);

@@ -43,7 +43,7 @@ abstract class Basic implements \SplSubject
         $value = static::create($value)->value();
 
         if ($value === null) {
-            throw new \InvalidArgumentException('Value is not nullable');
+            throw new \InvalidArgumentException('Not nullable');
         }
 
         return $value;
