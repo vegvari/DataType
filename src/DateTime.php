@@ -2,6 +2,8 @@
 
 namespace Data\Type;
 
+use Data\Type\Traits\SplSubject;
+
 class DateTime extends \Carbon\Carbon implements \SplSubject
 {
     use SplSubject;

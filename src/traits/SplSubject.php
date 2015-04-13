@@ -1,6 +1,6 @@
 <?php
 
-namespace Data\Type;
+namespace Data\Type\Traits;
 
 trait SplSubject
 {

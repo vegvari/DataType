@@ -2,6 +2,8 @@
 
 namespace Data\Type;
 
+use Data\Type\Traits\SplSubject;
+
 abstract class Basic implements \SplSubject
 {
     use SplSubject;
