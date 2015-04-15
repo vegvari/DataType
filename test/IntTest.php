@@ -15,7 +15,7 @@ class IntTest extends \PHPUnit_Framework_TestCase implements \SplObserver
 	{
 		$this->observer_helper_value = null;
 
-		$instance = IntType::create(1);
+		$instance = new IntType(1);
 		$instance->attach($this);
 		$this->assertSame(1, $this->observer_helper_value);
 	}
@@ -24,14 +24,14 @@ class IntTest extends \PHPUnit_Framework_TestCase implements \SplObserver
 	{
 		$this->observer_helper_value = 'no update';
 
-		$instance = IntType::create();
+		$instance = new IntType();
 		$instance->attach($this);
 		$this->assertSame('no update', $this->observer_helper_value);
 	}
 
 	public function testObserverUpdateOnChange()
 	{
-		$instance = IntType::create();
+		$instance = new IntType();
 		$instance->attach($this);
 
 		$instance->set(1);
@@ -46,79 +46,73 @@ class IntTest extends \PHPUnit_Framework_TestCase implements \SplObserver
 
 	public function testNull()
 	{
-		$instance = IntType::create();
+		$instance = new IntType();
 		$this->assertSame(null, $instance->value());
 	}
 
 	public function testMake()
 	{
-		$instance = IntType::create(1);
+		$instance = new IntType(1);
 		$this->assertSame(1, $instance->value());
 	}
 
 	public function testCast()
 	{
-		$data = IntType::cast(1);
+		$data = Cast::Int(1);
 		$this->assertSame(1, $data);
 	}
 
-	public function testCastSilent()
+	public function testCastUnsignedWithZero()
 	{
-		$data = IntType::castSilent('test');
-		$this->assertSame(null, $data);
-	}
-
-	public function testCastNaturalWithZero()
-	{
-		$data = IntType::castNatural(0);
+		$data = Cast::uInt(0);
 		$this->assertSame(0, $data);
 	}
 
-	public function testCastNaturalWithPositive()
+	public function testCastUnsignedWithPositive()
 	{
-		$data = IntType::castNatural(1);
+		$data = Cast::uInt(1);
 		$this->assertSame(1, $data);
 	}
 
-	public function testCastNaturalWithNegative()
+	public function testCastUnsignedWithNegative()
 	{
 		$this->setExpectedException('\InvalidArgumentException');
-		$data = IntType::castNatural(-1);
+		$data = Cast::uInt(-1);
 	}
 
 	public function testCastPositiveWithZero()
 	{
 		$this->setExpectedException('\InvalidArgumentException');
-		$data = IntType::castPositive(0);
+		$data = Cast::pInt(0);
 	}
 
 	public function testCastPositiveWithPositive()
 	{
-		$data = IntType::castPositive(1);
+		$data = Cast::pInt(1);
 		$this->assertSame(1, $data);
 	}
 
 	public function testCastPositiveWithNegative()
 	{
 		$this->setExpectedException('\InvalidArgumentException');
-		$data = IntType::castPositive(-1);
+		$data = Cast::pInt(-1);
 	}
 
 	public function testCastNegativeWithZero()
 	{
 		$this->setExpectedException('\InvalidArgumentException');
-		$data = IntType::castNegative(0);
+		$data = Cast::nInt(0);
 	}
 
 	public function testCastNegativeWithPositive()
 	{
 		$this->setExpectedException('\InvalidArgumentException');
-		$data = IntType::castNegative(1);
+		$data = Cast::nInt(1);
 	}
 
 	public function testCastNegativeWithNegative()
 	{
-		$data = IntType::castNegative(-1);
+		$data = Cast::nInt(-1);
 		$this->assertSame(-1, $data);
 	}
 
@@ -127,7 +121,7 @@ class IntTest extends \PHPUnit_Framework_TestCase implements \SplObserver
      */
 	public function testToString($data, $expected)
 	{
-		$instance = IntType::create($data);
+		$instance = new IntType($data);
 		$this->assertSame($expected, (string) $instance);
 	}
 
@@ -144,57 +138,57 @@ class IntTest extends \PHPUnit_Framework_TestCase implements \SplObserver
      */
 	public function testValid($data, $expected)
 	{
-		$instance = IntType::create($data);
+		$instance = new IntType($data);
 		$this->assertSame($expected, $instance->value());
 	}
 
 	public function validDataProvider()
 	{
 		return array(
-			array(BoolType::create(1),   1),
-			array(FloatType::create(1),  1),
-			array(IntType::create(1),    1),
-			array(StringType::create(1), 1),
-			array(IntType::create(0.0),  0),
-			array(false,                 0),
-			array(true,                  1),
-			array(0.0,                   0),
-			array(1.0,                   1),
-			array(0,                     0),
-			array(1,                     1),
-			array('0',                   0),
-			array('1',                   1),
+			array(new BoolType(1),   1),
+			array(new FloatType(1),  1),
+			array(new IntType(1),    1),
+			array(new StringType(1), 1),
+			array(new IntType(0.0),  0),
+			array(false,             0),
+			array(true,              1),
+			array(0.0,               0),
+			array(1.0,               1),
+			array(0,                 0),
+			array(1,                 1),
+			array('0',               0),
+			array('1',               1),
 
-			array(-1.0,                  -1),
-			array(2.0,                   2),
-			array(-1,                    -1),
-			array(2,                     2),
+			array(-1.0,              -1),
+			array(2.0,               2),
+			array(-1,                -1),
+			array(2,                 2),
 
-			array('-1',                  -1),
-			array('2',                   2),
+			array('-1',              -1),
+			array('2',               2),
 
-			array('000',                 0),
-			array('000.000',             0),
-			array('-1.00000',            -1),
-			array('2.000000',            2),
+			array('000',             0),
+			array('000.000',         0),
+			array('-1.00000',        -1),
+			array('2.000000',        2),
 
-			array('1e2',                 100),
-			array('-1e2',                -100),
-			array('1E2',                 100),
-			array('-1E2',                -100),
-			array('1e+2',                100),
-			array('-1e+2',               -100),
-			array('1E+2',                100),
-			array('-1E+2',               -100),
+			array('1e2',             100),
+			array('-1e2',            -100),
+			array('1E2',             100),
+			array('-1E2',            -100),
+			array('1e+2',            100),
+			array('-1e+2',           -100),
+			array('1E+2',            100),
+			array('-1E+2',           -100),
 
-			array('0e0',                 0),
-			array('000e000',             0),
-			array('1e0',                 1),
-			array('1e000',               1),
-			array('1e001',               10),
+			array('0e0',             0),
+			array('000e000',         0),
+			array('1e0',             1),
+			array('1e000',           1),
+			array('1e001',           10),
 
-			array(PHP_INT_MAX,           PHP_INT_MAX),
-			array(~PHP_INT_MAX,          ~PHP_INT_MAX),
+			array(PHP_INT_MAX,       PHP_INT_MAX),
+			array(~PHP_INT_MAX,      ~PHP_INT_MAX),
 		);
 	}
 
@@ -204,7 +198,7 @@ class IntTest extends \PHPUnit_Framework_TestCase implements \SplObserver
 	public function testInvalid($data, $expected)
 	{
 		$this->setExpectedException($expected);
-		$instance = IntType::create($data);
+		$instance = new IntType($data);
 	}
 
 	public function invalidDataProvider()
@@ -235,103 +229,97 @@ class IntTest extends \PHPUnit_Framework_TestCase implements \SplObserver
 		);
 	}
 
-	public function testRand()
-	{
-		$instance = IntType::rand();
-		$this->assertTrue($instance instanceof IntType);
-	}
-
 	public function testNeg()
 	{
-		$instance = IntType::create(1);
+		$instance = new IntType(1);
 		$this->assertTrue($instance->neg() instanceof FloatType);
 		$this->assertSame(-1.0, $instance->neg()->value());
 
-		$instance = IntType::create(-1);
+		$instance = new IntType(-1);
 		$this->assertTrue($instance->neg() instanceof FloatType);
 		$this->assertSame(1.0, $instance->neg()->value());
 	}
 
 	public function testAdd()
 	{
-		$instance = IntType::create(1);
+		$instance = new IntType(1);
 		$this->assertTrue($instance->add(1) instanceof FloatType);
 		$this->assertSame(2.0, $instance->add(1)->value());
 
-		$this->assertTrue($instance->add(FloatType::create(1)) instanceof FloatType);
-		$this->assertSame(2.0, $instance->add(FloatType::create(1))->value());
+		$this->assertTrue($instance->add(new FloatType(1)) instanceof FloatType);
+		$this->assertSame(2.0, $instance->add(new FloatType(1))->value());
 	}
 
 	public function testSub()
 	{
-		$instance = IntType::create(1);
+		$instance = new IntType(1);
 		$this->assertTrue($instance->sub(1) instanceof FloatType);
 		$this->assertSame(0.0, $instance->sub(1)->value());
 
-		$this->assertTrue($instance->sub(FloatType::create(1)) instanceof FloatType);
-		$this->assertSame(0.0, $instance->sub(FloatType::create(1))->value());
+		$this->assertTrue($instance->sub(new FloatType(1)) instanceof FloatType);
+		$this->assertSame(0.0, $instance->sub(new FloatType(1))->value());
 	}
 
 	public function testMul()
 	{
-		$instance = IntType::create(2);
+		$instance = new IntType(2);
 		$this->assertTrue($instance->mul(5) instanceof FloatType);
 		$this->assertSame(10.0, $instance->mul(5)->value());
 
-		$this->assertTrue($instance->mul(FloatType::create(5)) instanceof FloatType);
-		$this->assertSame(10.0, $instance->mul(FloatType::create(5))->value());
+		$this->assertTrue($instance->mul(new FloatType(5)) instanceof FloatType);
+		$this->assertSame(10.0, $instance->mul(new FloatType(5))->value());
 	}
 
 	public function testDiv()
 	{
-		$instance = IntType::create(10);
+		$instance = new IntType(10);
 		$this->assertTrue($instance->div(2) instanceof FloatType);
 		$this->assertSame(5.0, $instance->div(2)->value());
 
-		$this->assertTrue($instance->div(FloatType::create(2)) instanceof FloatType);
-		$this->assertSame(5.0, $instance->div(FloatType::create(2))->value());
+		$this->assertTrue($instance->div(new FloatType(2)) instanceof FloatType);
+		$this->assertSame(5.0, $instance->div(new FloatType(2))->value());
 	}
 
 	public function testMod()
 	{
-		$instance = IntType::create(10);
+		$instance = new IntType(10);
 		$this->assertTrue($instance->mod(2) instanceof FloatType);
 		$this->assertSame(0.0, $instance->mod(2)->value());
 
-		$this->assertTrue($instance->mod(FloatType::create(2)) instanceof FloatType);
-		$this->assertSame(0.0, $instance->mod(FloatType::create(2))->value());
+		$this->assertTrue($instance->mod(new FloatType(2)) instanceof FloatType);
+		$this->assertSame(0.0, $instance->mod(new FloatType(2))->value());
 	}
 
 	public function testExp()
 	{
-		$instance = IntType::create(10);
+		$instance = new IntType(10);
 		$this->assertTrue($instance->exp(2) instanceof FloatType);
 		$this->assertSame(100.0, $instance->exp(2)->value());
 
-		$this->assertTrue($instance->exp(FloatType::create(2)) instanceof FloatType);
-		$this->assertSame(100.0, $instance->exp(FloatType::create(2))->value());
+		$this->assertTrue($instance->exp(new FloatType(2)) instanceof FloatType);
+		$this->assertSame(100.0, $instance->exp(new FloatType(2))->value());
 	}
 
 	public function testSqrt()
 	{
-		$instance = IntType::create(100);
+		$instance = new IntType(100);
 		$this->assertTrue($instance->sqrt() instanceof FloatType);
 		$this->assertSame(10.0, $instance->sqrt()->value());
 	}
 
 	public function testRoot()
 	{
-		$instance = IntType::create(27);
+		$instance = new IntType(27);
 		$this->assertTrue($instance->root(3) instanceof FloatType);
 		$this->assertSame(3.0, $instance->root(3)->value());
 
-		$this->assertTrue($instance->root(FloatType::create(3)) instanceof FloatType);
-		$this->assertSame(3.0, $instance->root(FloatType::create(3))->value());
+		$this->assertTrue($instance->root(new FloatType(3)) instanceof FloatType);
+		$this->assertSame(3.0, $instance->root(new FloatType(3))->value());
 	}
 
 	public function testEq()
 	{
-		$instance = FloatType::create(1);
+		$instance = new FloatType(1);
 		$this->assertSame(false, $instance->eq(null));
 		$this->assertSame(false, $instance->eq(0));
 		$this->assertSame(true,  $instance->eq(1));
@@ -340,13 +328,13 @@ class IntTest extends \PHPUnit_Framework_TestCase implements \SplObserver
 
 	public function testEqWithNull()
 	{
-		$instance = FloatType::create();
+		$instance = new FloatType();
 		$this->assertSame(true, $instance->eq(null));
 	}
 
 	public function testNe()
 	{
-		$instance = FloatType::create(1);
+		$instance = new FloatType(1);
 		$this->assertSame(true,  $instance->ne(null));
 		$this->assertSame(true,  $instance->ne(0));
 		$this->assertSame(false, $instance->ne(1));
@@ -355,13 +343,13 @@ class IntTest extends \PHPUnit_Framework_TestCase implements \SplObserver
 
 	public function testNeWithNull()
 	{
-		$instance = FloatType::create();
+		$instance = new FloatType();
 		$this->assertSame(false, $instance->eq(1));
 	}
 
 	public function testGt()
 	{
-		$instance = FloatType::create(1);
+		$instance = new FloatType(1);
 		$this->assertSame(true,  $instance->gt(0));
 		$this->assertSame(false, $instance->gt(1));
 		$this->assertSame(false, $instance->gt(2));
@@ -370,13 +358,13 @@ class IntTest extends \PHPUnit_Framework_TestCase implements \SplObserver
 	public function testGtWithNull()
 	{
 		$this->setExpectedException('\InvalidArgumentException');
-		$instance = FloatType::create(1);
+		$instance = new FloatType(1);
 		$instance->gt(null);
 	}
 
 	public function testGte()
 	{
-		$instance = FloatType::create(1);
+		$instance = new FloatType(1);
 		$this->assertSame(true,  $instance->gte(0));
 		$this->assertSame(true,  $instance->gte(1));
 		$this->assertSame(false, $instance->gte(2));
@@ -385,13 +373,13 @@ class IntTest extends \PHPUnit_Framework_TestCase implements \SplObserver
 	public function testGteWithNull()
 	{
 		$this->setExpectedException('\InvalidArgumentException');
-		$instance = FloatType::create(1);
+		$instance = new FloatType(1);
 		$instance->gte(null);
 	}
 
 	public function testLt()
 	{
-		$instance = FloatType::create(1);
+		$instance = new FloatType(1);
 		$this->assertSame(false, $instance->lt(0));
 		$this->assertSame(false, $instance->lt(1));
 		$this->assertSame(true,  $instance->lt(2));
@@ -400,13 +388,13 @@ class IntTest extends \PHPUnit_Framework_TestCase implements \SplObserver
 	public function testLtWithNull()
 	{
 		$this->setExpectedException('\InvalidArgumentException');
-		$instance = FloatType::create(1);
+		$instance = new FloatType(1);
 		$instance->lt(null);
 	}
 
 	public function testLte()
 	{
-		$instance = FloatType::create(1);
+		$instance = new FloatType(1);
 		$this->assertSame(false, $instance->lte(0));
 		$this->assertSame(true,  $instance->lte(1));
 		$this->assertSame(true,  $instance->lte(2));
@@ -415,31 +403,31 @@ class IntTest extends \PHPUnit_Framework_TestCase implements \SplObserver
 	public function testLteWithNull()
 	{
 		$this->setExpectedException('\InvalidArgumentException');
-		$instance = FloatType::create(1);
+		$instance = new FloatType(1);
 		$instance->lte(null);
 	}
 
 	public function testIsEven()
 	{
-		$instance = IntType::create(0);
+		$instance = new IntType(0);
 		$this->assertSame(true, $instance->isEven());
 
-		$instance = IntType::create(1);
+		$instance = new IntType(1);
 		$this->assertSame(false, $instance->isEven());
 
-		$instance = IntType::create(2);
+		$instance = new IntType(2);
 		$this->assertSame(true, $instance->isEven());
 	}
 
 	public function testIsOdd()
 	{
-		$instance = IntType::create(0);
+		$instance = new IntType(0);
 		$this->assertSame(false, $instance->isOdd());
 
-		$instance = IntType::create(1);
+		$instance = new IntType(1);
 		$this->assertSame(true, $instance->isOdd());
 
-		$instance = IntType::create(2);
+		$instance = new IntType(2);
 		$this->assertSame(false, $instance->isOdd());
 	}
 
@@ -448,7 +436,7 @@ class IntTest extends \PHPUnit_Framework_TestCase implements \SplObserver
      */
 	public function testIsPrime($data, $expected)
 	{
-		$instance = IntType::create($data);
+		$instance = new IntType($data);
 		$this->assertSame($expected, $instance->isPrime());
 	}
 

@@ -5,7 +5,10 @@ namespace Data\Type;
 class FloatType extends Number
 {
     /**
-     * @see TypeInterface
+     * Check the value
+     *
+     * @param  mixed $value
+     * @return float
      */
     public function check($value)
     {

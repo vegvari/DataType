@@ -21,58 +21,15 @@ class StringType extends Basic implements \ArrayAccess, \Iterator, \Countable
      *
      * @param mixed $value
      */
-    protected function __construct($value = null, $encoding = null)
+    public function __construct($value = null, $encoding = null)
     {
-        $this->setEncoding($encoding);
-        $this->set($value);
-    }
-
-    /**
-     * Instance factory
-     *
-     * @param  mixed $value
-     * @return String
-     */
-    public static function create($value = null, $encoding = null)
-    {
-        return new static($value, $encoding);
-    }
-
-    /**
-     * Casting to the type, null not allowed
-     *
-     * @param  mixed $value
-     * @return String
-     */
-    public static function cast($value, $encoding = null)
-    {
-        $value = static::create($value, $encoding)->value();
-        return parent::castNullable($value);
-    }
-
-    /**
-     * Casting to the type, null allowed
-     *
-     * @param  mixed $value
-     * @return String
-     */
-    public static function castNullable($value, $encoding = null)
-    {
-        return static::create($value, $encoding)->value();
-    }
-
-    /**
-     * Casting to the type, hide exception if any (return null)
-     *
-     * @param  mixed $value
-     * @return String
-     */
-    public static function castSilent($value, $encoding = null)
-    {
-        try {
-            return static::cast($value, $encoding);
-        } catch (\InvalidArgumentException $e) {
+        if ($encoding === null) {
+            $this->encoding = mb_internal_encoding();
+        } else {
+            $this->encoding = $this->getRealEncoding($encoding);
         }
+
+        $this->set($value);
     }
 
     /**
@@ -139,20 +96,6 @@ class StringType extends Basic implements \ArrayAccess, \Iterator, \Countable
     }
 
     /**
-     * Sets the encoding
-     *
-     * @param string
-     */
-    public function setEncoding($encoding)
-    {
-        if ($encoding === null) {
-            $this->encoding = mb_internal_encoding();
-        } else {
-            $this->encoding = $this->getRealEncoding($encoding);
-        }
-    }
-
-    /**
      * Creates an array with all of the aliases->encodings
      *
      * @return array
@@ -180,7 +123,7 @@ class StringType extends Basic implements \ArrayAccess, \Iterator, \Countable
      * @param  string  $encoding
      * @return bool
      */
-    public function isEncodingSupported($encoding)
+    public static function isEncodingSupported($encoding)
     {
         $encoding = strtolower($encoding);
 
@@ -199,13 +142,11 @@ class StringType extends Basic implements \ArrayAccess, \Iterator, \Countable
      */
     public function getRealEncoding($encoding)
     {
-        $encoding = strtolower($encoding);
-
-        if (isset (static::supportedEncodings()[$encoding])) {
-            return static::supportedEncodings()[$encoding];
+        if (static::isEncodingSupported($encoding) === false) {
+            throw new \Exception('Encoding is not supported: "' . $encoding . '"');
         }
 
-        throw new \Exception('Encoding is not supported: "' . $encoding . '"');
+        return static::supportedEncodings()[strtolower($encoding)];
     }
 
     /**
@@ -306,7 +247,7 @@ class StringType extends Basic implements \ArrayAccess, \Iterator, \Countable
     public function offsetGet($offset)
     {
         if ($this->offsetExists($offset) === false) {
-            throw new \InvalidArgumentException('Invalid offset "' . $offset . '"');
+            throw new \InvalidArgumentException('Invalid offset: "' . $offset . '"');
         }
 
         return $this->substr($offset, 1);
