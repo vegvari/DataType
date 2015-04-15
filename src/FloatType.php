@@ -10,7 +10,7 @@ class FloatType extends Number
      * @param  mixed $value
      * @return float
      */
-    public function check($value)
+    protected function check($value)
     {
         if (is_float($value)) {
             return $value;

@@ -10,7 +10,7 @@ class IntType extends FloatType
      * @param  mixed $value
      * @return int
      */
-    public function check($value)
+    protected function check($value)
     {
         if (is_int($value)) {
             return $value;

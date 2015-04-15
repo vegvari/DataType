@@ -103,7 +103,7 @@ abstract class Basic implements \SplSubject
      * @param  mixed $value
      * @return mixed
      */
-    public function check($value)
+    protected function check($value)
     {
         if ($value instanceof Basic) {
             $value = $value->value;

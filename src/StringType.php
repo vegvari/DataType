@@ -56,7 +56,7 @@ class StringType extends Basic implements \ArrayAccess, \Iterator, \Countable
      * @param  mixed  $value
      * @return string
      */
-    public function check($value)
+    protected function check($value)
     {
         if ($value === false || $value === 0 || $value === 0.0 || $value === '0') {
             return '0';
