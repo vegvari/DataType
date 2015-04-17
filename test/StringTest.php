@@ -58,7 +58,7 @@ class StringTest extends \PHPUnit_Framework_TestCase implements \SplObserver
 
 	public function testCast()
 	{
-		$data = StringType::cast(1);
+		$data = Cast::String(1);
 		$this->assertSame('1', $data);
 	}
 

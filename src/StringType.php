@@ -168,8 +168,8 @@ class StringType extends Basic implements \ArrayAccess, \Iterator, \Countable
      */
     public function substr($from, $length = null)
     {
-        $from = IntType::cast($from);
-        $length = IntType::castNullable($length);
+        $from = Cast::Int($from);
+        $length = Cast::_Int($length);
 
         if ($this->length() < $from) {
             throw new \LengthException('From parameter must be smaller than the length of the string');
@@ -231,7 +231,7 @@ class StringType extends Basic implements \ArrayAccess, \Iterator, \Countable
      */
     public function offsetExists($offset)
     {
-        $offset = IntType::castNullable($offset);
+        $offset = Cast::_Int($offset);
 
         if ($offset !== null && $offset >= 0 && $this->length() > $offset)
         {
@@ -258,7 +258,7 @@ class StringType extends Basic implements \ArrayAccess, \Iterator, \Countable
      */
     public function offsetSet($offset, $value)
     {
-        $value = String::castNullable($value, $this->encoding);
+        $value = Cast::_String($value, $this->encoding);
 
         $new = static::create($this->substr(0, $offset) . $value . $this->substr($offset + 1), $this->encoding);
         $this->value = $new->value;

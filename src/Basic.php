@@ -24,50 +24,6 @@ abstract class Basic implements \SplSubject
     }
 
     /**
-     * Casting to the type, null not allowed
-     *
-     * @param  mixed $value
-     * @return this
-     */
-    public static function cast($value)
-    {
-        $instance = new static($value);
-
-        if ($instance->value() === null) {
-            throw new \InvalidArgumentException('Not nullable');
-        }
-
-        return $instance->value();
-    }
-
-    /**
-     * Casting to the type, null allowed
-     *
-     * @param  mixed $value
-     * @return this
-     */
-    public static function castNullable($value)
-    {
-        $instance = new static($value);
-        return $instance->value();
-    }
-
-    /**
-     * Casting to the type, hide exception if any (return null)
-     *
-     * @param  mixed $value
-     * @return this
-     */
-    public static function castSilent($value)
-    {
-        try {
-            $instance = new static($value);
-            return $instance->value();
-        } catch (\InvalidArgumentException $e) {
-        }
-    }
-
-    /**
      * Set the value
      *
      * @param  mixed $value

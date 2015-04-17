@@ -26,7 +26,7 @@ abstract class Number extends Basic
      */
     public function add($value)
     {
-        $value = self::cast($value);
+        $value = Cast::Float($value);
 
         if ($this->value === null) {
             return new FloatType($this->value);
@@ -43,7 +43,7 @@ abstract class Number extends Basic
      */
     public function sub($value)
     {
-        $value = self::cast($value);
+        $value = Cast::Float($value);
 
         if ($this->value === null) {
             return new FloatType($this->value);
@@ -60,7 +60,7 @@ abstract class Number extends Basic
      */
     public function mul($value)
     {
-        $value = self::cast($value);
+        $value = Cast::Float($value);
 
         if ($this->value === null) {
             return new FloatType($this->value);
@@ -77,7 +77,7 @@ abstract class Number extends Basic
      */
     public function div($value)
     {
-        $value = self::cast($value);
+        $value = Cast::Float($value);
 
         if ($value == 0) {
             throw new \InvalidArgumentException('Division by zero');
@@ -98,7 +98,7 @@ abstract class Number extends Basic
      */
     public function mod($value)
     {
-        $value = self::cast($value);
+        $value = Cast::Float($value);
 
         if ($value == 0) {
             throw new \InvalidArgumentException('Division by zero');
@@ -119,7 +119,7 @@ abstract class Number extends Basic
      */
     public function exp($value)
     {
-        $value = self::cast($value);
+        $value = Cast::Float($value);
 
         if ($this->value === null) {
             return new FloatType($this->value);
@@ -158,7 +158,7 @@ abstract class Number extends Basic
      */
     public function root($value)
     {
-        $value = self::cast($value);
+        $value = Cast::Float($value);
 
         if ($this->value === null) {
             return new FloatType($this->value);
@@ -175,7 +175,7 @@ abstract class Number extends Basic
      */
     public function eq($value)
     {
-        $value = self::castNullable($value);
+        $value = Cast::_Float($value);
 
         if ($this->value === $value) {
             return true;
@@ -192,7 +192,7 @@ abstract class Number extends Basic
      */
     public function ne($value)
     {
-        $value = self::castNullable($value);
+        $value = Cast::_Float($value);
 
         if ($this->value !== $value) {
             return true;
@@ -209,7 +209,7 @@ abstract class Number extends Basic
      */
     public function gt($value)
     {
-        $value = self::cast($value);
+        $value = Cast::Float($value);
 
         if ($this->value !== null && $this->value > $value) {
             return true;
@@ -226,7 +226,7 @@ abstract class Number extends Basic
      */
     public function gte($value)
     {
-        $value = self::cast($value);
+        $value = Cast::Float($value);
 
         if ($this->value !== null && $this->value >= $value) {
             return true;
@@ -243,7 +243,7 @@ abstract class Number extends Basic
      */
     public function lt($value)
     {
-        $value = self::cast($value);
+        $value = Cast::Float($value);
 
         if ($this->value !== null && $this->value < $value) {
             return true;
@@ -260,7 +260,7 @@ abstract class Number extends Basic
      */
     public function lte($value)
     {
-        $value = self::cast($value);
+        $value = Cast::Float($value);
 
         if ($this->value !== null && $this->value <= $value) {
             return true;
