@@ -2,11 +2,12 @@
 
 namespace Data\Type;
 
-use Data\Type\Traits\SplSubject;
+use SplSubject;
+use Data\Type\Traits\SplSubject as SplSubjectTrait;
 
-abstract class Basic implements \SplSubject
+abstract class Basic implements SplSubject
 {
-    use SplSubject;
+    use SplSubjectTrait;
 
     /**
      * @var mixed

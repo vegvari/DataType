@@ -2,6 +2,8 @@
 
 namespace Data\Type;
 
+use InvalidArgumentException;
+
 class BoolType extends Basic
 {
     /**
@@ -36,6 +38,6 @@ class BoolType extends Basic
             return true;
         }
 
-        throw new \InvalidArgumentException('Invalid bool');
+        throw new InvalidArgumentException('Invalid bool');
     }
 }

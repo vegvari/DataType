@@ -2,7 +2,12 @@
 
 namespace Data\Type;
 
-class StringType extends Basic implements \ArrayAccess, \Iterator, \Countable
+use Iterator;
+use Countable;
+use ArrayAccess;
+use InvalidArgumentException;
+
+class StringType extends Basic implements ArrayAccess, Iterator, Countable
 {
     protected static $supported_encodings;
 
@@ -75,7 +80,7 @@ class StringType extends Basic implements \ArrayAccess, \Iterator, \Countable
         }
 
         if (is_array($value) || is_object($value) || is_resource($value)) {
-            throw new \InvalidArgumentException('Invalid string');
+            throw new InvalidArgumentException('Invalid string');
         }
 
         return mb_convert_encoding($value, 'UTF-8', $this->encoding);
@@ -247,7 +252,7 @@ class StringType extends Basic implements \ArrayAccess, \Iterator, \Countable
     public function offsetGet($offset)
     {
         if ($this->offsetExists($offset) === false) {
-            throw new \InvalidArgumentException('Invalid offset: "' . $offset . '"');
+            throw new InvalidArgumentException('Invalid offset: "' . $offset . '"');
         }
 
         return $this->substr($offset, 1);

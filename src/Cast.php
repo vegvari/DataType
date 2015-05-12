@@ -2,6 +2,8 @@
 
 namespace Data\Type;
 
+use InvalidArgumentException;
+
 abstract class Cast
 {
     /**
@@ -30,7 +32,7 @@ abstract class Cast
             case 'nInt':
             case 'String':
                 if ($args[0] === null) {
-                    throw new \InvalidArgumentException($name . ' is not nullable');
+                    throw new InvalidArgumentException($name . ' is not nullable');
                 }
                 break;
         }
@@ -70,7 +72,7 @@ abstract class Cast
                 $instance = new FloatType($args[0]);
 
                 if ($instance->value() < 0) {
-                    throw new \InvalidArgumentException('Unsigned float must be >= 0, "' . $instance->value() . '" given');
+                    throw new InvalidArgumentException('Unsigned float must be >= 0, "' . $instance->value() . '" given');
                 }
 
                 return $instance->value();
@@ -80,7 +82,7 @@ abstract class Cast
                 $instance = new FloatType($args[0]);
 
                 if ($instance->value() <= 0) {
-                    throw new \InvalidArgumentException('Positive float must be > 0, "' . $instance->value() . '" given');
+                    throw new InvalidArgumentException('Positive float must be > 0, "' . $instance->value() . '" given');
                 }
 
                 return $instance->value();
@@ -90,7 +92,7 @@ abstract class Cast
                 $instance = new FloatType($args[0]);
 
                 if ($instance->value() >= 0) {
-                    throw new \InvalidArgumentException('Negative float must be < 0, "' . $instance->value() . '" given');
+                    throw new InvalidArgumentException('Negative float must be < 0, "' . $instance->value() . '" given');
                 }
 
                 return $instance->value();
@@ -105,7 +107,7 @@ abstract class Cast
                 $instance = new IntType($args[0]);
 
                 if ($instance->value() < 0) {
-                    throw new \InvalidArgumentException('Unsigned int must be >= 0, "' . $instance->value() . '" given');
+                    throw new InvalidArgumentException('Unsigned int must be >= 0, "' . $instance->value() . '" given');
                 }
 
                 return $instance->value();
@@ -115,7 +117,7 @@ abstract class Cast
                 $instance = new IntType($args[0]);
 
                 if ($instance->value() < 1) {
-                    throw new \InvalidArgumentException('Positive int must be > 0, "' . $instance->value() . '" given');
+                    throw new InvalidArgumentException('Positive int must be > 0, "' . $instance->value() . '" given');
                 }
 
                 return $instance->value();
@@ -125,7 +127,7 @@ abstract class Cast
                 $instance = new IntType($args[0]);
 
                 if ($instance->value() >= 0) {
-                    throw new \InvalidArgumentException('Negative int must be < 0, "' . $instance->value() . '" given');
+                    throw new InvalidArgumentException('Negative int must be < 0, "' . $instance->value() . '" given');
                 }
 
                 return $instance->value();

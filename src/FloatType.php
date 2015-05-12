@@ -2,6 +2,8 @@
 
 namespace Data\Type;
 
+use InvalidArgumentException;
+
 class FloatType extends Number
 {
     /**
@@ -41,7 +43,7 @@ class FloatType extends Number
         }
 
         if (filter_var($value, FILTER_VALIDATE_FLOAT) === false) {
-            throw new \InvalidArgumentException('Invalid float');
+            throw new InvalidArgumentException('Invalid float');
         }
 
         return (float) $value;

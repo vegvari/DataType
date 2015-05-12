@@ -2,6 +2,8 @@
 
 namespace Data\Type;
 
+use InvalidArgumentException;
+
 class IntType extends FloatType
 {
     /**
@@ -35,7 +37,7 @@ class IntType extends FloatType
         $value = parent::check($value);
 
         if (filter_var($value, FILTER_VALIDATE_INT) === false) {
-            throw new \InvalidArgumentException('Invalid int');
+            throw new InvalidArgumentException('Invalid int');
         }
 
         return (int) $value;

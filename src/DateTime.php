@@ -2,11 +2,13 @@
 
 namespace Data\Type;
 
-use Data\Type\Traits\SplSubject;
+use SplSubject;
+use Carbon\Carbon;
+use Data\Type\Traits\SplSubject as SplSubjectTrait;
 
-class DateTime extends \Carbon\Carbon implements \SplSubject
+class DateTime extends Carbon\Carbon implements SplSubject
 {
-    use SplSubject;
+    use SplSubjectTrait;
 
     protected $value;
 

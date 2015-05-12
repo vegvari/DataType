@@ -2,6 +2,8 @@
 
 namespace Data\Type;
 
+use InvalidArgumentException;
+
 abstract class Number extends Basic
 {
     /**
@@ -80,7 +82,7 @@ abstract class Number extends Basic
         $value = Cast::Float($value);
 
         if ($value == 0) {
-            throw new \InvalidArgumentException('Division by zero');
+            throw new InvalidArgumentException('Division by zero');
         }
 
         if ($this->value === null) {
@@ -101,7 +103,7 @@ abstract class Number extends Basic
         $value = Cast::Float($value);
 
         if ($value == 0) {
-            throw new \InvalidArgumentException('Division by zero');
+            throw new InvalidArgumentException('Division by zero');
         }
 
         if ($this->value === null) {
