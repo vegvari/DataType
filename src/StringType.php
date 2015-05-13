@@ -5,6 +5,7 @@ namespace Data\Type;
 use Iterator;
 use Countable;
 use ArrayAccess;
+use LengthException;
 use InvalidArgumentException;
 
 class StringType extends Type implements ArrayAccess, Iterator, Countable
@@ -177,11 +178,11 @@ class StringType extends Type implements ArrayAccess, Iterator, Countable
         $length = Cast::_Int($length);
 
         if ($this->length() < $from) {
-            throw new \LengthException('From parameter must be smaller than the length of the string');
+            throw new LengthException('From parameter must be smaller than the length of the string');
         }
 
         if ($this->length() < $length) {
-            throw new \LengthException('Length parameter must be smaller than the length of the string');
+            throw new LengthException('Length parameter must be smaller than the length of the string');
         }
 
         return mb_convert_encoding(mb_substr($this->value, $from, $length, 'UTF-8'), $this->encoding, 'UTF-8');

@@ -2,6 +2,7 @@
 
 namespace Data\Type;
 
+use Exception;
 use InvalidArgumentException;
 
 abstract class Cast
@@ -144,7 +145,7 @@ abstract class Cast
                 break;
 
             default:
-                throw new \Exception('Unknown type: "' . $name . '"');
+                throw new Exception('Unknown type: "' . $name . '"');
                 break;
         }
     }
