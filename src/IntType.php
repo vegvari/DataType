@@ -30,7 +30,7 @@ class IntType extends FloatType
             return $value->value();
         }
 
-        if ($value instanceof Basic) {
+        if ($value instanceof Type) {
             $value = $value->value();
         }
 

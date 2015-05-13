@@ -7,7 +7,7 @@ use Countable;
 use ArrayAccess;
 use InvalidArgumentException;
 
-class StringType extends Basic implements ArrayAccess, Iterator, Countable
+class StringType extends Type implements ArrayAccess, Iterator, Countable
 {
     protected static $supported_encodings;
 
@@ -75,7 +75,7 @@ class StringType extends Basic implements ArrayAccess, Iterator, Countable
             return $value->value($this->encoding);
         }
 
-        if ($value instanceof Basic) {
+        if ($value instanceof Type) {
             return $value->value();
         }
 

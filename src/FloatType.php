@@ -38,7 +38,7 @@ class FloatType extends Number
             return (float) $value->value();
         }
 
-        if ($value instanceof Basic) {
+        if ($value instanceof Type) {
             $value = $value->value();
         }
 

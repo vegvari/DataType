@@ -4,7 +4,7 @@ namespace Data\Type;
 
 use InvalidArgumentException;
 
-abstract class Number extends Basic
+abstract class Number extends Type
 {
     /**
      * Negation. Product is always FloatType.

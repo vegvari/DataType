@@ -4,7 +4,7 @@ namespace Data\Type;
 
 use InvalidArgumentException;
 
-class BoolType extends Basic
+class BoolType extends Type
 {
     /**
      * Check the value
@@ -26,7 +26,7 @@ class BoolType extends Basic
             return $value->value();
         }
 
-        if ($value instanceof Basic) {
+        if ($value instanceof Type) {
             $value = $value->value();
         }
 

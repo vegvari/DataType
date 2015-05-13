@@ -5,7 +5,7 @@ namespace Data\Type;
 use SplSubject;
 use Data\Type\Traits\SplSubject as SplSubjectTrait;
 
-abstract class Basic implements SplSubject
+abstract class Type implements SplSubject
 {
     use SplSubjectTrait;
 
@@ -62,7 +62,7 @@ abstract class Basic implements SplSubject
      */
     protected function check($value)
     {
-        if ($value instanceof Basic) {
+        if ($value instanceof Type) {
             $value = $value->value;
         }
 
