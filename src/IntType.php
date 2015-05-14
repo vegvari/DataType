@@ -32,16 +32,28 @@ class IntType extends FloatType
 
         if ($value instanceof Type) {
             $value = $value->value();
+        } else {
+            if (is_array($value)) {
+                throw new InvalidArgumentException('Invalid int, array given');
+            }
+
+            if (is_resource($value)) {
+                throw new InvalidArgumentException('Invalid int, resource given');
+            }
+
+            if (is_object($value)) {
+                throw new InvalidArgumentException('Invalid int, object given');
+            }
         }
 
         try {
             $value = parent::check($value);
         } catch (InvalidArgumentException $e) {
-            throw new InvalidArgumentException('Invalid int');
+            throw new InvalidArgumentException('Invalid int: ' . $value);
         }
 
         if (filter_var($value, FILTER_VALIDATE_INT) === false) {
-            throw new InvalidArgumentException('Invalid int');
+            throw new InvalidArgumentException('Invalid int: ' . $value);
         }
 
         return (int) $value;

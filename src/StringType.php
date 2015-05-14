@@ -77,11 +77,23 @@ class StringType extends Type implements ArrayAccess, Iterator, Countable
         }
 
         if ($value instanceof Type) {
-            return $value->value();
+            $value = $value->value();
+        } else {
+            if (is_array($value)) {
+                throw new InvalidArgumentException('Invalid string, array given');
+            }
+
+            if (is_resource($value)) {
+                throw new InvalidArgumentException('Invalid string, resource given');
+            }
+
+            if (is_object($value)) {
+                throw new InvalidArgumentException('Invalid string, object given');
+            }
         }
 
         if (is_array($value) || is_object($value) || is_resource($value)) {
-            throw new InvalidArgumentException('Invalid string');
+            throw new InvalidArgumentException('Invalid string: ' . $value);
         }
 
         return mb_convert_encoding($value, 'UTF-8', $this->encoding);

@@ -28,6 +28,18 @@ class BoolType extends Type
 
         if ($value instanceof Type) {
             $value = $value->value();
+        } else {
+            if (is_array($value)) {
+                throw new InvalidArgumentException('Invalid bool, array given');
+            }
+
+            if (is_resource($value)) {
+                throw new InvalidArgumentException('Invalid bool, resource given');
+            }
+
+            if (is_object($value)) {
+                throw new InvalidArgumentException('Invalid bool, object given');
+            }
         }
 
         if ($value === 0 || $value === 0.0 || $value === '0') {
@@ -38,6 +50,6 @@ class BoolType extends Type
             return true;
         }
 
-        throw new InvalidArgumentException('Invalid bool');
+        throw new InvalidArgumentException('Invalid bool: ' . $value);
     }
 }

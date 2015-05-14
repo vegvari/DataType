@@ -14,9 +14,25 @@ class TimeType extends Type
      */
     public function check($value)
     {
+        if ($value instanceof StringType) {
+            $value = $value->value();
+        } else {
+            if (is_array($value)) {
+                throw new InvalidArgumentException('Invalid time, array given');
+            }
+
+            if (is_resource($value)) {
+                throw new InvalidArgumentException('Invalid time, resource given');
+            }
+
+            if (is_object($value)) {
+                throw new InvalidArgumentException('Invalid time, object given');
+            }
+        }
+
         if (preg_match('/^(?P<year>[0-9]{4,4})-(?P<month>[0-9]{2,2})-(?P<day>[0-9]{2,2}) (?P<hour>[0-9]{2,2}):(?P<minute>[0-9]{2,2}):(?P<second>[0-9]{2,2})$/ui', $value, $m)) {
             // month
-            if ($m['month'] < 1 && $m['month'] > 12) {
+            if ($m['month'] < 1 || $m['month'] > 12) {
                 throw new InvalidArgumentException('Invalid month: ' . $m['month']);
             }
 
@@ -31,29 +47,29 @@ class TimeType extends Type
                 }
             }
 
-            if ($m['day'] < 1 && $m['day'] > $day_max) {
+            if ($m['day'] < 1 || $m['day'] > $day_max) {
                 throw new InvalidArgumentException('Invalid day: ' . $m['day']);
             }
 
             // hour
-            if ($m['hour'] < 0 && $m['hour'] > 23) {
+            if ($m['hour'] < 0 || $m['hour'] > 23) {
                 throw new InvalidArgumentException('Invalid hour: ' . $m['hour']);
             }
 
             // minute
-            if ($m['minute'] < 0 && $m['minute'] > 59) {
+            if ($m['minute'] < 0 || $m['minute'] > 59) {
                 throw new InvalidArgumentException('Invalid minute: ' . $m['minute']);
             }
 
             // second
-            if ($m['second'] < 0 && $m['second'] > 59) {
+            if ($m['second'] < 0 || $m['second'] > 59) {
                 throw new InvalidArgumentException('Invalid second: ' . $m['second']);
             }
-        } else {
-            throw new InvalidArgumentException('Invalid format: ' . $value);
+
+            return $value;
         }
 
-        return $value;
+        throw new InvalidArgumentException('Invalid time: ' . $value . ' given');
     }
 
     /**
@@ -172,10 +188,10 @@ class TimeType extends Type
             return true;
         } elseif ($year % 400 !== 0) {
             return false;
-        } elseif ($year !== 0) {
-            return true;
+        } elseif ($year === 0) {
+            return false;
         }
 
-        return false;
+        return true;
     }
 }

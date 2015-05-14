@@ -36,10 +36,22 @@ class FloatType extends Number
 
         if ($value instanceof Type) {
             $value = $value->value();
+        } else {
+            if (is_array($value)) {
+                throw new InvalidArgumentException('Invalid float, array given');
+            }
+
+            if (is_resource($value)) {
+                throw new InvalidArgumentException('Invalid float, resource given');
+            }
+
+            if (is_object($value)) {
+                throw new InvalidArgumentException('Invalid float, object given');
+            }
         }
 
         if (filter_var($value, FILTER_VALIDATE_FLOAT) === false) {
-            throw new InvalidArgumentException('Invalid float');
+            throw new InvalidArgumentException('Invalid float: ' . $value);
         }
 
         return (float) $value;
