@@ -11,8 +11,7 @@
     "minimum-stability": "dev",
     "require": {
         "php": ">=5.3.0",
-        "ext-mbstring": "*",
-        "nesbot/carbon": "dev-master"
+        "ext-mbstring": "*"
     },
     "autoload": {
         "psr-4": {
