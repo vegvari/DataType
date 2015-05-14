@@ -34,7 +34,11 @@ class IntType extends FloatType
             $value = $value->value();
         }
 
-        $value = parent::check($value);
+        try {
+            $value = parent::check($value);
+        } catch (InvalidArgumentException $e) {
+            throw new InvalidArgumentException('Invalid int');
+        }
 
         if (filter_var($value, FILTER_VALIDATE_INT) === false) {
             throw new InvalidArgumentException('Invalid int');

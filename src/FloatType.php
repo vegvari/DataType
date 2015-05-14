@@ -30,11 +30,7 @@ class FloatType extends Number
             return 1.0;
         }
 
-        if ($value == $this) {
-            return $value->value();
-        }
-
-        if ($value instanceof IntType) {
+        if ($value instanceof FloatType) {
             return (float) $value->value();
         }
 
