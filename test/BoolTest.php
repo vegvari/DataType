@@ -2,11 +2,16 @@
 
 namespace Data\Type;
 
-class BoolTest extends \PHPUnit_Framework_TestCase implements \SplObserver
+use stdClass;
+use SplSubject;
+use SplObserver;
+use PHPUnit_Framework_TestCase;
+
+class BoolTest extends PHPUnit_Framework_TestCase implements SplObserver
 {
 	public $observer_helper_value;
 
-	public function update(\SplSubject $subject)
+	public function update(SplSubject $subject)
 	{
 		$this->observer_helper_value = $subject->value();
 	}
@@ -115,22 +120,22 @@ class BoolTest extends \PHPUnit_Framework_TestCase implements \SplObserver
 	public function invalidDataProvider()
 	{
 		return array(
-			array(array(),              '\InvalidArgumentException'),
-			array(new \stdClass(),      '\InvalidArgumentException'),
-			array(fopen(__FILE__, 'r'), '\InvalidArgumentException'),
-			array(-1.0,                 '\InvalidArgumentException'),
-			array(2.0,                  '\InvalidArgumentException'),
-			array(-1,                   '\InvalidArgumentException'),
-			array(2,                    '\InvalidArgumentException'),
-			array('-1.0',               '\InvalidArgumentException'),
-			array('2.0',                '\InvalidArgumentException'),
-			array('-1',                 '\InvalidArgumentException'),
-			array('2',                  '\InvalidArgumentException'),
-			array('on',                 '\InvalidArgumentException'),
-			array('off',                '\InvalidArgumentException'),
-			array('true',               '\InvalidArgumentException'),
-			array('false',              '\InvalidArgumentException'),
-			array('null',               '\InvalidArgumentException'),
+			array(array(),              'InvalidArgumentException'),
+			array(new stdClass(),       'InvalidArgumentException'),
+			array(fopen(__FILE__, 'r'), 'InvalidArgumentException'),
+			array(-1.0,                 'InvalidArgumentException'),
+			array(2.0,                  'InvalidArgumentException'),
+			array(-1,                   'InvalidArgumentException'),
+			array(2,                    'InvalidArgumentException'),
+			array('-1.0',               'InvalidArgumentException'),
+			array('2.0',                'InvalidArgumentException'),
+			array('-1',                 'InvalidArgumentException'),
+			array('2',                  'InvalidArgumentException'),
+			array('on',                 'InvalidArgumentException'),
+			array('off',                'InvalidArgumentException'),
+			array('true',               'InvalidArgumentException'),
+			array('false',              'InvalidArgumentException'),
+			array('null',               'InvalidArgumentException'),
 		);
 	}
 }

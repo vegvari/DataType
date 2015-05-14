@@ -2,7 +2,9 @@
 
 namespace Data\Type;
 
-class CastTest extends \PHPUnit_Framework_TestCase
+use PHPUnit_Framework_TestCase;
+
+class CastTest extends PHPUnit_Framework_TestCase
 {
 	public function testBool()
 	{
@@ -11,7 +13,7 @@ class CastTest extends \PHPUnit_Framework_TestCase
 
 	public function testBoolWithNull()
 	{
-		$this->setExpectedException('\InvalidArgumentException');
+		$this->setExpectedException('InvalidArgumentException');
 		Cast::Bool();
 	}
 
@@ -45,7 +47,7 @@ class CastTest extends \PHPUnit_Framework_TestCase
 	// signed float, test with null
 	public function testSignedFloatWithNull()
 	{
-		$this->setExpectedException('\InvalidArgumentException');
+		$this->setExpectedException('InvalidArgumentException');
 		Cast::Float();
 	}
 
@@ -92,14 +94,14 @@ class CastTest extends \PHPUnit_Framework_TestCase
 	// unsigned float, test with negative
 	public function testUnsignedFloatWithNegative()
 	{
-		$this->setExpectedException('\InvalidArgumentException');
+		$this->setExpectedException('InvalidArgumentException');
 		Cast::uFloat(-1);
 	}
 
 	// unsigned float, test with null
 	public function testUnsignedFloatWithNull()
 	{
-		$this->setExpectedException('\InvalidArgumentException');
+		$this->setExpectedException('InvalidArgumentException');
 		Cast::uFloat();
 	}
 
@@ -118,7 +120,7 @@ class CastTest extends \PHPUnit_Framework_TestCase
 	// nullable unsigned float, test with negative
 	public function testNullableUnsignedFloatWithNegative()
 	{
-		$this->setExpectedException('\InvalidArgumentException');
+		$this->setExpectedException('InvalidArgumentException');
 		Cast::_uFloat(-1);
 	}
 
@@ -135,7 +137,7 @@ class CastTest extends \PHPUnit_Framework_TestCase
 	// positive float, test with zero
 	public function testPositiveFloatWithZero()
 	{
-		$this->setExpectedException('\InvalidArgumentException');
+		$this->setExpectedException('InvalidArgumentException');
 		Cast::pFloat(0);
 	}
 
@@ -148,21 +150,21 @@ class CastTest extends \PHPUnit_Framework_TestCase
 	// positive float, test with negative
 	public function testPositiveFloatWithNegative()
 	{
-		$this->setExpectedException('\InvalidArgumentException');
+		$this->setExpectedException('InvalidArgumentException');
 		Cast::pFloat(-1);
 	}
 
 	// positive float, test with null
 	public function testPositiveFloatWithNull()
 	{
-		$this->setExpectedException('\InvalidArgumentException');
+		$this->setExpectedException('InvalidArgumentException');
 		Cast::pFloat();
 	}
 
 	// nullable positive float, test with zero
 	public function testNullablePositiveFloatWithZero()
 	{
-		$this->setExpectedException('\InvalidArgumentException');
+		$this->setExpectedException('InvalidArgumentException');
 		Cast::_pFloat(0);
 	}
 
@@ -175,7 +177,7 @@ class CastTest extends \PHPUnit_Framework_TestCase
 	// nullable positive float, test with negative
 	public function testNullablePositiveFloatWithNegative()
 	{
-		$this->setExpectedException('\InvalidArgumentException');
+		$this->setExpectedException('InvalidArgumentException');
 		Cast::_pFloat(-1);
 	}
 
@@ -192,14 +194,14 @@ class CastTest extends \PHPUnit_Framework_TestCase
 	// negative float, test with zero
 	public function testNegativeFloatWithZero()
 	{
-		$this->setExpectedException('\InvalidArgumentException');
+		$this->setExpectedException('InvalidArgumentException');
 		Cast::nFloat(0);
 	}
 
 	// negative float, test with positive
 	public function testNegativeFloatWithPositive()
 	{
-		$this->setExpectedException('\InvalidArgumentException');
+		$this->setExpectedException('InvalidArgumentException');
 		Cast::nFloat(1);
 	}
 
@@ -212,21 +214,21 @@ class CastTest extends \PHPUnit_Framework_TestCase
 	// negative float, test with null
 	public function testNegativeFloatNotNull()
 	{
-		$this->setExpectedException('\InvalidArgumentException');
+		$this->setExpectedException('InvalidArgumentException');
 		Cast::nFloat();
 	}
 
 	// nullable negative float, test with zero
 	public function testNullableNegativeFloatWithZero()
 	{
-		$this->setExpectedException('\InvalidArgumentException');
+		$this->setExpectedException('InvalidArgumentException');
 		Cast::_nFloat(0);
 	}
 
 	// nullable negative float, test with positive
 	public function testNullableNegativeFloatWithPositive()
 	{
-		$this->setExpectedException('\InvalidArgumentException');
+		$this->setExpectedException('InvalidArgumentException');
 		Cast::_nFloat(1);
 	}
 
@@ -267,7 +269,7 @@ class CastTest extends \PHPUnit_Framework_TestCase
 	// signed int, test with null
 	public function testSignedIntWithNull()
 	{
-		$this->setExpectedException('\InvalidArgumentException');
+		$this->setExpectedException('InvalidArgumentException');
 		Cast::Int();
 	}
 
@@ -314,14 +316,14 @@ class CastTest extends \PHPUnit_Framework_TestCase
 	// unsigned int, test with negative
 	public function testUnsignedIntWithNegative()
 	{
-		$this->setExpectedException('\InvalidArgumentException');
+		$this->setExpectedException('InvalidArgumentException');
 		Cast::uInt(-1);
 	}
 
 	// unsigned int, test with null
 	public function testUnsignedIntWithNull()
 	{
-		$this->setExpectedException('\InvalidArgumentException');
+		$this->setExpectedException('InvalidArgumentException');
 		Cast::uInt();
 	}
 
@@ -340,7 +342,7 @@ class CastTest extends \PHPUnit_Framework_TestCase
 	// nullable unsigned int, test with negative
 	public function testNullableUnsignedIntWithNegative()
 	{
-		$this->setExpectedException('\InvalidArgumentException');
+		$this->setExpectedException('InvalidArgumentException');
 		Cast::_uInt(-1);
 	}
 
@@ -357,7 +359,7 @@ class CastTest extends \PHPUnit_Framework_TestCase
 	// positive int, test with zero
 	public function testPositiveIntWithZero()
 	{
-		$this->setExpectedException('\InvalidArgumentException');
+		$this->setExpectedException('InvalidArgumentException');
 		Cast::pInt(0);
 	}
 
@@ -370,21 +372,21 @@ class CastTest extends \PHPUnit_Framework_TestCase
 	// positive int, test with negative
 	public function testPositiveIntWithNegative()
 	{
-		$this->setExpectedException('\InvalidArgumentException');
+		$this->setExpectedException('InvalidArgumentException');
 		Cast::pInt(-1);
 	}
 
 	// positive int, test with null
 	public function testPositiveIntWithNull()
 	{
-		$this->setExpectedException('\InvalidArgumentException');
+		$this->setExpectedException('InvalidArgumentException');
 		Cast::pInt();
 	}
 
 	// nullable positive int, test with zero
 	public function testNullablePositiveIntWithZero()
 	{
-		$this->setExpectedException('\InvalidArgumentException');
+		$this->setExpectedException('InvalidArgumentException');
 		Cast::_pInt(0);
 	}
 
@@ -397,7 +399,7 @@ class CastTest extends \PHPUnit_Framework_TestCase
 	// nullable positive int, test with negative
 	public function testNullablePositiveIntWithNegative()
 	{
-		$this->setExpectedException('\InvalidArgumentException');
+		$this->setExpectedException('InvalidArgumentException');
 		Cast::_pInt(-1);
 	}
 
@@ -414,14 +416,14 @@ class CastTest extends \PHPUnit_Framework_TestCase
 	// negative int, test with zero
 	public function testNegativeIntWithZero()
 	{
-		$this->setExpectedException('\InvalidArgumentException');
+		$this->setExpectedException('InvalidArgumentException');
 		Cast::nInt(0);
 	}
 
 	// negative int, test with positive
 	public function testNegativeIntWithPositive()
 	{
-		$this->setExpectedException('\InvalidArgumentException');
+		$this->setExpectedException('InvalidArgumentException');
 		Cast::nInt(1);
 	}
 
@@ -434,21 +436,21 @@ class CastTest extends \PHPUnit_Framework_TestCase
 	// negative int, test with null
 	public function testNegativeIntNotNull()
 	{
-		$this->setExpectedException('\InvalidArgumentException');
+		$this->setExpectedException('InvalidArgumentException');
 		Cast::nInt();
 	}
 
 	// nullable negative int, test with zero
 	public function testNullableNegativeIntWithZero()
 	{
-		$this->setExpectedException('\InvalidArgumentException');
+		$this->setExpectedException('InvalidArgumentException');
 		Cast::_nInt(0);
 	}
 
 	// nullable negative int, test with positive
 	public function testNullableNegativeIntWithPositive()
 	{
-		$this->setExpectedException('\InvalidArgumentException');
+		$this->setExpectedException('InvalidArgumentException');
 		Cast::_nInt(1);
 	}
 
@@ -476,7 +478,7 @@ class CastTest extends \PHPUnit_Framework_TestCase
 
 	public function testStringWithNull()
 	{
-		$this->setExpectedException('\InvalidArgumentException');
+		$this->setExpectedException('InvalidArgumentException');
 		$data = Cast::String();
 	}
 

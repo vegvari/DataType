@@ -2,11 +2,16 @@
 
 namespace Data\Type;
 
-class StringTest extends \PHPUnit_Framework_TestCase implements \SplObserver
+use stdClass;
+use SplSubject;
+use SplObserver;
+use PHPUnit_Framework_TestCase;
+
+class StringTest extends PHPUnit_Framework_TestCase implements SplObserver
 {
 	public $observer_helper_value;
 
-	public function update(\SplSubject $subject)
+	public function update(SplSubject $subject)
 	{
 		$this->observer_helper_value = $subject->value();
 	}
@@ -123,9 +128,9 @@ class StringTest extends \PHPUnit_Framework_TestCase implements \SplObserver
 	public function invalidDataProvider()
 	{
 		return array(
-			array(array(),              '\InvalidArgumentException'),
-			array(new \stdClass(),      '\InvalidArgumentException'),
-			array(fopen(__FILE__, 'r'), '\InvalidArgumentException'),
+			array(array(),              'InvalidArgumentException'),
+			array(new stdClass(),       'InvalidArgumentException'),
+			array(fopen(__FILE__, 'r'), 'InvalidArgumentException'),
 		);
 	}
 
@@ -150,21 +155,21 @@ class StringTest extends \PHPUnit_Framework_TestCase implements \SplObserver
 
 	public function testSubstrInvalidLength()
 	{
-		$this->setExpectedException('\InvalidArgumentException');
+		$this->setExpectedException('InvalidArgumentException');
 		$instance = new StringType('árvíztűrő tükörfúrógép');
 		$instance->substr(0, 'test');
 	}
 
 	public function testSubstrOutOfRangeFrom()
 	{
-		$this->setExpectedException('\LengthException');
+		$this->setExpectedException('LengthException');
 		$instance = new StringType('árvíztűrő tükörfúrógép');
 		$instance->substr($instance->length() + 1);
 	}
 
 	public function testSubstrOutOfRangeLength()
 	{
-		$this->setExpectedException('\LengthException');
+		$this->setExpectedException('LengthException');
 		$instance = new StringType('árvíztűrő tükörfúrógép');
 		$instance->substr(0, $instance->length() + 1);
 	}
@@ -239,21 +244,21 @@ class StringTest extends \PHPUnit_Framework_TestCase implements \SplObserver
 
 	public function testArrayAccessInvalidOffset1()
 	{
-		$this->setExpectedException('\InvalidArgumentException');
+		$this->setExpectedException('InvalidArgumentException');
 		$instance = new StringType('árvíztűrő tükörfúrógép');
 		$test = $instance[-1];
 	}
 
 	public function testArrayAccessInvalidOffset2()
 	{
-		$this->setExpectedException('\InvalidArgumentException');
+		$this->setExpectedException('InvalidArgumentException');
 		$instance = new StringType('árvíztűrő tükörfúrógép');
 		$test = $instance[$instance->length()];
 	}
 
 	public function testArrayAccessInvalidOffset3()
 	{
-		$this->setExpectedException('\InvalidArgumentException');
+		$this->setExpectedException('InvalidArgumentException');
 		$instance = new StringType('árvíztűrő tükörfúrógép');
 		$test = $instance[null];
 	}

@@ -2,11 +2,16 @@
 
 namespace Data\Type;
 
-class FloatTest extends \PHPUnit_Framework_TestCase implements \SplObserver
+use stdClass;
+use SplSubject;
+use SplObserver;
+use PHPUnit_Framework_TestCase;
+
+class FloatTest extends PHPUnit_Framework_TestCase implements SplObserver
 {
 	public $observer_helper_value;
 
-	public function update(\SplSubject $subject)
+	public function update(SplSubject $subject)
 	{
 		$this->observer_helper_value = $subject->value();
 	}
@@ -76,13 +81,13 @@ class FloatTest extends \PHPUnit_Framework_TestCase implements \SplObserver
 
 	public function testCastUnsignedWithNegative()
 	{
-		$this->setExpectedException('\InvalidArgumentException');
+		$this->setExpectedException('InvalidArgumentException');
 		$data = Cast::uFloat(-1.0);
 	}
 
 	public function testCastPositiveWithZero()
 	{
-		$this->setExpectedException('\InvalidArgumentException');
+		$this->setExpectedException('InvalidArgumentException');
 		$data = Cast::pFloat(0.0);
 	}
 
@@ -94,19 +99,19 @@ class FloatTest extends \PHPUnit_Framework_TestCase implements \SplObserver
 
 	public function testCastPositiveWithNegative()
 	{
-		$this->setExpectedException('\InvalidArgumentException');
+		$this->setExpectedException('InvalidArgumentException');
 		$data = Cast::pFloat(-1.0);
 	}
 
 	public function testCastNegativeWithZero()
 	{
-		$this->setExpectedException('\InvalidArgumentException');
+		$this->setExpectedException('InvalidArgumentException');
 		$data = Cast::nFloat(0.0);
 	}
 
 	public function testCastNegativeWithPositive()
 	{
-		$this->setExpectedException('\InvalidArgumentException');
+		$this->setExpectedException('InvalidArgumentException');
 		$data = Cast::nFloat(1.0);
 	}
 
@@ -209,20 +214,20 @@ class FloatTest extends \PHPUnit_Framework_TestCase implements \SplObserver
 	public function invalidDataProvider()
 	{
 		return array(
-			array(array(),              '\InvalidArgumentException'),
-			array(new \stdClass(),      '\InvalidArgumentException'),
-			array(fopen(__FILE__, 'r'), '\InvalidArgumentException'),
-			array('e',                  '\InvalidArgumentException'),
-			array('0e',                 '\InvalidArgumentException'),
-			array('0.0e',               '\InvalidArgumentException'),
-			array('1e',                 '\InvalidArgumentException'),
-			array('1.e',                '\InvalidArgumentException'),
-			array('1.0e',               '\InvalidArgumentException'),
-			array('on',                 '\InvalidArgumentException'),
-			array('off',                '\InvalidArgumentException'),
-			array('true',               '\InvalidArgumentException'),
-			array('false',              '\InvalidArgumentException'),
-			array('null',               '\InvalidArgumentException'),
+			array(array(),              'InvalidArgumentException'),
+			array(new \stdClass(),      'InvalidArgumentException'),
+			array(fopen(__FILE__, 'r'), 'InvalidArgumentException'),
+			array('e',                  'InvalidArgumentException'),
+			array('0e',                 'InvalidArgumentException'),
+			array('0.0e',               'InvalidArgumentException'),
+			array('1e',                 'InvalidArgumentException'),
+			array('1.e',                'InvalidArgumentException'),
+			array('1.0e',               'InvalidArgumentException'),
+			array('on',                 'InvalidArgumentException'),
+			array('off',                'InvalidArgumentException'),
+			array('true',               'InvalidArgumentException'),
+			array('false',              'InvalidArgumentException'),
+			array('null',               'InvalidArgumentException'),
 		);
 	}
 
@@ -354,7 +359,7 @@ class FloatTest extends \PHPUnit_Framework_TestCase implements \SplObserver
 
 	public function testGtWithNull()
 	{
-		$this->setExpectedException('\InvalidArgumentException');
+		$this->setExpectedException('InvalidArgumentException');
 		$instance = new FloatType(1);
 		$instance->gt(null);
 	}
@@ -369,7 +374,7 @@ class FloatTest extends \PHPUnit_Framework_TestCase implements \SplObserver
 
 	public function testGteWithNull()
 	{
-		$this->setExpectedException('\InvalidArgumentException');
+		$this->setExpectedException('InvalidArgumentException');
 		$instance = new FloatType(1);
 		$instance->gte(null);
 	}
@@ -384,7 +389,7 @@ class FloatTest extends \PHPUnit_Framework_TestCase implements \SplObserver
 
 	public function testLtWithNull()
 	{
-		$this->setExpectedException('\InvalidArgumentException');
+		$this->setExpectedException('InvalidArgumentException');
 		$instance = new FloatType(1);
 		$instance->lt(null);
 	}
@@ -399,7 +404,7 @@ class FloatTest extends \PHPUnit_Framework_TestCase implements \SplObserver
 
 	public function testLteWithNull()
 	{
-		$this->setExpectedException('\InvalidArgumentException');
+		$this->setExpectedException('InvalidArgumentException');
 		$instance = new FloatType(1);
 		$instance->lte(null);
 	}

@@ -2,11 +2,16 @@
 
 namespace Data\Type;
 
-class IntTest extends \PHPUnit_Framework_TestCase implements \SplObserver
+use stdClass;
+use SplSubject;
+use SplObserver;
+use PHPUnit_Framework_TestCase;
+
+class IntTest extends PHPUnit_Framework_TestCase implements SplObserver
 {
 	public $observer_helper_value;
 
-	public function update(\SplSubject $subject)
+	public function update(SplSubject $subject)
 	{
 		$this->observer_helper_value = $subject->value();
 	}
@@ -76,13 +81,13 @@ class IntTest extends \PHPUnit_Framework_TestCase implements \SplObserver
 
 	public function testCastUnsignedWithNegative()
 	{
-		$this->setExpectedException('\InvalidArgumentException');
+		$this->setExpectedException('InvalidArgumentException');
 		$data = Cast::uInt(-1);
 	}
 
 	public function testCastPositiveWithZero()
 	{
-		$this->setExpectedException('\InvalidArgumentException');
+		$this->setExpectedException('InvalidArgumentException');
 		$data = Cast::pInt(0);
 	}
 
@@ -94,19 +99,19 @@ class IntTest extends \PHPUnit_Framework_TestCase implements \SplObserver
 
 	public function testCastPositiveWithNegative()
 	{
-		$this->setExpectedException('\InvalidArgumentException');
+		$this->setExpectedException('InvalidArgumentException');
 		$data = Cast::pInt(-1);
 	}
 
 	public function testCastNegativeWithZero()
 	{
-		$this->setExpectedException('\InvalidArgumentException');
+		$this->setExpectedException('InvalidArgumentException');
 		$data = Cast::nInt(0);
 	}
 
 	public function testCastNegativeWithPositive()
 	{
-		$this->setExpectedException('\InvalidArgumentException');
+		$this->setExpectedException('InvalidArgumentException');
 		$data = Cast::nInt(1);
 	}
 
@@ -204,28 +209,28 @@ class IntTest extends \PHPUnit_Framework_TestCase implements \SplObserver
 	public function invalidDataProvider()
 	{
 		return array(
-			array(array(),              '\InvalidArgumentException'),
-			array(new \stdClass(),      '\InvalidArgumentException'),
-			array(fopen(__FILE__, 'r'), '\InvalidArgumentException'),
-			array('1e-2',               '\InvalidArgumentException'),
-			array('-1e-2',              '\InvalidArgumentException'),
-			array('1E-2',               '\InvalidArgumentException'),
-			array('-1E-2',              '\InvalidArgumentException'),
-			array('0.1',                '\InvalidArgumentException'),
-			array('-0.1',               '\InvalidArgumentException'),
-			array('10.1',               '\InvalidArgumentException'),
-			array('-10.1',              '\InvalidArgumentException'),
-			array('e',                  '\InvalidArgumentException'),
-			array('0e',                 '\InvalidArgumentException'),
-			array('0.0e',               '\InvalidArgumentException'),
-			array('1e',                 '\InvalidArgumentException'),
-			array('1.e',                '\InvalidArgumentException'),
-			array('1.0e',               '\InvalidArgumentException'),
-			array('on',                 '\InvalidArgumentException'),
-			array('off',                '\InvalidArgumentException'),
-			array('true',               '\InvalidArgumentException'),
-			array('false',              '\InvalidArgumentException'),
-			array('null',               '\InvalidArgumentException'),
+			array(array(),              'InvalidArgumentException'),
+			array(new \stdClass(),      'InvalidArgumentException'),
+			array(fopen(__FILE__, 'r'), 'InvalidArgumentException'),
+			array('1e-2',               'InvalidArgumentException'),
+			array('-1e-2',              'InvalidArgumentException'),
+			array('1E-2',               'InvalidArgumentException'),
+			array('-1E-2',              'InvalidArgumentException'),
+			array('0.1',                'InvalidArgumentException'),
+			array('-0.1',               'InvalidArgumentException'),
+			array('10.1',               'InvalidArgumentException'),
+			array('-10.1',              'InvalidArgumentException'),
+			array('e',                  'InvalidArgumentException'),
+			array('0e',                 'InvalidArgumentException'),
+			array('0.0e',               'InvalidArgumentException'),
+			array('1e',                 'InvalidArgumentException'),
+			array('1.e',                'InvalidArgumentException'),
+			array('1.0e',               'InvalidArgumentException'),
+			array('on',                 'InvalidArgumentException'),
+			array('off',                'InvalidArgumentException'),
+			array('true',               'InvalidArgumentException'),
+			array('false',              'InvalidArgumentException'),
+			array('null',               'InvalidArgumentException'),
 		);
 	}
 
@@ -357,7 +362,7 @@ class IntTest extends \PHPUnit_Framework_TestCase implements \SplObserver
 
 	public function testGtWithNull()
 	{
-		$this->setExpectedException('\InvalidArgumentException');
+		$this->setExpectedException('InvalidArgumentException');
 		$instance = new FloatType(1);
 		$instance->gt(null);
 	}
@@ -372,7 +377,7 @@ class IntTest extends \PHPUnit_Framework_TestCase implements \SplObserver
 
 	public function testGteWithNull()
 	{
-		$this->setExpectedException('\InvalidArgumentException');
+		$this->setExpectedException('InvalidArgumentException');
 		$instance = new FloatType(1);
 		$instance->gte(null);
 	}
@@ -387,7 +392,7 @@ class IntTest extends \PHPUnit_Framework_TestCase implements \SplObserver
 
 	public function testLtWithNull()
 	{
-		$this->setExpectedException('\InvalidArgumentException');
+		$this->setExpectedException('InvalidArgumentException');
 		$instance = new FloatType(1);
 		$instance->lt(null);
 	}
@@ -402,7 +407,7 @@ class IntTest extends \PHPUnit_Framework_TestCase implements \SplObserver
 
 	public function testLteWithNull()
 	{
-		$this->setExpectedException('\InvalidArgumentException');
+		$this->setExpectedException('InvalidArgumentException');
 		$instance = new FloatType(1);
 		$instance->lte(null);
 	}
