@@ -10,111 +10,97 @@ use Data\Type\StringType;
 /**
  * @coversDefaultClass \Data\Type\BoolType
  */
-class BoolTypeTest extends PHPUnit_Framework_TestCase implements SplObserver
+class BoolTypeTest extends PHPUnit_Framework_TestCase
 {
-	public $observer_helper_value;
+	/**
+	 * @test
+	 * @covers ::attach
+	 * @covers ::detach
+	 * @covers ::notify
+	 */
+    public function observer()
+    {
+    	$instance = new BoolType();
 
-	public function update(SplSubject $subject)
-	{
-		$this->observer_helper_value = $subject->value();
-	}
+        $observer = $this->getMockBuilder('SplObserver')
+                         ->setMethods(['update'])
+                         ->getMock();
 
-	public function testObserverUpdateOnAttach()
-	{
-		$this->observer_helper_value = null;
+        $observer->expects($this->exactly(2))
+                 ->method('update')
+                 ->with($this->equalTo($instance));
 
-		$instance = new BoolType(true);
-		$instance->attach($this);
-		$this->assertSame(true, $this->observer_helper_value);
-	}
+		// no update on attach because value is null
+        $instance->attach($observer);
 
-	public function testObserverUpdateOnAttachExceptNull()
-	{
-		$this->observer_helper_value = 'no update';
+        // first update
+        $instance->set(true);
 
-		$instance = new BoolType();
-		$instance->attach($this);
-		$this->assertSame('no update', $this->observer_helper_value);
-	}
+        // no update because value is not changed
+        $instance->set(true);
 
-	public function testObserverUpdateOnChange()
-	{
-		$this->observer_helper_value = null;
+        $instance->detach($observer);
 
-		$instance = new BoolType();
-		$instance->attach($this);
+        // update, but observer detached
+        $instance->set(false);
 
-		$instance->set(true);
-		$this->assertSame(true, $this->observer_helper_value);
-
-		$instance->set(false);
-		$this->assertSame(false, $this->observer_helper_value);
-
-		$instance->set(null);
-		$this->assertSame(null, $this->observer_helper_value);
-	}
-
-	public function testNull()
-	{
-		$instance = new BoolType();
-		$this->assertSame(null, $instance->value());
-	}
-
-	public function testMake()
-	{
-		$instance = new BoolType(true);
-		$this->assertSame(true, $instance->value());
-	}
+        // second update on attach because value is not null
+        $instance->attach($observer);
+    }
 
 	/**
-     * @dataProvider toStringDataProvider
+     * @test
+     * @covers ::__toString
      */
-	public function testToString($data, $expected)
+	public function toString()
 	{
-		$instance = new BoolType($data);
-		$this->assertSame($expected, (string) $instance);
-	}
+		$instance = new BoolType(true);
+		$this->assertSame('1', (string) $instance);
 
-	public function toStringDataProvider()
-	{
-		return array(
-			array(false, '0'),
-			array(true,  '1'),
-		);
+		$instance = new BoolType(false);
+		$this->assertSame('0', (string) $instance);
 	}
 
 	/**
+	 * @test
      * @dataProvider validDataProvider
+     * @covers       ::check
      */
-	public function testValid($data, $expected)
+	public function check($data, $expected)
 	{
 		$instance = new BoolType($data);
-		$this->assertSame($expected, $instance->value());
+		$this->assertSame($expected, $instance->get());
 	}
 
 	public function validDataProvider()
 	{
-		return array(
-			array(new BoolType(1),     true),
-			array(new FloatType(1),    true),
-			array(new IntType(1),      true),
-			array(new StringType(1),   true),
-			array(new BoolType(false), false),
-			array(false,               false),
-			array(true,                true),
-			array(0.0,                 false),
-			array(1.0,                 true),
-			array(0,                   false),
-			array(1,                   true),
-			array('0',                 false),
-			array('1',                 true),
-		);
+		return [
+			[null,                null],
+			[new BoolType(true),  true],
+			[new BoolType(false), false],
+			[new FloatType(1),    true],
+			[new FloatType(0),    false],
+			[new IntType(1),      true],
+			[new IntType(0),      false],
+			[new StringType(1),   true],
+			[new StringType(0),   false],
+			[true,                true],
+			[false,               false],
+			[1.0,                 true],
+			[0.0,                 false],
+			[1,                   true],
+			[0,                   false],
+			['1',                 true],
+			['0',                 false],
+		];
 	}
 
 	/**
+	 * @test
      * @dataProvider invalidDataProvider
+     * @covers       ::check
      */
-	public function testInvalid($data, $expected)
+	public function checkFail($data, $expected)
 	{
 		$this->setExpectedException($expected);
 		$instance = new BoolType($data);
@@ -122,23 +108,23 @@ class BoolTypeTest extends PHPUnit_Framework_TestCase implements SplObserver
 
 	public function invalidDataProvider()
 	{
-		return array(
-			array(array(),              'InvalidArgumentException'),
-			array(new stdClass(),       'InvalidArgumentException'),
-			array(fopen(__FILE__, 'r'), 'InvalidArgumentException'),
-			array(-1.0,                 'InvalidArgumentException'),
-			array(2.0,                  'InvalidArgumentException'),
-			array(-1,                   'InvalidArgumentException'),
-			array(2,                    'InvalidArgumentException'),
-			array('-1.0',               'InvalidArgumentException'),
-			array('2.0',                'InvalidArgumentException'),
-			array('-1',                 'InvalidArgumentException'),
-			array('2',                  'InvalidArgumentException'),
-			array('on',                 'InvalidArgumentException'),
-			array('off',                'InvalidArgumentException'),
-			array('true',               'InvalidArgumentException'),
-			array('false',              'InvalidArgumentException'),
-			array('null',               'InvalidArgumentException'),
-		);
+		return [
+			[array(),              'InvalidArgumentException'],
+			[new stdClass(),       'InvalidArgumentException'],
+			[fopen(__FILE__, 'r'), 'InvalidArgumentException'],
+			[-1.0,                 'InvalidArgumentException'],
+			[2.0,                  'InvalidArgumentException'],
+			[-1,                   'InvalidArgumentException'],
+			[2,                    'InvalidArgumentException'],
+			['-1.0',               'InvalidArgumentException'],
+			['2.0',                'InvalidArgumentException'],
+			['-1',                 'InvalidArgumentException'],
+			['2',                  'InvalidArgumentException'],
+			['on',                 'InvalidArgumentException'],
+			['off',                'InvalidArgumentException'],
+			['true',               'InvalidArgumentException'],
+			['false',              'InvalidArgumentException'],
+			['null',               'InvalidArgumentException'],
+		];
 	}
 }

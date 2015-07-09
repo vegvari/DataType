@@ -3,16 +3,20 @@
 namespace Data\Type;
 
 use SplSubject;
-use Data\Type\Traits\SplSubject as SplSubjectTrait;
+use SplObserver;
+use SplObjectStorage;
 
 abstract class Type implements SplSubject
 {
-    use SplSubjectTrait;
-
     /**
      * @var mixed
      */
     protected $value;
+
+    /**
+     * @var SplObjectStorage
+     */
+    protected $observers;
 
     /**
      * Constructor
@@ -47,6 +51,16 @@ abstract class Type implements SplSubject
      *
      * @return mixed
      */
+    public function get()
+    {
+        return $this->value;
+    }
+
+    /**
+     * Get the value
+     *
+     * @return mixed
+     */
     public function value()
     {
         return $this->value;
@@ -58,14 +72,7 @@ abstract class Type implements SplSubject
      * @param  mixed $value
      * @return mixed
      */
-    protected function check($value)
-    {
-        if ($value instanceof Type) {
-            $value = $value->value;
-        }
-
-        return $value;
-    }
+    abstract protected function check($value);
 
     /**
      * Cast instance to string
@@ -79,5 +86,43 @@ abstract class Type implements SplSubject
         }
 
         return (string) $this->value;
+    }
+
+    /**
+     * @see SplObserver
+     */
+    public function attach(SplObserver $observer)
+    {
+        if ($this->observers === null) {
+            $this->observers = new SplObjectStorage();
+        }
+
+        $this->observers->attach($observer);
+
+        if ($this->value !== null) {
+            $this->notify();
+        }
+    }
+
+    /**
+     * @see SplObserver
+     */
+    public function detach(SplObserver $observer)
+    {
+        if ($this->observers !== null) {
+            $this->observers->detach($observer);
+        }
+    }
+
+    /**
+     * @see SplObserver
+     */
+    public function notify()
+    {
+        if ($this->observers !== null) {
+            foreach ($this->observers as $observer) {
+                $observer->update($this);
+            }
+        }
     }
 }
