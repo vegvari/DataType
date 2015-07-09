@@ -2,7 +2,7 @@
 
 namespace Data\Type;
 
-use InvalidArgumentException;
+use Data\Type\Exceptions\InvalidBoolException;
 
 class BoolType extends Type
 {
@@ -34,15 +34,15 @@ class BoolType extends Type
             $value = $value->value();
         } else {
             if (is_array($value)) {
-                throw new InvalidArgumentException('Invalid bool, array given');
+                throw new InvalidBoolException('Invalid bool: array');
             }
 
             if (is_resource($value)) {
-                throw new InvalidArgumentException('Invalid bool, resource given');
+                throw new InvalidBoolException('Invalid bool: resource');
             }
 
             if (is_object($value)) {
-                throw new InvalidArgumentException('Invalid bool, object given');
+                throw new InvalidBoolException('Invalid bool: object');
             }
         }
 
@@ -54,6 +54,6 @@ class BoolType extends Type
             return true;
         }
 
-        throw new InvalidArgumentException('Invalid bool: "' . $value . '"');
+        throw new InvalidBoolException('Invalid bool: "' . $value . '"');
     }
 }

@@ -109,22 +109,22 @@ class BoolTypeTest extends PHPUnit_Framework_TestCase
 	public function invalidDataProvider()
 	{
 		return [
-			[array(),              'InvalidArgumentException'],
-			[new stdClass(),       'InvalidArgumentException'],
-			[fopen(__FILE__, 'r'), 'InvalidArgumentException'],
-			[-1.0,                 'InvalidArgumentException'],
-			[2.0,                  'InvalidArgumentException'],
-			[-1,                   'InvalidArgumentException'],
-			[2,                    'InvalidArgumentException'],
-			['-1.0',               'InvalidArgumentException'],
-			['2.0',                'InvalidArgumentException'],
-			['-1',                 'InvalidArgumentException'],
-			['2',                  'InvalidArgumentException'],
-			['on',                 'InvalidArgumentException'],
-			['off',                'InvalidArgumentException'],
-			['true',               'InvalidArgumentException'],
-			['false',              'InvalidArgumentException'],
-			['null',               'InvalidArgumentException'],
+			[array(),              '\Data\Type\Exceptions\InvalidBoolException'],
+			[new stdClass(),       '\Data\Type\Exceptions\InvalidBoolException'],
+			[fopen(__FILE__, 'r'), '\Data\Type\Exceptions\InvalidBoolException'],
+			[-1.0,                 '\Data\Type\Exceptions\InvalidBoolException'],
+			[2.0,                  '\Data\Type\Exceptions\InvalidBoolException'],
+			[-1,                   '\Data\Type\Exceptions\InvalidBoolException'],
+			[2,                    '\Data\Type\Exceptions\InvalidBoolException'],
+			['-1.0',               '\Data\Type\Exceptions\InvalidBoolException'],
+			['2.0',                '\Data\Type\Exceptions\InvalidBoolException'],
+			['-1',                 '\Data\Type\Exceptions\InvalidBoolException'],
+			['2',                  '\Data\Type\Exceptions\InvalidBoolException'],
+			['on',                 '\Data\Type\Exceptions\InvalidBoolException'],
+			['off',                '\Data\Type\Exceptions\InvalidBoolException'],
+			['true',               '\Data\Type\Exceptions\InvalidBoolException'],
+			['false',              '\Data\Type\Exceptions\InvalidBoolException'],
+			['null',               '\Data\Type\Exceptions\InvalidBoolException'],
 		];
 	}
 }
