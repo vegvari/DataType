@@ -7,127 +7,119 @@ use InvalidArgumentException;
 abstract class Number extends Type
 {
     /**
-     * Negation. Product is always FloatType.
+     * Negation
      *
      * @return FloatType
      */
     public function neg()
     {
         if ($this->value === null) {
-            return new FloatType($this->value);
+            return new FloatType();
         }
 
         return new FloatType($this->value * -1);
     }
 
     /**
-     * Addition. Product is always FloatType.
+     * Addition
      *
-     * @param  mixed $value
+     * @param  mixed     $value
      * @return FloatType
      */
     public function add($value)
     {
-        $value = Cast::Float($value);
-
         if ($this->value === null) {
-            return new FloatType($this->value);
+            return new FloatType();
         }
 
-        return new FloatType($this->value + $value);
+        return new FloatType($this->value + Cast::Float($value));
     }
 
     /**
-     * Subtraction. Product is always FloatType.
+     * Subtraction
      *
-     * @param  mixed $value
+     * @param  mixed     $value
      * @return FloatType
      */
     public function sub($value)
     {
-        $value = Cast::Float($value);
-
         if ($this->value === null) {
-            return new FloatType($this->value);
+            return new FloatType();
         }
 
-        return new FloatType($this->value - $value);
+        return new FloatType($this->value - Cast::Float($value));
     }
 
     /**
-     * Multiplication. Product is always FloatType.
+     * Multiplication
      *
-     * @param  mixed $value
+     * @param  mixed     $value
      * @return FloatType
      */
     public function mul($value)
     {
-        $value = Cast::Float($value);
-
         if ($this->value === null) {
-            return new FloatType($this->value);
+            return new FloatType();
         }
 
-        return new FloatType($this->value * $value);
+        return new FloatType($this->value * Cast::Float($value));
     }
 
     /**
-     * Division. Product is always FloatType.
+     * Division
      *
-     * @param  mixed $value
+     * @param  mixed     $value
      * @return FloatType
      */
     public function div($value)
     {
         $value = Cast::Float($value);
 
-        if ($value == 0) {
+        if ($value === 0.0) {
             throw new InvalidArgumentException('Division by zero');
         }
 
         if ($this->value === null) {
-            return new FloatType($this->value);
+            return new FloatType();
         }
 
         return new FloatType($this->value / $value);
     }
 
     /**
-     * Modulus. Product is always FloatType.
+     * Modulus
      *
-     * @param  mixed $value
+     * @param  mixed     $value
      * @return FloatType
      */
     public function mod($value)
     {
         $value = Cast::Float($value);
 
-        if ($value == 0) {
+        if ($value === 0.0) {
             throw new InvalidArgumentException('Division by zero');
         }
 
         if ($this->value === null) {
-            return new FloatType($this->value);
+            return new FloatType();
         }
 
         return new FloatType($this->value % $value);
     }
 
     /**
-     * Exponentiation. Product is always FloatType.
+     * Exponentiation
      *
-     * @param  mixed $value
+     * @param  mixed     $value
      * @return FloatType
      */
     public function exp($value)
     {
-        $value = Cast::Float($value);
-
         if ($this->value === null) {
-            return new FloatType($this->value);
+            return new FloatType();
         }
 
-        return new FloatType(pow($this->value, $value));
+        return new FloatType(pow($this->value, Cast::Float($value)));
     }
 
     /**
@@ -140,14 +132,14 @@ abstract class Number extends Type
     }
 
     /**
-     * Square root. Product is always FloatType.
+     * Square root
      *
      * @return FloatType
      */
     public function sqrt()
     {
         if ($this->value === null) {
-            return new FloatType($this->value);
+            return new FloatType();
         }
 
         return new FloatType(sqrt($this->value));
@@ -160,13 +152,11 @@ abstract class Number extends Type
      */
     public function root($value)
     {
-        $value = Cast::Float($value);
-
         if ($this->value === null) {
-            return new FloatType($this->value);
+            return new FloatType();
         }
 
-        return new FloatType(pow($this->value, 1 / $value));
+        return new FloatType(pow($this->value, 1 / Cast::Float($value)));
     }
 
     /**

@@ -1,9 +1,15 @@
 <?php
 
-namespace Data\Type;
+use Data\Type\Cast;
+use Data\Type\IntType;
+use Data\Type\BoolType;
+use Data\Type\TimeType;
+use Data\Type\FloatType;
+use Data\Type\StringType;
 
-use PHPUnit_Framework_TestCase;
-
+/**
+ * @coversDefaultClass \Data\Type\Cast
+ */
 class CastTest extends PHPUnit_Framework_TestCase
 {
 	public function testBool()

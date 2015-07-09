@@ -5,11 +5,16 @@ namespace Data\Type;
 use Iterator;
 use Countable;
 use ArrayAccess;
+
+use Exception;
 use LengthException;
 use InvalidArgumentException;
 
 class StringType extends Type implements ArrayAccess, Iterator, Countable
 {
+    /**
+     * @var array
+     */
     protected static $supported_encodings;
 
     /**
@@ -26,44 +31,66 @@ class StringType extends Type implements ArrayAccess, Iterator, Countable
      * Constructor
      *
      * @param mixed $value
+     * @param strig $encoding
      */
     public function __construct($value = null, $encoding = null)
+    {
+        $this->setEncoding($encoding);
+        $this->set($value);
+    }
+
+    /**
+     * Set the encoding
+     *
+     * @param  string $encoding
+     * @return void
+     */
+    protected function setEncoding($encoding)
     {
         if ($encoding === null) {
             $this->encoding = mb_internal_encoding();
         } else {
             $this->encoding = $this->getRealEncoding($encoding);
         }
-
-        $this->set($value);
     }
 
     /**
-     * Get the value
+     * Get the encoding
+     *
+     * @return string
+     */
+    public function getEncoding()
+    {
+        return $this->encoding;
+    }
+
+    /**
+     * Format the value
      *
      * @param  string $encoding
      * @return string
      */
-    public function value($encoding = null)
+    public function format($encoding)
     {
+        $encoding = $this->getRealEncoding($encoding);
+
         if ($this->value !== null) {
-            if ($encoding === null) {
-                return mb_convert_encoding($this->value, $this->encoding, 'UTF-8');
-            } else {
-                $encoding = $this->getRealEncoding($encoding);
-                return mb_convert_encoding($this->value, $encoding, 'UTF-8');
-            }
+            return mb_convert_encoding($this->value, $encoding, $this->encoding);
         }
     }
 
     /**
      * Check the value
      *
-     * @param  mixed  $value
-     * @return string
+     * @param  mixed       $value
+     * @return string|null
      */
     protected function check($value)
     {
+        if ($value === null) {
+            return null;
+        }
+
         if ($value === false || $value === 0 || $value === 0.0 || $value === '0') {
             return '0';
         }
@@ -77,7 +104,7 @@ class StringType extends Type implements ArrayAccess, Iterator, Countable
         }
 
         if ($value instanceof Type) {
-            $value = $value->value();
+            return (string) $value->value();
         } else {
             if (is_array($value)) {
                 throw new InvalidArgumentException('Invalid string, array given');
@@ -92,11 +119,7 @@ class StringType extends Type implements ArrayAccess, Iterator, Countable
             }
         }
 
-        if (is_array($value) || is_object($value) || is_resource($value)) {
-            throw new InvalidArgumentException('Invalid string: ' . $value);
-        }
-
-        return mb_convert_encoding($value, 'UTF-8', $this->encoding);
+        return (string) $value;
     }
 
     /**
@@ -110,7 +133,7 @@ class StringType extends Type implements ArrayAccess, Iterator, Countable
             return '';
         }
 
-        return mb_convert_encoding($this->value, $this->encoding, 'UTF-8');
+        return $this->value;
     }
 
     /**
@@ -161,7 +184,7 @@ class StringType extends Type implements ArrayAccess, Iterator, Countable
     public function getRealEncoding($encoding)
     {
         if (static::isEncodingSupported($encoding) === false) {
-            throw new \Exception('Encoding is not supported: "' . $encoding . '"');
+            throw new Exception('Encoding is not supported: "' . $encoding . '"');
         }
 
         return static::supportedEncodings()[strtolower($encoding)];
@@ -174,7 +197,7 @@ class StringType extends Type implements ArrayAccess, Iterator, Countable
      */
     public function length()
     {
-        return mb_strlen($this->value, 'UTF-8');
+        return mb_strlen($this->value, $this->encoding);
     }
 
     /**
@@ -197,7 +220,7 @@ class StringType extends Type implements ArrayAccess, Iterator, Countable
             throw new LengthException('Length parameter must be smaller than the length of the string');
         }
 
-        return mb_convert_encoding(mb_substr($this->value, $from, $length, 'UTF-8'), $this->encoding, 'UTF-8');
+        return mb_substr($this->value, $from, $length, $this->encoding);
     }
 
     /**
@@ -207,7 +230,7 @@ class StringType extends Type implements ArrayAccess, Iterator, Countable
      */
     public function toLower()
     {
-        $this->value = mb_strtolower($this->value, 'UTF-8');
+        $this->value = mb_strtolower($this->value, $this->encoding);
         return $this;
     }
 
@@ -218,7 +241,7 @@ class StringType extends Type implements ArrayAccess, Iterator, Countable
      */
     public function toUpper()
     {
-        $this->value = mb_strtoupper($this->value, 'UTF-8');
+        $this->value = mb_strtoupper($this->value, $this->encoding);
         return $this;
     }
 
@@ -229,7 +252,7 @@ class StringType extends Type implements ArrayAccess, Iterator, Countable
      */
     public function upperFirst()
     {
-        $this->value = mb_strtoupper(mb_substr($this->value, 0, 1, 'UTF-8'), 'UTF-8') . mb_substr($this->value, 1, null, 'UTF-8');
+        $this->value = mb_strtoupper(mb_substr($this->value, 0, 1, $this->encoding), $this->encoding) . mb_substr($this->value, 1, null, $this->encoding);
         return $this;
     }
 
@@ -240,7 +263,7 @@ class StringType extends Type implements ArrayAccess, Iterator, Countable
      */
     public function upperWords()
     {
-        $this->value = mb_convert_case($this->value, MB_CASE_TITLE, 'UTF-8');
+        $this->value = mb_convert_case($this->value, MB_CASE_TITLE, $this->encoding);
         return $this;
     }
 

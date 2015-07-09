@@ -1,13 +1,16 @@
 <?php
 
-namespace Data\Type;
+use Data\Type\Cast;
+use Data\Type\IntType;
+use Data\Type\BoolType;
+use Data\Type\TimeType;
+use Data\Type\FloatType;
+use Data\Type\StringType;
 
-use stdClass;
-use SplSubject;
-use SplObserver;
-use PHPUnit_Framework_TestCase;
-
-class FloatTest extends PHPUnit_Framework_TestCase implements SplObserver
+/**
+ * @coversDefaultClass \Data\Type\IntType
+ */
+class IntTypeTest extends PHPUnit_Framework_TestCase implements SplObserver
 {
 	public $observer_helper_value;
 
@@ -20,30 +23,30 @@ class FloatTest extends PHPUnit_Framework_TestCase implements SplObserver
 	{
 		$this->observer_helper_value = null;
 
-		$instance = new FloatType(1.0);
+		$instance = new IntType(1);
 		$instance->attach($this);
-		$this->assertSame(1.0, $this->observer_helper_value);
+		$this->assertSame(1, $this->observer_helper_value);
 	}
 
 	public function testObserverUpdateOnAttachExceptNull()
 	{
 		$this->observer_helper_value = 'no update';
 
-		$instance = new FloatType();
+		$instance = new IntType();
 		$instance->attach($this);
 		$this->assertSame('no update', $this->observer_helper_value);
 	}
 
 	public function testObserverUpdateOnChange()
 	{
-		$instance = new FloatType();
+		$instance = new IntType();
 		$instance->attach($this);
 
-		$instance->set(1.0);
-		$this->assertSame(1.0, $this->observer_helper_value);
+		$instance->set(1);
+		$this->assertSame(1, $this->observer_helper_value);
 
-		$instance->set(2.0);
-		$this->assertSame(2.0, $this->observer_helper_value);
+		$instance->set(2);
+		$this->assertSame(2, $this->observer_helper_value);
 
 		$instance->set(null);
 		$this->assertSame(null, $this->observer_helper_value);
@@ -51,74 +54,74 @@ class FloatTest extends PHPUnit_Framework_TestCase implements SplObserver
 
 	public function testNull()
 	{
-		$instance = new FloatType();
+		$instance = new IntType();
 		$this->assertSame(null, $instance->value());
 	}
 
 	public function testMake()
 	{
-		$instance = new FloatType(1.0);
-		$this->assertSame(1.0, $instance->value());
+		$instance = new IntType(1);
+		$this->assertSame(1, $instance->value());
 	}
 
 	public function testCast()
 	{
-		$data = Cast::Float(1);
-		$this->assertSame(1.0, $data);
+		$data = Cast::Int(1);
+		$this->assertSame(1, $data);
 	}
 
 	public function testCastUnsignedWithZero()
 	{
-		$data = Cast::uFloat(0);
-		$this->assertSame(0.0, $data);
+		$data = Cast::uInt(0);
+		$this->assertSame(0, $data);
 	}
 
 	public function testCastUnsignedWithPositive()
 	{
-		$data = Cast::uFloat(1);
-		$this->assertSame(1.0, $data);
+		$data = Cast::uInt(1);
+		$this->assertSame(1, $data);
 	}
 
 	public function testCastUnsignedWithNegative()
 	{
 		$this->setExpectedException('InvalidArgumentException');
-		$data = Cast::uFloat(-1.0);
+		$data = Cast::uInt(-1);
 	}
 
 	public function testCastPositiveWithZero()
 	{
 		$this->setExpectedException('InvalidArgumentException');
-		$data = Cast::pFloat(0.0);
+		$data = Cast::pInt(0);
 	}
 
 	public function testCastPositiveWithPositive()
 	{
-		$data = Cast::pFloat(1);
-		$this->assertSame(1.0, $data);
+		$data = Cast::pInt(1);
+		$this->assertSame(1, $data);
 	}
 
 	public function testCastPositiveWithNegative()
 	{
 		$this->setExpectedException('InvalidArgumentException');
-		$data = Cast::pFloat(-1.0);
+		$data = Cast::pInt(-1);
 	}
 
 	public function testCastNegativeWithZero()
 	{
 		$this->setExpectedException('InvalidArgumentException');
-		$data = Cast::nFloat(0.0);
+		$data = Cast::nInt(0);
 	}
 
 	public function testCastNegativeWithPositive()
 	{
 		$this->setExpectedException('InvalidArgumentException');
-		$data = Cast::nFloat(1.0);
+		$data = Cast::nInt(1);
 	}
 
 	public function testCastNegativeWithNegative()
 	{
-		$data = Cast::nFloat(-1);
-		$this->assertSame(-1.0, $data);
+		$data = Cast::nInt(-1);
+		$this->assertSame(-1, $data);
 	}
 
 	/**
@@ -126,7 +129,7 @@ class FloatTest extends PHPUnit_Framework_TestCase implements SplObserver
      */
 	public function testToString($data, $expected)
 	{
-		$instance = new FloatType($data);
+		$instance = new IntType($data);
 		$this->assertSame($expected, (string) $instance);
 	}
 
@@ -143,62 +146,57 @@ class FloatTest extends PHPUnit_Framework_TestCase implements SplObserver
      */
 	public function testValid($data, $expected)
 	{
-		$instance = new FloatType($data);
+		$instance = new IntType($data);
 		$this->assertSame($expected, $instance->value());
 	}
 
 	public function validDataProvider()
 	{
 		return array(
-			array(new BoolType(1),   1.0),
-			array(new FloatType(1),  1.0),
-			array(new IntType(1),    1.0),
-			array(new StringType(1), 1.0),
-			array(false,             0.0),
-			array(true,              1.0),
-			array(0.0,               0.0),
-			array(1.0,               1.0),
-			array(0,                 0.0),
-			array(1,                 1.0),
-			array('0',               0.0),
-			array('1',               1.0),
+			array(new BoolType(1),   1),
+			array(new FloatType(1),  1),
+			array(new IntType(1),    1),
+			array(new StringType(1), 1),
+			array(new IntType(0.0),  0),
+			array(false,             0),
+			array(true,              1),
+			array(0.0,               0),
+			array(1.0,               1),
+			array(0,                 0),
+			array(1,                 1),
+			array('0',               0),
+			array('1',               1),
 
-			array(-1.0,              -1.0),
-			array(2.0,               2.0),
-			array(-1,                -1.0),
-			array(2,                 2.0),
+			array(-1.0,              -1),
+			array(2.0,               2),
+			array(-1,                -1),
+			array(2,                 2),
 
-			array('-1',              -1.0),
-			array('2',               2.0),
+			array('-1',              -1),
+			array('2',               2),
 
-			array('000',             0.0),
-			array('000.000',         0.0),
-			array('-1.00000',        -1.0),
-			array('2.000000',        2.0),
+			array('000',             0),
+			array('000.000',         0),
+			array('-1.00000',        -1),
+			array('2.000000',        2),
 
-			array('1e2',             100.0),
-			array('-1e2',            -100.0),
-			array('1E2',             100.0),
-			array('-1E2',            -100.0),
-			array('1e+2',            100.0),
-			array('-1e+2',           -100.0),
-			array('1E+2',            100.0),
-			array('-1E+2',           -100.0),
+			array('1e2',             100),
+			array('-1e2',            -100),
+			array('1E2',             100),
+			array('-1E2',            -100),
+			array('1e+2',            100),
+			array('-1e+2',           -100),
+			array('1E+2',            100),
+			array('-1E+2',           -100),
 
-			array('0e0',             0.0),
-			array('000e000',         0.0),
-			array('1e0',             1.0),
-			array('1e000',           1.0),
-			array('1e001',           10.0),
+			array('0e0',             0),
+			array('000e000',         0),
+			array('1e0',             1),
+			array('1e000',           1),
+			array('1e001',           10),
 
-			array('1e-2',            0.01),
-			array('-1e-2',           -0.01),
-			array('1E-2',            0.01),
-			array('-1E-2',           -0.01),
-			array('0.1',             0.1),
-			array('-0.1',            -0.1),
-			array('10.1',            10.1),
-			array('-10.1',           -10.1),
+			array(PHP_INT_MAX,       PHP_INT_MAX),
+			array(~PHP_INT_MAX,      ~PHP_INT_MAX),
 		);
 	}
 
@@ -208,7 +206,7 @@ class FloatTest extends PHPUnit_Framework_TestCase implements SplObserver
 	public function testInvalid($data, $expected)
 	{
 		$this->setExpectedException($expected);
-		$instance = new FloatType($data);
+		$instance = new IntType($data);
 	}
 
 	public function invalidDataProvider()
@@ -217,6 +215,14 @@ class FloatTest extends PHPUnit_Framework_TestCase implements SplObserver
 			array(array(),              'InvalidArgumentException'),
 			array(new \stdClass(),      'InvalidArgumentException'),
 			array(fopen(__FILE__, 'r'), 'InvalidArgumentException'),
+			array('1e-2',               'InvalidArgumentException'),
+			array('-1e-2',              'InvalidArgumentException'),
+			array('1E-2',               'InvalidArgumentException'),
+			array('-1E-2',              'InvalidArgumentException'),
+			array('0.1',                'InvalidArgumentException'),
+			array('-0.1',               'InvalidArgumentException'),
+			array('10.1',               'InvalidArgumentException'),
+			array('-10.1',              'InvalidArgumentException'),
 			array('e',                  'InvalidArgumentException'),
 			array('0e',                 'InvalidArgumentException'),
 			array('0.0e',               'InvalidArgumentException'),
@@ -233,18 +239,18 @@ class FloatTest extends PHPUnit_Framework_TestCase implements SplObserver
 
 	public function testNeg()
 	{
-		$instance = new FloatType(1);
+		$instance = new IntType(1);
 		$this->assertTrue($instance->neg() instanceof FloatType);
 		$this->assertSame(-1.0, $instance->neg()->value());
 
-		$instance = new FloatType(-1);
+		$instance = new IntType(-1);
 		$this->assertTrue($instance->neg() instanceof FloatType);
 		$this->assertSame(1.0, $instance->neg()->value());
 	}
 
 	public function testAdd()
 	{
-		$instance = new FloatType(1);
+		$instance = new IntType(1);
 		$this->assertTrue($instance->add(1) instanceof FloatType);
 		$this->assertSame(2.0, $instance->add(1)->value());
 
@@ -254,7 +260,7 @@ class FloatTest extends PHPUnit_Framework_TestCase implements SplObserver
 
 	public function testSub()
 	{
-		$instance = new FloatType(1);
+		$instance = new IntType(1);
 		$this->assertTrue($instance->sub(1) instanceof FloatType);
 		$this->assertSame(0.0, $instance->sub(1)->value());
 
@@ -264,7 +270,7 @@ class FloatTest extends PHPUnit_Framework_TestCase implements SplObserver
 
 	public function testMul()
 	{
-		$instance = new FloatType(2);
+		$instance = new IntType(2);
 		$this->assertTrue($instance->mul(5) instanceof FloatType);
 		$this->assertSame(10.0, $instance->mul(5)->value());
 
@@ -274,7 +280,7 @@ class FloatTest extends PHPUnit_Framework_TestCase implements SplObserver
 
 	public function testDiv()
 	{
-		$instance = new FloatType(10);
+		$instance = new IntType(10);
 		$this->assertTrue($instance->div(2) instanceof FloatType);
 		$this->assertSame(5.0, $instance->div(2)->value());
 
@@ -284,7 +290,7 @@ class FloatTest extends PHPUnit_Framework_TestCase implements SplObserver
 
 	public function testMod()
 	{
-		$instance = new FloatType(10);
+		$instance = new IntType(10);
 		$this->assertTrue($instance->mod(2) instanceof FloatType);
 		$this->assertSame(0.0, $instance->mod(2)->value());
 
@@ -294,7 +300,7 @@ class FloatTest extends PHPUnit_Framework_TestCase implements SplObserver
 
 	public function testExp()
 	{
-		$instance = new FloatType(10);
+		$instance = new IntType(10);
 		$this->assertTrue($instance->exp(2) instanceof FloatType);
 		$this->assertSame(100.0, $instance->exp(2)->value());
 
@@ -304,14 +310,14 @@ class FloatTest extends PHPUnit_Framework_TestCase implements SplObserver
 
 	public function testSqrt()
 	{
-		$instance = new FloatType(100);
+		$instance = new IntType(100);
 		$this->assertTrue($instance->sqrt() instanceof FloatType);
 		$this->assertSame(10.0, $instance->sqrt()->value());
 	}
 
 	public function testRoot()
 	{
-		$instance = new FloatType(27);
+		$instance = new IntType(27);
 		$this->assertTrue($instance->root(3) instanceof FloatType);
 		$this->assertSame(3.0, $instance->root(3)->value());
 
@@ -407,5 +413,57 @@ class FloatTest extends PHPUnit_Framework_TestCase implements SplObserver
 		$this->setExpectedException('InvalidArgumentException');
 		$instance = new FloatType(1);
 		$instance->lte(null);
+	}
+
+	public function testIsEven()
+	{
+		$instance = new IntType(0);
+		$this->assertSame(true, $instance->isEven());
+
+		$instance = new IntType(1);
+		$this->assertSame(false, $instance->isEven());
+
+		$instance = new IntType(2);
+		$this->assertSame(true, $instance->isEven());
+	}
+
+	public function testIsOdd()
+	{
+		$instance = new IntType(0);
+		$this->assertSame(false, $instance->isOdd());
+
+		$instance = new IntType(1);
+		$this->assertSame(true, $instance->isOdd());
+
+		$instance = new IntType(2);
+		$this->assertSame(false, $instance->isOdd());
+	}
+
+	/**
+     * @dataProvider primeDataProvider
+     */
+	public function testIsPrime($data, $expected)
+	{
+		$instance = new IntType($data);
+		$this->assertSame($expected, $instance->isPrime());
+	}
+
+	public function primeDataProvider()
+	{
+		return array(
+			array(-1, false),
+			array(0,  false),
+			array(1,  false),
+			array(2,  true),
+			array(3,  true),
+			array(4,  false),
+			array(5,  true),
+			array(6,  false),
+			array(7,  true),
+			array(8,  false),
+			array(9,  false),
+			array(10, false),
+			array(11, true),
+		);
 	}
 }

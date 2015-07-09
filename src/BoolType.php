@@ -9,11 +9,15 @@ class BoolType extends Type
     /**
      * Check the value
      *
-     * @param  mixed $value
-     * @return bool
+     * @param  mixed     $value
+     * @return bool|null
      */
     protected function check($value)
     {
+        if ($value === null) {
+            return null;
+        }
+
         if ($value === false || $value === 0 || $value === 0.0 || $value === '0') {
             return false;
         }
@@ -50,6 +54,6 @@ class BoolType extends Type
             return true;
         }
 
-        throw new InvalidArgumentException('Invalid bool: ' . $value);
+        throw new InvalidArgumentException('Invalid bool: "' . $value . '"');
     }
 }

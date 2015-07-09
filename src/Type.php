@@ -32,9 +32,7 @@ abstract class Type implements SplSubject
      */
     public function set($value)
     {
-        if ($value !== null) {
-            $value = $this->check($value);
-        }
+        $value = $this->check($value);
 
         if ($value !== $this->value) {
             $this->value = $value;

@@ -1,13 +1,16 @@
 <?php
 
-namespace Data\Type;
+use Data\Type\Cast;
+use Data\Type\IntType;
+use Data\Type\BoolType;
+use Data\Type\TimeType;
+use Data\Type\FloatType;
+use Data\Type\StringType;
 
-use stdClass;
-use SplSubject;
-use SplObserver;
-use PHPUnit_Framework_TestCase;
-
-class StringTest extends PHPUnit_Framework_TestCase implements SplObserver
+/**
+ * @coversDefaultClass \Data\Type\StringType
+ */
+class StringTypeTest extends PHPUnit_Framework_TestCase implements SplObserver
 {
 	public $observer_helper_value;
 

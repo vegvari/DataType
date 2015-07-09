@@ -9,11 +9,15 @@ class FloatType extends Number
     /**
      * Check the value
      *
-     * @param  mixed $value
-     * @return float
+     * @param  mixed      $value
+     * @return float|null
      */
     protected function check($value)
     {
+        if ($value === null) {
+            return null;
+        }
+
         if (is_float($value)) {
             return $value;
         }
@@ -51,7 +55,7 @@ class FloatType extends Number
         }
 
         if (filter_var($value, FILTER_VALIDATE_FLOAT) === false) {
-            throw new InvalidArgumentException('Invalid float: ' . $value);
+            throw new InvalidArgumentException('Invalid float: "' . $value . '"');
         }
 
         return (float) $value;

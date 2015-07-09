@@ -9,11 +9,15 @@ class IntType extends FloatType
     /**
      * Check the value
      *
-     * @param  mixed $value
-     * @return int
+     * @param  mixed    $value
+     * @return int|null
      */
     protected function check($value)
     {
+        if ($value === null) {
+            return null;
+        }
+
         if (is_int($value)) {
             return $value;
         }
@@ -49,11 +53,11 @@ class IntType extends FloatType
         try {
             $value = parent::check($value);
         } catch (InvalidArgumentException $e) {
-            throw new InvalidArgumentException('Invalid int: ' . $value);
+            throw new InvalidArgumentException('Invalid int: "' . $value . '"');
         }
 
         if (filter_var($value, FILTER_VALIDATE_INT) === false) {
-            throw new InvalidArgumentException('Invalid int: ' . $value);
+            throw new InvalidArgumentException('Invalid int: "' . $value . '"');
         }
 
         return (int) $value;
@@ -62,7 +66,7 @@ class IntType extends FloatType
     /**
      * Is it even?
      *
-     * @return boolean
+     * @return bool
      */
     public function isEven()
     {
@@ -76,7 +80,7 @@ class IntType extends FloatType
     /**
      * Is it odd?
      *
-     * @return boolean
+     * @return bool
      */
     public function isOdd()
     {
@@ -90,7 +94,7 @@ class IntType extends FloatType
     /**
      * Is this a prime?
      *
-     * @return boolean
+     * @return bool
      */
     public function isPrime()
     {
