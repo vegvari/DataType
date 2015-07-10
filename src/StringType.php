@@ -237,7 +237,7 @@ class StringType extends Type implements ArrayAccess, Iterator, Countable
      */
     public function toUpper()
     {
-        $this->value = mb_strtoupper($this->value, $this->encoding);
+        $this->set(mb_strtoupper($this->value, $this->encoding));
         return $this;
     }
 
@@ -248,7 +248,7 @@ class StringType extends Type implements ArrayAccess, Iterator, Countable
      */
     public function upperFirst()
     {
-        $this->value = mb_strtoupper(mb_substr($this->value, 0, 1, $this->encoding), $this->encoding) . mb_substr($this->value, 1, null, $this->encoding);
+        $this->set(mb_strtoupper(mb_substr($this->value, 0, 1, $this->encoding), $this->encoding) . mb_substr($this->value, 1, null, $this->encoding));
         return $this;
     }
 
@@ -259,7 +259,7 @@ class StringType extends Type implements ArrayAccess, Iterator, Countable
      */
     public function upperWords()
     {
-        $this->value = mb_convert_case($this->value, MB_CASE_TITLE, $this->encoding);
+        $this->set(mb_convert_case($this->value, MB_CASE_TITLE, $this->encoding));
         return $this;
     }
 
