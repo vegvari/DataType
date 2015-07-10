@@ -14,42 +14,6 @@ class BoolTypeTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @test
-     * @covers ::attach
-     * @covers ::detach
-     * @covers ::notify
-     */
-    public function observer()
-    {
-        $instance = new BoolType();
-
-        $observer = $this->getMockBuilder('SplObserver')
-                         ->setMethods(['update'])
-                         ->getMock();
-
-        $observer->expects($this->exactly(2))
-                 ->method('update')
-                 ->with($this->equalTo($instance));
-
-        // no update on attach because value is null
-        $instance->attach($observer);
-
-        // first update
-        $instance->set(true);
-
-        // no update because value is not changed
-        $instance->set(true);
-
-        $instance->detach($observer);
-
-        // update, but observer detached
-        $instance->set(false);
-
-        // second update on attach because value is not null
-        $instance->attach($observer);
-    }
-
-    /**
-     * @test
      * @covers ::__toString
      */
     public function toString()
