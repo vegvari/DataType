@@ -99,6 +99,10 @@ abstract class Type implements SplSubject
      */
     public function __toString()
     {
+        if ($this->value === null) {
+            return '';
+        }
+
         if ($this->value === false) {
             return '0';
         }

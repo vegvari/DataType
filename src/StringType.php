@@ -9,14 +9,10 @@ use ArrayAccess;
 use Exception;
 use LengthException;
 use InvalidArgumentException;
+use \Data\Type\Exceptions\InvalidStringException;
 
 class StringType extends Type implements ArrayAccess, Iterator, Countable
 {
-    /**
-     * @var array
-     */
-    protected static $supported_encodings;
-
     /**
      * @var string
      */
@@ -25,7 +21,7 @@ class StringType extends Type implements ArrayAccess, Iterator, Countable
     /**
      * @var int
      */
-    protected $iteratorPosition = 0;
+    protected $iterator_position;
 
     /**
      * Constructor
@@ -67,12 +63,16 @@ class StringType extends Type implements ArrayAccess, Iterator, Countable
     /**
      * Format the value
      *
-     * @param  string $encoding
-     * @return string
+     * @param  string      $encoding
+     * @return string|null
      */
-    public function format($encoding)
+    public function value($encoding = null)
     {
-        $encoding = $this->getRealEncoding($encoding);
+        if ($encoding !== null) {
+            $encoding = $this->getRealEncoding($encoding);
+        } else {
+            $encoding = $this->encoding;
+        }
 
         if ($this->value !== null) {
             return mb_convert_encoding($this->value, $encoding, $this->encoding);
@@ -104,36 +104,26 @@ class StringType extends Type implements ArrayAccess, Iterator, Countable
         }
 
         if ($value instanceof Type) {
-            return (string) $value->value();
+            if ($value->isNull()) {
+                return null;
+            }
+
+            return (string) $value;
         } else {
             if (is_array($value)) {
-                throw new InvalidArgumentException('Invalid string, array given');
+                throw new InvalidStringException('Invalid string: array');
             }
 
             if (is_resource($value)) {
-                throw new InvalidArgumentException('Invalid string, resource given');
+                throw new InvalidStringException('Invalid string: resource');
             }
 
             if (is_object($value)) {
-                throw new InvalidArgumentException('Invalid string, object given');
+                throw new InvalidStringException('Invalid string: object');
             }
         }
 
-        return (string) $value;
-    }
-
-    /**
-     * Cast instance to string
-     *
-     * @return string
-     */
-    public function __toString()
-    {
-        if ($this->value === null) {
-            return '';
-        }
-
-        return $this->value;
+        return mb_convert_encoding($value, $this->encoding, $this->encoding);
     }
 
     /**
@@ -143,19 +133,21 @@ class StringType extends Type implements ArrayAccess, Iterator, Countable
      */
     public static function supportedEncodings()
     {
-        if (static::$supported_encodings === null) {
+        static $supported_encodings = ['pass' => 'pass'];
+
+        if ($supported_encodings === ['pass' => 'pass']) {
             $supported = mb_list_encodings();
 
             foreach ($supported as $key => $value) {
-                static::$supported_encodings[strtolower($value)] = $value;
+                $supported_encodings[strtolower($value)] = $value;
 
                 foreach (mb_encoding_aliases($value) as $k => $v) {
-                    static::$supported_encodings[strtolower($v)] = $value;
+                    $supported_encodings[strtolower($v)] = $value;
                 }
             }
         }
 
-        return static::$supported_encodings;
+        return $supported_encodings;
     }
 
     /**
@@ -181,7 +173,7 @@ class StringType extends Type implements ArrayAccess, Iterator, Countable
      * @param  string $encoding
      * @return string
      */
-    public function getRealEncoding($encoding)
+    public static function getRealEncoding($encoding)
     {
         if (static::isEncodingSupported($encoding) === false) {
             throw new Exception('Encoding is not supported: "' . $encoding . '"');
@@ -197,6 +189,10 @@ class StringType extends Type implements ArrayAccess, Iterator, Countable
      */
     public function length()
     {
+        if ($this->value === null) {
+            return 0;
+        }
+
         return mb_strlen($this->value, $this->encoding);
     }
 
@@ -209,15 +205,15 @@ class StringType extends Type implements ArrayAccess, Iterator, Countable
      */
     public function substr($from, $length = null)
     {
-        $from = Cast::Int($from);
-        $length = Cast::_Int($length);
+        $from = Cast::uInt($from);
+        $length = Cast::_uInt($length);
 
-        if ($this->length() < $from) {
-            throw new LengthException('From parameter must be smaller than the length of the string');
+        if ($from > $this->length()) {
+            throw new LengthException('From parameter is greater than the length of the string');
         }
 
-        if ($this->length() < $length) {
-            throw new LengthException('Length parameter must be smaller than the length of the string');
+        if ($length > $this->length()) {
+            throw new LengthException('Length parameter is greater than the length of the string');
         }
 
         return mb_substr($this->value, $from, $length, $this->encoding);
@@ -230,7 +226,7 @@ class StringType extends Type implements ArrayAccess, Iterator, Countable
      */
     public function toLower()
     {
-        $this->value = mb_strtolower($this->value, $this->encoding);
+        $this->set(mb_strtolower($this->value, $this->encoding));
         return $this;
     }
 
@@ -272,14 +268,14 @@ class StringType extends Type implements ArrayAccess, Iterator, Countable
      */
     public function offsetExists($offset)
     {
-        $offset = Cast::_Int($offset);
+        $offset = Cast::uInt($offset);
 
-        if ($offset !== null && $offset >= 0 && $this->length() > $offset)
+        if ($offset < $this->length())
         {
             return true;
         }
 
-        return false;
+        throw new InvalidArgumentException('Invalid offset: "' . $offset . '"');
     }
 
     /**
@@ -287,10 +283,6 @@ class StringType extends Type implements ArrayAccess, Iterator, Countable
      */
     public function offsetGet($offset)
     {
-        if ($this->offsetExists($offset) === false) {
-            throw new InvalidArgumentException('Invalid offset: "' . $offset . '"');
-        }
-
         return $this->substr($offset, 1);
     }
 
@@ -300,9 +292,12 @@ class StringType extends Type implements ArrayAccess, Iterator, Countable
     public function offsetSet($offset, $value)
     {
         $value = Cast::_String($value, $this->encoding);
+        if ($value === null) {
+            $value = '';
+        }
 
-        $new = static::create($this->substr(0, $offset) . $value . $this->substr($offset + 1), $this->encoding);
-        $this->value = $new->value;
+        $instance = new static($this->substr(0, $offset) . $value . $this->substr($offset + 1), $this->encoding);
+        $this->set($instance->value());
     }
 
     /**
@@ -318,7 +313,7 @@ class StringType extends Type implements ArrayAccess, Iterator, Countable
      */
     public function rewind()
     {
-        $this->iteratorPosition = 0;
+        $this->iterator_position = 0;
     }
 
     /**
@@ -326,7 +321,7 @@ class StringType extends Type implements ArrayAccess, Iterator, Countable
      */
     public function current()
     {
-        return $this->offsetGet($this->iteratorPosition);
+        return $this->offsetGet($this->iterator_position);
     }
 
     /**
@@ -334,7 +329,7 @@ class StringType extends Type implements ArrayAccess, Iterator, Countable
      */
     public function key()
     {
-        return $this->iteratorPosition;
+        return $this->iterator_position;
     }
 
     /**
@@ -342,7 +337,7 @@ class StringType extends Type implements ArrayAccess, Iterator, Countable
      */
     public function next()
     {
-        $this->iteratorPosition++;
+        $this->iterator_position++;
     }
 
     /**
@@ -350,7 +345,11 @@ class StringType extends Type implements ArrayAccess, Iterator, Countable
      */
     public function valid()
     {
-        return $this->offsetExists($this->iteratorPosition);
+        try {
+            return $this->offsetExists($this->iterator_position);
+        } catch (InvalidArgumentException $e) {
+            return false;
+        }
     }
 
     /**

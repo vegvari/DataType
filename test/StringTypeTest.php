@@ -10,217 +10,324 @@ use Data\Type\StringType;
 /**
  * @coversDefaultClass \Data\Type\StringType
  */
-class StringTypeTest extends PHPUnit_Framework_TestCase implements SplObserver
+class StringTypeTest extends PHPUnit_Framework_TestCase
 {
-    public $observer_helper_value;
-
-    public function update(SplSubject $subject)
-    {
-        $this->observer_helper_value = $subject->value();
-    }
-
-    public function testObserverUpdateOnAttach()
-    {
-        $this->observer_helper_value = null;
-
-        $instance = new StringType('test');
-        $instance->attach($this);
-        $this->assertSame('test', $this->observer_helper_value);
-    }
-
-    public function testObserverUpdateOnAttachExceptNull()
-    {
-        $this->observer_helper_value = 'no update';
-
-        $instance = new StringType();
-        $instance->attach($this);
-        $this->assertSame('no update', $this->observer_helper_value);
-    }
-
-    public function testObserverUpdateOnChange()
+    /**
+     * @test
+     * @covers ::__toString
+     */
+    public function toString()
     {
         $instance = new StringType();
-        $instance->attach($this);
+        $this->assertSame('', (string) $instance);
 
-        $instance->set('test');
-        $this->assertSame('test', $this->observer_helper_value);
+        $instance = new StringType('1');
+        $this->assertSame('1', (string) $instance);
 
-        $instance->set('test2');
-        $this->assertSame('test2', $this->observer_helper_value);
-
-        $instance->set(null);
-        $this->assertSame(null, $this->observer_helper_value);
-    }
-
-    public function testNull()
-    {
-        $instance = new StringType();
-        $this->assertSame(null, $instance->value());
-    }
-
-    public function testMake()
-    {
-        $instance = new StringType(1);
-        $this->assertSame('1', $instance->value());
-    }
-
-    public function testCast()
-    {
-        $data = Cast::String(1);
-        $this->assertSame('1', $data);
+        $instance = new StringType('0');
+        $this->assertSame('0', (string) $instance);
     }
 
     /**
-     * @dataProvider toStringDataProvider
+     * @test
+     * @covers ::__construct
+     * @covers ::setEncoding
+     * @covers ::getEncoding
      */
-    public function testToString($data, $expected)
+    public function setEncoding()
     {
-        $instance = new StringType($data);
-        $this->assertSame($expected, (string) $instance);
-    }
+        $instance = new StringType();
+        $this->assertSame(mb_internal_encoding(), $instance->getEncoding());
 
-    public function toStringDataProvider()
-    {
-        return array(
-            array(0, '0'),
-            array(1, '1'),
-        );
+        $instance = new StringType(null, 'pass');
+        $this->assertSame('pass', $instance->getEncoding());
     }
 
     /**
-     * @dataProvider validDataProvider
+     * @test
+     * @runInSeparateProcess
+     * @afterClass
+     * @covers ::supportedEncodings
      */
-    public function testValid($data, $expected)
+    public function supportedEncodings()
+    {
+        $encodings = StringType::supportedEncodings();
+        $this->assertSame(true, is_array($encodings));
+
+        $supported = mb_list_encodings();
+        foreach ($supported as $key => $value) {
+            $this->assertContains($value, $encodings);
+
+            $aliases = mb_encoding_aliases($value);
+            foreach ($aliases as $k => $v) {
+                $this->assertArrayHasKey(strtolower($v), $encodings);
+            }
+        }
+    }
+
+    /**
+     * @test
+     * @covers ::isEncodingSupported
+     */
+    public function isEncodingSupported()
+    {
+        $supported = mb_list_encodings();
+        foreach ($supported as $key => $value) {
+            $this->assertSame(true, StringType::isEncodingSupported($value));
+
+            $aliases = mb_encoding_aliases($value);
+            foreach ($aliases as $k => $v) {
+                $this->assertSame(true, StringType::isEncodingSupported($v));
+            }
+        }
+
+        $this->assertSame(false, StringType::isEncodingSupported('This encoding is invalid'));
+    }
+
+    /**
+     * @test
+     * @covers ::getRealEncoding
+     */
+    public function getRealEncoding()
+    {
+        $supported = mb_list_encodings();
+        foreach ($supported as $key => $value) {
+            $this->assertSame($value, StringType::getRealEncoding($value));
+
+            $aliases = mb_encoding_aliases($value);
+            foreach ($aliases as $k => $v) {
+                $this->assertSame($value, StringType::getRealEncoding($v));
+            }
+        }
+    }
+
+    /**
+     * @test
+     * @covers ::getRealEncoding
+     */
+    public function getRealEncodingFail()
+    {
+        $this->setExpectedException('Exception');
+        StringType::getRealEncoding('This encoding is invalid');
+    }
+
+    /**
+     * @test
+     * @dataProvider checkDataProvider
+     * @covers       ::check
+     * @covers       ::value
+     */
+    public function check($data, $expected)
     {
         $instance = new StringType($data);
         $this->assertSame($expected, $instance->value());
     }
 
-    public function validDataProvider()
+    public function checkDataProvider()
     {
-        return array(
-            array(new BoolType(1),          '1'),
-            array(new FloatType(1),         '1'),
-            array(new IntType(1),           '1'),
-            array(new StringType(1),        '1'),
-            array(new StringType(0),        '0'),
-            array(false,                    '0'),
-            array(true,                     '1'),
-            array(0.0,                      '0'),
-            array(1.0,                      '1'),
-            array(0,                        '0'),
-            array(1,                        '1'),
-            array('0',                      '0'),
-            array('1',                      '1'),
-            array(2.0,                      '2'),
-            array(2,                        '2'),
-            array('2',                      '2'),
-            array('árvíztűrő tükörfúrógép', 'árvíztűrő tükörfúrógép'),
-        );
+        return [
+            [null,                          null],
+            ['',                            null],
+            [new BoolType(),                null],
+            [new FloatType(),               null],
+            [new IntType(),                 null],
+            [new StringType(),              null],
+
+            [true,                          '1'],
+            [1.0,                           '1'],
+            [1,                             '1'],
+            ['1',                           '1'],
+            [new BoolType(true),            '1'],
+            [new FloatType(1),              '1'],
+            [new IntType(1),                '1'],
+            [new StringType(1),             '1'],
+
+            [false,                         '0'],
+            [0.0,                           '0'],
+            [0,                             '0'],
+            ['0',                           '0'],
+            [new BoolType(false),           '0'],
+            [new FloatType(0),              '0'],
+            [new IntType(0),                '0'],
+            [new StringType(0),             '0'],
+
+            [2.0,                           '2'],
+            [2,                             '2'],
+            ['2',                           '2'],
+            ['árvíztűrő tükörfúrógép',      'árvíztűrő tükörfúrógép'],
+        ];
     }
 
     /**
-     * @dataProvider invalidDataProvider
+     * @test
+     * @dataProvider checkFailDataProvider
+     * @covers       ::check
      */
-    public function testInvalid($data, $expected)
+    public function checkFail($data, $expected)
     {
         $this->setExpectedException($expected);
         $instance = new StringType($data);
     }
 
-    public function invalidDataProvider()
+    public function checkFailDataProvider()
     {
-        return array(
-            array(array(),              'InvalidArgumentException'),
-            array(new stdClass(),       'InvalidArgumentException'),
-            array(fopen(__FILE__, 'r'), 'InvalidArgumentException'),
-        );
+        return [
+            [[],                   '\Data\Type\Exceptions\InvalidStringException'],
+            [new stdClass(),       '\Data\Type\Exceptions\InvalidStringException'],
+            [fopen(__FILE__, 'r'), '\Data\Type\Exceptions\InvalidStringException'],
+        ];
     }
 
-    public function testLength()
+    /**
+     * @test
+     * @covers ::value
+     */
+    public function value()
+    {
+        $instance = new StringType('árvíztűrő tükörfúrógép', 'UTF-8');
+        $this->assertSame(mb_convert_encoding('árvíztűrő tükörfúrógép', 'ISO-8859-2'), $instance->value('ISO-8859-2'));
+    }
+
+    /**
+     * @test
+     * @covers ::length
+     */
+    public function length()
     {
         $instance = new StringType('árvíztűrő tükörfúrógép', 'UTF-8');
         $this->assertSame(22, $instance->length());
+
+        $instance = new StringType(null, 'UTF-8');
+        $this->assertSame(0, $instance->length());
     }
 
-    public function testSubstr()
+    /**
+     * @test
+     * @covers ::substr
+     */
+    public function substr()
     {
         $instance = new StringType('árvíztűrő tükörfúrógép', 'UTF-8');
         $this->assertSame('árvíztűrő tükörfúrógép', $instance->substr(0));
+        $this->assertSame('r', $instance->substr(1, 1));
+        $this->assertSame('v', $instance->substr(2, 1));
+        $this->assertSame('í', $instance->substr(3, 1));
+        $this->assertSame('z', $instance->substr(4, 1));
+        $this->assertSame('t', $instance->substr(5, 1));
+        $this->assertSame('ű', $instance->substr(6, 1));
+        $this->assertSame('r', $instance->substr(7, 1));
+        $this->assertSame('ő', $instance->substr(8, 1));
+        $this->assertSame('tükör', $instance->substr(10, 5));
+        $this->assertSame('fúrógép', $instance->substr(15));
     }
 
-    public function testSubstrMissingFrom()
-    {
-        $this->setExpectedException('PHPUnit_Framework_Error_Warning');
-        $instance = new StringType('árvíztűrő tükörfúrógép');
-        $instance->substr();
-    }
-
-    public function testSubstrInvalidLength()
-    {
-        $this->setExpectedException('InvalidArgumentException');
-        $instance = new StringType('árvíztűrő tükörfúrógép');
-        $instance->substr(0, 'test');
-    }
-
-    public function testSubstrOutOfRangeFrom()
+    /**
+     * @test
+     * @covers ::substr
+     */
+    public function substrFromFail()
     {
         $this->setExpectedException('LengthException');
         $instance = new StringType('árvíztűrő tükörfúrógép');
         $instance->substr($instance->length() + 1);
     }
 
-    public function testSubstrOutOfRangeLength()
+    /**
+     * @test
+     * @covers ::substr
+     */
+    public function substrLengthFail()
     {
         $this->setExpectedException('LengthException');
         $instance = new StringType('árvíztűrő tükörfúrógép');
         $instance->substr(0, $instance->length() + 1);
     }
 
-    public function testToLower()
+    /**
+     * @test
+     * @covers ::toLower
+     */
+    public function toLower()
     {
         $instance = new StringType('ÁRVÍZTŰRŐ TÜKÖRFÚRÓGÉP', 'UTF-8');
-        $this->assertTrue($instance->toLower() instanceof StringType);
+        $this->assertInstanceOf('\Data\Type\StringType', $instance->toLower());
         $this->assertSame('árvíztűrő tükörfúrógép', $instance->toLower()->value());
     }
 
-    public function testToUpper()
+    /**
+     * @test
+     * @covers ::toUpper
+     */
+    public function toUpper()
     {
         $instance = new StringType('árvíztűrő tükörfúrógép', 'UTF-8');
-        $this->assertTrue($instance->toUpper() instanceof StringType);
+        $this->assertInstanceOf('\Data\Type\StringType', $instance->toUpper());
         $this->assertSame('ÁRVÍZTŰRŐ TÜKÖRFÚRÓGÉP', $instance->toUpper()->value());
     }
 
-    public function testUpperFirst()
+    /**
+     * @test
+     * @covers ::upperFirst
+     */
+    public function upperFirst()
     {
         $instance = new StringType('árvíztűrő tükörfúrógép', 'UTF-8');
-        $this->assertTrue($instance->upperFirst() instanceof StringType);
+        $this->assertInstanceOf('\Data\Type\StringType', $instance->upperFirst());
         $this->assertSame('Árvíztűrő tükörfúrógép', $instance->upperFirst()->value());
     }
 
-    public function testUpperWords()
+    /**
+     * @test
+     * @covers ::upperWords
+     */
+    public function upperWords()
     {
         $instance = new StringType('árvíztűrő tükörfúrógép', 'UTF-8');
-        $this->assertTrue($instance->upperWords() instanceof StringType);
+        $this->assertInstanceOf('\Data\Type\StringType', $instance->upperWords());
         $this->assertSame('Árvíztűrő Tükörfúrógép', $instance->upperWords()->value());
     }
 
-    public function testArrayAccess()
+    /**
+     * @test
+     * @covers ::offsetExists
+     */
+    public function offsetExists()
     {
         $instance = new StringType('árvíztűrő tükörfúrógép', 'UTF-8');
-
-        // isset
-        for($n = 0; $n < $instance->length(); $n++)
-        {
-            $this->assertSame(true, isset($instance[$n]));
+        for ($n = 0; $n < $instance->length(); $n++) {
+            $this->assertSame(true, isset ($instance[$n]));
         }
+    }
 
-        // isset invalid offset
-        $this->assertSame(false, isset($instance[-1]));
-        $this->assertSame(false, isset($instance[$instance->length() + 1]));
-        $this->assertSame(false, isset($instance[null]));
+    /**
+     * @test
+     * @covers ::offsetExists
+     */
+    public function offsetExistsMinFail()
+    {
+        $this->setExpectedException('InvalidArgumentException');
+        $instance = new StringType(null, 'UTF-8');
+        isset ($instance[0]);
+    }
 
-        // get
+    /**
+     * @test
+     * @covers ::offsetExists
+     */
+    public function offsetExistsMaxFail()
+    {
+        $this->setExpectedException('InvalidArgumentException');
+        $instance = new StringType('árvíztűrő tükörfúrógép', 'UTF-8');
+        isset ($instance[$instance->length() + 1]);
+    }
+
+    /**
+     * @test
+     * @covers ::offsetGet
+     */
+    public function offsetGet()
+    {
+        $instance = new StringType('árvíztűrő tükörfúrógép', 'UTF-8');
         $this->assertEquals('á', $instance[0]);
         $this->assertEquals('r', $instance[1]);
         $this->assertEquals('v', $instance[2]);
@@ -245,37 +352,78 @@ class StringTypeTest extends PHPUnit_Framework_TestCase implements SplObserver
         $this->assertEquals('p', $instance[21]);
     }
 
-    public function testArrayAccessInvalidOffset1()
+    /**
+     * @test
+     * @covers ::offsetSet
+     */
+    public function offsetSet()
     {
-        $this->setExpectedException('InvalidArgumentException');
-        $instance = new StringType('árvíztűrő tükörfúrógép');
-        $test = $instance[-1];
+        $instance = new StringType('árvíztűrő tükörfúrógép', 'UTF-8');
+
+        $instance[0] = 0;
+        $this->assertSame('0rvíztűrő tükörfúrógép', $instance->value());
+
+        $instance[0] = 'TEST';
+        $this->assertSame('TESTrvíztűrő tükörfúrógép', $instance->value());
+
+        $instance[0] = '';
+        $this->assertSame('ESTrvíztűrő tükörfúrógép', $instance->value());
+
+        $instance[0] = null;
+        $instance[0] = null;
+        $this->assertSame('Trvíztűrő tükörfúrógép', $instance->value());
+
+        $instance[1] = 'ES';
+        $instance[3] = 'T';
+        $this->assertSame('TESTíztűrő tükörfúrógép', $instance->value());
     }
 
-    public function testArrayAccessInvalidOffset2()
+    /**
+     * @test
+     * @covers ::offsetUnset
+     */
+    public function offsetUnset()
     {
-        $this->setExpectedException('InvalidArgumentException');
-        $instance = new StringType('árvíztűrő tükörfúrógép');
-        $test = $instance[$instance->length()];
+        $instance = new StringType('árvíztűrő tükörfúrógép', 'UTF-8');
+
+        unset ($instance[0]);
+        $this->assertSame('rvíztűrő tükörfúrógép', $instance->value());
+
+        unset ($instance[0]);
+        unset ($instance[0]);
+        unset ($instance[0]);
+        $this->assertSame('ztűrő tükörfúrógép', $instance->value());
+
+        unset ($instance[1]);
+        $this->assertSame('zűrő tükörfúrógép', $instance->value());
     }
 
-    public function testArrayAccessInvalidOffset3()
+    /**
+     * @test
+     * @covers ::rewind
+     * @covers ::current
+     * @covers ::key
+     * @covers ::next
+     * @covers ::valid
+     */
+    public function iterator()
     {
-        $this->setExpectedException('InvalidArgumentException');
         $instance = new StringType('árvíztűrő tükörfúrógép');
-        $test = $instance[null];
-    }
-
-    public function testIterator()
-    {
-        $instance = new StringType('𐆖 árvíztűrő tükörfúrógép 𐆖');
 
         $n = 0;
         foreach ($instance as $key => $value) {
             $this->assertSame($n, $key);
+            $this->assertSame($instance->substr($key, 1), $value);
             $n++;
-
-            $this->assertEquals($instance->substr($key, 1), $value);
         }
+    }
+
+    /**
+     * @covers ::count
+     */
+    public function testCount()
+    {
+        $instance = new StringType('árvíztűrő tükörfúrógép');
+        $this->assertSame(22, count($instance));
     }
 }
