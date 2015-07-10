@@ -227,7 +227,7 @@ class StringTypeTest extends PHPUnit_Framework_TestCase
      */
     public function substrFromFail()
     {
-        $this->setExpectedException('LengthException');
+        $this->setExpectedException('InvalidArgumentException');
         $instance = new StringType('árvíztűrő tükörfúrógép');
         $instance->substr($instance->length() + 1);
     }
@@ -238,7 +238,7 @@ class StringTypeTest extends PHPUnit_Framework_TestCase
      */
     public function substrLengthFail()
     {
-        $this->setExpectedException('LengthException');
+        $this->setExpectedException('InvalidArgumentException');
         $instance = new StringType('árvíztűrő tükörfúrógép');
         $instance->substr(0, $instance->length() + 1);
     }

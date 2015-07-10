@@ -2,7 +2,6 @@
 
 namespace Data\Type;
 
-use LengthException;
 use InvalidArgumentException;
 use \Data\Type\Exceptions\InvalidStringException;
 
@@ -204,11 +203,11 @@ class StringType extends Type
         $length = Cast::_uInt($length);
 
         if ($from > $this->length()) {
-            throw new LengthException('From parameter is greater than the length of the string');
+            throw new InvalidArgumentException('From parameter is greater than the length of the string');
         }
 
         if ($length > $this->length()) {
-            throw new LengthException('Length parameter is greater than the length of the string');
+            throw new InvalidArgumentException('Length parameter is greater than the length of the string');
         }
 
         return mb_substr($this->value, $from, $length, $this->encoding);
