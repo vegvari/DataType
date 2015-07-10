@@ -87,7 +87,7 @@ class StringType extends Type implements ArrayAccess, Iterator, Countable
      */
     protected function check($value)
     {
-        if ($value === null) {
+        if ($value === null || $value === '') {
             return null;
         }
 

@@ -51,16 +51,6 @@ abstract class Type implements SplSubject
      *
      * @return mixed
      */
-    public function get()
-    {
-        return $this->value;
-    }
-
-    /**
-     * Get the value
-     *
-     * @return mixed
-     */
     public function value()
     {
         return $this->value;
@@ -73,6 +63,34 @@ abstract class Type implements SplSubject
      * @return mixed
      */
     abstract protected function check($value);
+
+    /**
+     * True if the value is null
+     *
+     * @return bool
+     */
+    public function isNull()
+    {
+        if ($this->value === null) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * True if the value is not null
+     *
+     * @return bool
+     */
+    public function isNotNull()
+    {
+        if ($this->value !== null) {
+            return true;
+        }
+
+        return false;
+    }
 
     /**
      * Cast instance to string

@@ -2,7 +2,7 @@
 
 namespace Data\Type;
 
-use InvalidArgumentException;
+use Exception;
 
 abstract class Number extends Type
 {
@@ -17,7 +17,7 @@ abstract class Number extends Type
             return new FloatType();
         }
 
-        return new FloatType($this->value * -1);
+        return new FloatType(-$this->value);
     }
 
     /**
@@ -28,11 +28,13 @@ abstract class Number extends Type
      */
     public function add($value)
     {
+        $value = Cast::Float($value);
+
         if ($this->value === null) {
             return new FloatType();
         }
 
-        return new FloatType($this->value + Cast::Float($value));
+        return new FloatType($this->value + $value);
     }
 
     /**
@@ -43,11 +45,13 @@ abstract class Number extends Type
      */
     public function sub($value)
     {
+        $value = Cast::Float($value);
+
         if ($this->value === null) {
             return new FloatType();
         }
 
-        return new FloatType($this->value - Cast::Float($value));
+        return new FloatType($this->value - $value);
     }
 
     /**
@@ -58,11 +62,13 @@ abstract class Number extends Type
      */
     public function mul($value)
     {
+        $value = Cast::Float($value);
+
         if ($this->value === null) {
             return new FloatType();
         }
 
-        return new FloatType($this->value * Cast::Float($value));
+        return new FloatType($this->value * $value);
     }
 
     /**
@@ -75,8 +81,8 @@ abstract class Number extends Type
     {
         $value = Cast::Float($value);
 
-        if ($value === 0.0) {
-            throw new InvalidArgumentException('Division by zero');
+        if ($value === null || $value === 0.0) {
+            throw new Exception('Division by zero');
         }
 
         if ($this->value === null) {
@@ -96,10 +102,6 @@ abstract class Number extends Type
     {
         $value = Cast::Float($value);
 
-        if ($value === 0.0) {
-            throw new InvalidArgumentException('Division by zero');
-        }
-
         if ($this->value === null) {
             return new FloatType();
         }
@@ -115,11 +117,13 @@ abstract class Number extends Type
      */
     public function exp($value)
     {
+        $value = Cast::Float($value);
+
         if ($this->value === null) {
             return new FloatType();
         }
 
-        return new FloatType(pow($this->value, Cast::Float($value)));
+        return new FloatType(pow($this->value, $value));
     }
 
     /**
@@ -152,11 +156,13 @@ abstract class Number extends Type
      */
     public function root($value)
     {
+        $value = Cast::Float($value);
+
         if ($this->value === null) {
             return new FloatType();
         }
 
-        return new FloatType(pow($this->value, 1 / Cast::Float($value)));
+        return new FloatType(pow($this->value, 1 / $value));
     }
 
     /**
@@ -167,9 +173,9 @@ abstract class Number extends Type
      */
     public function eq($value)
     {
-        $value = Cast::_Float($value);
+        $instance = new static($value);
 
-        if ($this->value === $value) {
+        if ($this->value() === $instance->value()) {
             return true;
         }
 
@@ -184,9 +190,9 @@ abstract class Number extends Type
      */
     public function ne($value)
     {
-        $value = Cast::_Float($value);
+        $instance = new static($value);
 
-        if ($this->value !== $value) {
+        if ($this->value() !== $instance->value()) {
             return true;
         }
 
@@ -201,9 +207,9 @@ abstract class Number extends Type
      */
     public function gt($value)
     {
-        $value = Cast::Float($value);
+        $instance = new static($value);
 
-        if ($this->value !== null && $this->value > $value) {
+        if ($this->value() > $instance->value()) {
             return true;
         }
 
@@ -218,10 +224,14 @@ abstract class Number extends Type
      */
     public function gte($value)
     {
-        $value = Cast::Float($value);
+        $instance = new static($value);
 
-        if ($this->value !== null && $this->value >= $value) {
+        if ($instance->isNull() && $this->isNull()) {
             return true;
+        } elseif ($instance->isNotNull() && $this->isNotNull()) {
+            if ($this->value() >= $instance->value()) {
+                return true;
+            }
         }
 
         return false;
@@ -235,9 +245,9 @@ abstract class Number extends Type
      */
     public function lt($value)
     {
-        $value = Cast::Float($value);
+        $instance = new static($value);
 
-        if ($this->value !== null && $this->value < $value) {
+        if ($this->value() < $instance->value()) {
             return true;
         }
 
@@ -252,10 +262,14 @@ abstract class Number extends Type
      */
     public function lte($value)
     {
-        $value = Cast::Float($value);
+        $instance = new static($value);
 
-        if ($this->value !== null && $this->value <= $value) {
+        if ($instance->isNull() && $this->isNull()) {
             return true;
+        } elseif ($instance->isNotNull() && $this->isNotNull()) {
+            if ($this->value() <= $instance->value()) {
+                return true;
+            }
         }
 
         return false;

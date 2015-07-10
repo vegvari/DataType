@@ -3,6 +3,8 @@
 namespace Data\Type;
 
 use InvalidArgumentException;
+use \Data\Type\Exceptions\InvalidIntException;
+use \Data\Type\Exceptions\InvalidFloatException;
 
 class IntType extends FloatType
 {
@@ -14,7 +16,7 @@ class IntType extends FloatType
      */
     protected function check($value)
     {
-        if ($value === null) {
+        if ($value === null || $value === '') {
             return null;
         }
 
@@ -22,11 +24,11 @@ class IntType extends FloatType
             return $value;
         }
 
-        if ($value === false || $value === 0.0 || $value === '0') {
+        if ($value === false || $value === 0.0 || $value === '0' || $value === '0.0') {
             return 0;
         }
 
-        if ($value === true || $value === 1.0 || $value === '1') {
+        if ($value === true || $value === 1.0 || $value === '1' || $value === '1.0') {
             return 1;
         }
 
@@ -36,28 +38,40 @@ class IntType extends FloatType
 
         if ($value instanceof Type) {
             $value = $value->value();
+
+            if ($value === null) {
+                return null;
+            }
+
+            if ($value === false || $value === 0.0 || $value === '0' || $value === '0.0') {
+                return 0;
+            }
+
+            if ($value === true || $value === 1.0 || $value === '1' || $value === '1.0') {
+                return 1;
+            }
         } else {
             if (is_array($value)) {
-                throw new InvalidArgumentException('Invalid int, array given');
+                throw new InvalidIntException('Invalid int: array');
             }
 
             if (is_resource($value)) {
-                throw new InvalidArgumentException('Invalid int, resource given');
+                throw new InvalidIntException('Invalid int: resource');
             }
 
             if (is_object($value)) {
-                throw new InvalidArgumentException('Invalid int, object given');
+                throw new InvalidIntException('Invalid int: object');
             }
         }
 
         try {
             $value = parent::check($value);
-        } catch (InvalidArgumentException $e) {
-            throw new InvalidArgumentException('Invalid int: "' . $value . '"');
+        } catch (InvalidFloatException $e) {
+            throw new InvalidIntException('Invalid int: "' . $value . '"');
         }
 
         if (filter_var($value, FILTER_VALIDATE_INT) === false) {
-            throw new InvalidArgumentException('Invalid int: "' . $value . '"');
+            throw new InvalidIntException('Invalid int: "' . $value . '"');
         }
 
         return (int) $value;

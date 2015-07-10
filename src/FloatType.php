@@ -2,7 +2,7 @@
 
 namespace Data\Type;
 
-use InvalidArgumentException;
+use \Data\Type\Exceptions\InvalidFloatException;
 
 class FloatType extends Number
 {
@@ -14,7 +14,7 @@ class FloatType extends Number
      */
     protected function check($value)
     {
-        if ($value === null) {
+        if ($value === null || $value === '') {
             return null;
         }
 
@@ -35,27 +35,45 @@ class FloatType extends Number
         }
 
         if ($value instanceof FloatType) {
-            return (float) $value->value();
+            $value = $value->value();
+
+            if ($value === null) {
+                return null;
+            }
+
+            return (float) $value;
         }
 
         if ($value instanceof Type) {
             $value = $value->value();
+
+            if ($value === null) {
+                return null;
+            }
+
+            if ($value === false || $value === '0' || $value === '0.0') {
+                return 0.0;
+            }
+
+            if ($value === true || $value === '1' || $value === '1.0') {
+                return 1.0;
+            }
         } else {
             if (is_array($value)) {
-                throw new InvalidArgumentException('Invalid float, array given');
+                throw new InvalidFloatException('Invalid float: array');
             }
 
             if (is_resource($value)) {
-                throw new InvalidArgumentException('Invalid float, resource given');
+                throw new InvalidFloatException('Invalid float: resource');
             }
 
             if (is_object($value)) {
-                throw new InvalidArgumentException('Invalid float, object given');
+                throw new InvalidFloatException('Invalid float: object');
             }
         }
 
         if (filter_var($value, FILTER_VALIDATE_FLOAT) === false) {
-            throw new InvalidArgumentException('Invalid float: "' . $value . '"');
+            throw new InvalidFloatException('Invalid float: "' . $value . '"');
         }
 
         return (float) $value;

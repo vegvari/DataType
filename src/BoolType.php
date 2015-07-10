@@ -14,7 +14,7 @@ class BoolType extends Type
      */
     protected function check($value)
     {
-        if ($value === null) {
+        if ($value === null || $value === '') {
             return null;
         }
 
@@ -32,6 +32,18 @@ class BoolType extends Type
 
         if ($value instanceof Type) {
             $value = $value->value();
+
+            if ($value === null) {
+                return null;
+            }
+
+            if ($value === 0 || $value === 0.0 || $value === '0' || $value === '0.0') {
+                return false;
+            }
+
+            if ($value === 1 || $value === 1.0 || $value === '1' || $value === '1.0') {
+                return true;
+            }
         } else {
             if (is_array($value)) {
                 throw new InvalidBoolException('Invalid bool: array');
@@ -44,14 +56,6 @@ class BoolType extends Type
             if (is_object($value)) {
                 throw new InvalidBoolException('Invalid bool: object');
             }
-        }
-
-        if ($value === 0 || $value === 0.0 || $value === '0') {
-            return false;
-        }
-
-        if ($value === 1 || $value === 1.0 || $value === '1') {
-            return true;
         }
 
         throw new InvalidBoolException('Invalid bool: "' . $value . '"');
