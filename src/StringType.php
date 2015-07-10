@@ -2,16 +2,11 @@
 
 namespace Data\Type;
 
-use Iterator;
-use Countable;
-use ArrayAccess;
-
-use Exception;
 use LengthException;
 use InvalidArgumentException;
 use \Data\Type\Exceptions\InvalidStringException;
 
-class StringType extends Type implements ArrayAccess, Iterator, Countable
+class StringType extends Type
 {
     /**
      * @var string
@@ -176,7 +171,7 @@ class StringType extends Type implements ArrayAccess, Iterator, Countable
     public static function getRealEncoding($encoding)
     {
         if (static::isEncodingSupported($encoding) === false) {
-            throw new Exception('Encoding is not supported: "' . $encoding . '"');
+            throw new InvalidArgumentException('Encoding is not supported: "' . $encoding . '"');
         }
 
         return static::supportedEncodings()[strtolower($encoding)];
@@ -261,102 +256,5 @@ class StringType extends Type implements ArrayAccess, Iterator, Countable
     {
         $this->set(mb_convert_case($this->value, MB_CASE_TITLE, $this->encoding));
         return $this;
-    }
-
-    /**
-     * @see ArrayAccess::offsetExists
-     */
-    public function offsetExists($offset)
-    {
-        $offset = Cast::uInt($offset);
-
-        if ($offset < $this->length())
-        {
-            return true;
-        }
-
-        throw new InvalidArgumentException('Invalid offset: "' . $offset . '"');
-    }
-
-    /**
-     * @see ArrayAccess::offsetGet
-     */
-    public function offsetGet($offset)
-    {
-        return $this->substr($offset, 1);
-    }
-
-    /**
-     * @see ArrayAccess::offsetSet
-     */
-    public function offsetSet($offset, $value)
-    {
-        $value = Cast::_String($value, $this->encoding);
-        if ($value === null) {
-            $value = '';
-        }
-
-        $instance = new static($this->substr(0, $offset) . $value . $this->substr($offset + 1), $this->encoding);
-        $this->set($instance->value());
-    }
-
-    /**
-     * @see ArrayAccess::offsetUnset
-     */
-    public function offsetUnset($offset)
-    {
-        $this->offsetSet($offset, '');
-    }
-
-    /**
-     * @see Iterator::rewind
-     */
-    public function rewind()
-    {
-        $this->iterator_position = 0;
-    }
-
-    /**
-     * @see Iterator::current
-     */
-    public function current()
-    {
-        return $this->offsetGet($this->iterator_position);
-    }
-
-    /**
-     * @see Iterator::key
-     */
-    public function key()
-    {
-        return $this->iterator_position;
-    }
-
-    /**
-     * @see Iterator::next
-     */
-    public function next()
-    {
-        $this->iterator_position++;
-    }
-
-    /**
-     * @see Iterator::valid
-     */
-    public function valid()
-    {
-        try {
-            return $this->offsetExists($this->iterator_position);
-        } catch (InvalidArgumentException $e) {
-            return false;
-        }
-    }
-
-    /**
-     * @see Countable::count
-     */
-    public function count()
-    {
-        return $this->length();
     }
 }
