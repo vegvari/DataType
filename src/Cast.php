@@ -101,13 +101,28 @@ abstract class Cast
 
             case 'Int':
                 $instance = new IntType($args[0]);
+
+                if (isset ($args[1])) {
+                    $min = new IntType($args[1]);
+                    if ($instance->lt($min)) {
+                        throw new InvalidArgumentException('Value less than min (' . $min . '): ' . '"' . $instance . '"');
+                    }
+                }
+
+                if (isset ($args[2])) {
+                    $max = new IntType($args[2]);
+                    if ($instance->gt($max)) {
+                        throw new InvalidArgumentException('Value greater than max (' . $max . '): ' . '"' . $instance . '"');
+                    }
+                }
+
                 return $instance->value();
                 break;
 
             case 'uInt':
                 $instance = new IntType($args[0]);
 
-                if ($instance->value() < 0) {
+                if ($instance->lt(0)) {
                     throw new InvalidArgumentException('Unsigned int must be >= 0, "' . $instance->value() . '" given');
                 }
 
