@@ -161,7 +161,7 @@ class CastTest extends PHPUnit_Framework_TestCase
     public function testStringNotNull()
     {
         $this->assertSame('1', Cast::String('1'));
-        // $this->assertSame(mb_convert_encoding('árvíztűrő tükörfúrógép', 'ISO-8859-2'), Cast::String('árvíztűrő tükörfúrógép', 'ISO-8859-2'));
+        $this->assertSame(mb_convert_encoding('árvíztűrő tükörfúrógép', 'ISO-8859-2'), Cast::String(mb_convert_encoding('árvíztűrő tükörfúrógép', 'ISO-8859-2'), 'ISO-8859-2'));
     }
 
     public function testStringNotNullFail()
