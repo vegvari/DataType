@@ -93,16 +93,6 @@ abstract class Type implements SplSubject
     }
 
     /**
-     * True if the value is not null
-     *
-     * @return bool
-     */
-    public function __isset($name = 'value')
-    {
-        return $this->isNotNull();
-    }
-
-    /**
      * Cast instance to string
      *
      * @return string

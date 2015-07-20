@@ -14,7 +14,18 @@ class DateTimeTypeTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @test
-     * @cover ::__construct
+     * @covers ::__toString
+     */
+    public function toString()
+    {
+        $instance = new DateTimeType();
+        $this->assertSame('', (string) $instance);
+    }
+
+    /**
+     * @test
+     * @covers ::__construct
+     * #covers ::check
      */
     public function construct()
     {
@@ -27,8 +38,68 @@ class DateTimeTypeTest extends PHPUnit_Framework_TestCase
         $instance = new DateTimeType(null, new DateTimeZone('Europe/London'));
         $this->assertSame('Europe/London', $instance->getTimeZone()->getName());
 
+        $instance = new DateTimeType(new DateTimeType('2012-01-01'));
+        $this->assertSame(2012, $instance->getYear());
+        $this->assertSame(1, $instance->getMonth());
+        $this->assertSame(1, $instance->getDay());
+    }
+
+    /**
+     * @test
+     * @covers ::__construct
+     * @covers ::check
+     */
+    public function constructFail()
+    {
         $this->setExpectedException('InvalidArgumentException');
         $instance = new DateTimeType(null, 'GMT');
+    }
+
+    /**
+     * @test
+     * @covers ::check
+     */
+    public function check()
+    {
+        $instance = new DateTimeType();
+        $this->assertSame(null, $instance->value());
+
+        $instance = new DateTimeType('');
+        $this->assertSame(null, $instance->value());
+
+        $instance = new DateTimeType(new BoolType());
+        $this->assertSame(null, $instance->value());
+
+        $instance = new DateTimeType(new FloatType());
+        $this->assertSame(null, $instance->value());
+
+        $instance = new DateTimeType(new IntType());
+        $this->assertSame(null, $instance->value());
+
+        $instance = new DateTimeType(new StringType());
+        $this->assertSame(null, $instance->value());
+
+        $instance = new DateTimeType(new DateTimeType());
+        $this->assertSame(null, $instance->value());
+
+        $instance = new DateTimeType(new StringType('2012-01-01'));
+        $this->assertSame('2012-01-01 00:00:00', $instance->value());
+
+        $instance = new DateTimeType(new DateTimeType('2012-01-01'));
+        $this->assertSame('2012-01-01 00:00:00', $instance->value());
+
+        $instance = new DateTimeType('now');
+        $this->assertLessThanOrEqual(1, abs($instance->diffInSeconds('now')));
+    }
+
+    /**
+     * @test
+     * @covers ::check
+     */
+    public function checkFail()
+    {
+        $this->setExpectedException('InvalidArgumentException');
+        $instance = new DateTimeType('ASDFASDFASDF');
     }
 
     /**
@@ -331,5 +402,248 @@ class DateTimeTypeTest extends PHPUnit_Framework_TestCase
         $this->assertSame(0, $instance->getMinute());
         $this->assertSame(0, $instance->getSecond());
         $this->assertSame(0, $instance->getMicrosecond());
+
+        $instance->addMicrosecond(2000001);
+        $this->assertSame(2, $instance->getSecond());
+        $this->assertSame(1, $instance->getMicrosecond());
+
+        $instance->subMicrosecond(1000002);
+        $this->assertSame(0, $instance->getSecond());
+        $this->assertSame(999999, $instance->getMicrosecond());
+    }
+
+    /**
+     * @test
+     * @covers ::getDayOfWeek
+     */
+    public function dayOfWeek()
+    {
+        $instance = new DateTimeType();
+        $this->assertSame(null, $instance->getDayOfWeek());
+
+        $instance = new DateTimeType('2013-04-01');
+        $this->assertSame(1, $instance->getDayOfWeek());
+
+        $instance->setDay(2);
+        $this->assertSame(2, $instance->getDayOfWeek());
+
+        $instance->setDay(3);
+        $this->assertSame(3, $instance->getDayOfWeek());
+
+        $instance->setDay(4);
+        $this->assertSame(4, $instance->getDayOfWeek());
+
+        $instance->setDay(5);
+        $this->assertSame(5, $instance->getDayOfWeek());
+
+        $instance->setDay(6);
+        $this->assertSame(6, $instance->getDayOfWeek());
+
+        $instance->setDay(7);
+        $this->assertSame(7, $instance->getDayOfWeek());
+
+        $instance->setDay(8);
+        $this->assertSame(1, $instance->getDayOfWeek());
+    }
+
+    /**
+     * @test
+     * @covers ::diffInYears
+     * @covers ::diffInMonths
+     * @covers ::diffInDays
+     * @covers ::diffInHours
+     * @covers ::diffInMinutes
+     * @covers ::diffInSeconds
+     * @covers ::diffInMicroseconds
+     */
+    public function diff()
+    {
+        $instance = new DateTimeType();
+        $instance2 = new DateTimeType();
+
+        $this->assertSame(null, $instance->diffInYears($instance2));
+        $this->assertSame(null, $instance->diffInMonths($instance2));
+        $this->assertSame(null, $instance->diffInDays($instance2));
+        $this->assertSame(null, $instance->diffInHours($instance2));
+        $this->assertSame(null, $instance->diffInMinutes($instance2));
+        $this->assertSame(null, $instance->diffInSeconds($instance2));
+        $this->assertSame(null, $instance->diffInMicroSeconds($instance2));
+
+        $this->assertSame(null, $instance->diffInYears(new DateTimeType()));
+        $this->assertSame(null, $instance->diffInMonths(new DateTimeType()));
+        $this->assertSame(null, $instance->diffInDays(new DateTimeType()));
+        $this->assertSame(null, $instance->diffInHours(new DateTimeType()));
+        $this->assertSame(null, $instance->diffInMinutes(new DateTimeType()));
+        $this->assertSame(null, $instance->diffInSeconds(new DateTimeType()));
+        $this->assertSame(null, $instance->diffInMicroSeconds(new DateTimeType()));
+
+        $instance->setYear(2010);
+        $instance2->setYear(2013);
+
+        $this->assertSame(3, $instance->diffInYears('2013-01-01'));
+        $this->assertSame(3, $instance->diffInYears($instance2));
+        $this->assertSame(-3, $instance2->diffInYears($instance));
+
+        $this->assertSame(36, $instance->diffInMonths('2013-01-01'));
+        $this->assertSame(36, $instance->diffInMonths($instance2));
+        $this->assertSame(-36, $instance2->diffInMonths($instance));
+
+        $this->assertSame(1096, $instance->diffInDays('2013-01-01'));
+        $this->assertSame(1096, $instance->diffInDays($instance2));
+        $this->assertSame(-1096, $instance2->diffInDays($instance));
+
+        $this->assertSame(26304, $instance->diffInHours('2013-01-01'));
+        $this->assertSame(26304, $instance->diffInHours($instance2));
+        $this->assertSame(-26304, $instance2->diffInHours($instance));
+
+        $this->assertSame(1578240, $instance->diffInMinutes('2013-01-01'));
+        $this->assertSame(1578240, $instance->diffInMinutes($instance2));
+        $this->assertSame(-1578240, $instance2->diffInMinutes($instance));
+
+        $this->assertSame(94694400, $instance->diffInSeconds('2013-01-01'));
+        $this->assertSame(94694400, $instance->diffInSeconds($instance2));
+        $this->assertSame(-94694400, $instance2->diffInSeconds($instance));
+
+        $this->assertSame(94694400000000, $instance->diffInMicroSeconds('2013-01-01'));
+        $this->assertSame(94694400000000, $instance->diffInMicroSeconds($instance2));
+        $this->assertSame(-94694400000000, $instance2->diffInMicroSeconds($instance));
+
+        $instance->setDate(2012, 2, 29);
+        $this->assertSame(11, $instance->diffInMonths('2013-02-28'));
+        $this->assertSame(365, $instance->diffInDays('2013-02-28'));
+
+        $this->assertSame(12, $instance->diffInMonths('2013-03-01'));
+        $this->assertSame(366, $instance->diffInDays('2013-03-01'));
+
+        $instance->setDate(2012, 3, 01);
+        $this->assertSame(12, $instance->diffInMonths('2013-03-01'));
+        $this->assertSame(365, $instance->diffInDays('2013-03-01'));
+
+        $instance = new DateTimeType();
+        $instance->setDateTime(2012, 1, 1, 0, 0, 0, 0);
+        $this->assertSame(10, $instance->diffInSeconds(new DateTime('2012-01-01 00:00:10')));
+
+        $this->assertSame(null, $instance->diffInYears(new DateTimeType()));
+        $this->assertSame(null, $instance->diffInMonths(new DateTimeType()));
+        $this->assertSame(null, $instance->diffInDays(new DateTimeType()));
+        $this->assertSame(null, $instance->diffInHours(new DateTimeType()));
+        $this->assertSame(null, $instance->diffInMinutes(new DateTimeType()));
+        $this->assertSame(null, $instance->diffInSeconds(new DateTimeType()));
+        $this->assertSame(null, $instance->diffInMicroSeconds(new DateTimeType()));
+    }
+
+    /**
+     * @test
+     * @covers ::eq
+     * @covers ::ne
+     * @covers ::gt
+     * @covers ::gte
+     * @covers ::lt
+     * @covers ::lte
+     * @covers ::betweenEqual
+     * @covers ::betweenNotEqual
+     */
+    public function compare()
+    {
+        $instance = new DateTimeType();
+        $instance2 = new DateTimeType();
+        $instance3 = new DateTimeType();
+
+        $instance->setYear(2012);
+        $instance2->setYear(2012);
+        $instance3->setYear(2012);
+
+        // equal
+        $this->assertSame(true, $instance->eq($instance2));
+        $this->assertSame(false, $instance->ne($instance2));
+        $this->assertSame(false, $instance->gt($instance2));
+        $this->assertSame(true, $instance->gte($instance2));
+        $this->assertSame(false, $instance->lt($instance2));
+        $this->assertSame(true, $instance->lte($instance2));
+
+        $this->assertSame(true, $instance->eq('2012-01-01 00:00:00'));
+        $this->assertSame(false, $instance->ne('2012-01-01 00:00:00'));
+        $this->assertSame(false, $instance->gt('2012-01-01 00:00:00'));
+        $this->assertSame(true, $instance->gte('2012-01-01 00:00:00'));
+        $this->assertSame(false, $instance->lt('2012-01-01 00:00:00'));
+        $this->assertSame(true, $instance->lte('2012-01-01 00:00:00'));
+
+        $this->assertSame(true, $instance3->betweenEqual('2012-01-01', '2012-01-01'));
+        $this->assertSame(false, $instance3->betweenNotEqual('2012-01-01', '2012-01-01'));
+        $this->assertSame(true, $instance3->betweenNotEqual('2011-01-01', '2013-01-01'));
+        $this->assertSame(true, $instance3->betweenNotEqual('2011-01-01', '2013-01-01'));
+        $this->assertSame(true, $instance3->betweenNotEqual('2013-01-01', '2011-01-01'));
+        $this->assertSame(true, $instance3->betweenNotEqual('2013-01-01', '2011-01-01'));
+        $this->assertSame(false, $instance3->betweenNotEqual('2014-01-01', '2015-01-01'));
+        $this->assertSame(false, $instance3->betweenNotEqual('2014-01-01', '2015-01-01'));
+
+        // equal with microseconds
+        $instance->setMicrosecond(1);
+        $instance2->setMicrosecond(1);
+        $instance3->setMicrosecond(1);
+        $this->assertSame(true, $instance->eq($instance2));
+        $this->assertSame(false, $instance->ne($instance2));
+        $this->assertSame(false, $instance->gt($instance2));
+        $this->assertSame(true, $instance->gte($instance2));
+        $this->assertSame(false, $instance->lt($instance2));
+        $this->assertSame(true, $instance->lte($instance2));
+        $this->assertSame(true, $instance3->betweenEqual($instance, $instance2));
+        $this->assertSame(false, $instance3->betweenNotEqual($instance, $instance2));
+
+        // less
+        $instance->setMicrosecond(1);
+        $instance2->setMicrosecond(3);
+        $instance3->setMicrosecond(2);
+        $this->assertSame(false, $instance->eq($instance2));
+        $this->assertSame(true, $instance->ne($instance2));
+        $this->assertSame(false, $instance->gt($instance2));
+        $this->assertSame(false, $instance->gte($instance2));
+        $this->assertSame(true, $instance->lt($instance2));
+        $this->assertSame(true, $instance->lte($instance2));
+        $this->assertSame(true, $instance3->betweenEqual($instance, $instance2));
+        $this->assertSame(true, $instance3->betweenNotEqual($instance, $instance2));
+
+        // greater
+        $instance->setMicrosecond(3);
+        $instance2->setMicrosecond(1);
+        $instance3->setMicrosecond(2);
+        $this->assertSame(false, $instance->eq($instance2));
+        $this->assertSame(true, $instance->ne($instance2));
+        $this->assertSame(true, $instance->gt($instance2));
+        $this->assertSame(true, $instance->gte($instance2));
+        $this->assertSame(false, $instance->lt($instance2));
+        $this->assertSame(false, $instance->lte($instance2));
+        $this->assertSame(true, $instance3->betweenEqual($instance, $instance2));
+        $this->assertSame(true, $instance3->betweenNotEqual($instance, $instance2));
+
+        $instance3->setMicrosecond(4);
+        $this->assertSame(false, $instance3->betweenEqual($instance, $instance2));
+        $this->assertSame(false, $instance3->betweenNotEqual($instance, $instance2));
+    }
+
+    /**
+     * @test
+     * @covers ::checkLeapYear
+     */
+    public function checkLeapYear()
+    {
+        $this->assertSame(true, DateTimeType::checkLeapYear(0));
+        $this->assertSame(true, DateTimeType::checkLeapYear(2000));
+        $this->assertSame(true, DateTimeType::checkLeapYear(2012));
+        $this->assertSame(false, DateTimeType::checkLeapYear(1));
+        $this->assertSame(false, DateTimeType::checkLeapYear(1900));
+    }
+
+    /**
+     * @test
+     * @covers ::isTimezoneDeprecated
+     */
+    public function isTimezoneDeprecated()
+    {
+        $this->assertSame(true, DateTimeType::isTimezoneDeprecated('GMT'));
+        $this->assertSame(true, DateTimeType::isTimezoneDeprecated(new DateTimeZone('GMT')));
+
+        $this->assertSame(false, DateTimeType::isTimezoneDeprecated('UTC'));
+        $this->assertSame(false, DateTimeType::isTimezoneDeprecated(new DateTimeZone('UTC')));
     }
 }

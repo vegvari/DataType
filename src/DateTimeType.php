@@ -66,7 +66,7 @@ class DateTimeType extends Type
      */
     protected function check($value)
     {
-        if ( ! isset ($value)) {
+        if ($value === null || $value === '') {
             $this->datetime = null;
             return;
         }
@@ -76,6 +76,11 @@ class DateTimeType extends Type
             $this->datetime = DateTime::createFromFormat('Y-m-d H:i:s.u', date('Y-m-d H:i:s.' . $microsecond), $this->timezone);
             $this->datetime->microsecond = (int) $microsecond;
         } elseif ($value instanceof static) {
+            if ($value->isNull()) {
+                $this->datetime = null;
+                return;
+            }
+
             $this->datetime = DateTime::createFromFormat('Y-m-d H:i:s.u', $value->format('Y-m-d H:i:s.u'), $this->timezone);
             $this->datetime->microsecond = (int) $value->format('u');
         } elseif ($value instanceof DateTime) {
@@ -83,6 +88,14 @@ class DateTimeType extends Type
             $this->datetime->setTimezone($this->timezone);
             $this->datetime->microsecond = (int) $value->format('u');
         } else {
+            if ($value instanceof Type) {
+                if ($value->isNull()) {
+                    $this->datetime = null;
+                    return;
+                }
+                $value = $value->value();
+            }
+
             try {
                 $this->datetime = new DateTime($value, $this->timezone);
             } catch (Exception $e) {
@@ -422,27 +435,13 @@ class DateTimeType extends Type
     }
 
     /**
-     * Get the day of the week
-     * 0 - sunday
-     * 6 - saturday
-     *
-     * @return int|null
-     */
-    public function getDayOfWeek()
-    {
-        if ($this->isNotNull()) {
-            return (int) $this->format('w');
-        }
-    }
-
-    /**
-     * Get the ISO day of the week
+     * Get the day of the week (ISO)
      * 1 - monday
      * 7 - sunday
      *
      * @return int|null
      */
-    public function getDayOfWeekISO()
+    public function getDayOfWeek()
     {
         if ($this->isNotNull()) {
             return (int) $this->format('N');
@@ -662,17 +661,20 @@ class DateTimeType extends Type
      */
     public function diffInYears($value)
     {
-        if ($this->isNotNull() && isset ($value)) {
-            if ($value instanceof DateTime) {
-                return (int) $this->datetime->diff($value, false)->format('%r%y');
-            }
-
-            if ( ! $value instanceof static) {
-                $value = new static($value);
-            }
-
-            return $value->diffInYears($this->datetime) * -1;
+        if ($this->isNull()) {
+            return;
         }
+
+        if ($value instanceof DateTime) {
+            return (int) $this->datetime->diff($value, false)->format('%r%y');
+        }
+
+        $value = new static($value);
+        if ($value->isNull()) {
+            return;
+        }
+
+        return $value->diffInYears($this->datetime) * -1;
     }
 
     /**
@@ -683,17 +685,20 @@ class DateTimeType extends Type
      */
     public function diffInMonths($value)
     {
-        if ($this->isNotNull() && isset ($value)) {
-            if ($value instanceof DateTime) {
-                return (int) $this->diffInYears($value) * 12 + $this->datetime->diff($value, false)->format('%r%m');
-            }
-
-            if ( ! $value instanceof static) {
-                $value = new static($value);
-            }
-
-            return $value->diffInMonths($this->datetime) * -1;
+        if ($this->isNull()) {
+            return;
         }
+
+        if ($value instanceof DateTime) {
+            return (int) $this->diffInYears($value) * 12 + $this->datetime->diff($value, false)->format('%r%m');
+        }
+
+        $value = new static($value);
+        if ($value->isNull()) {
+            return;
+        }
+
+        return $value->diffInMonths($this->datetime) * -1;
     }
 
     /**
@@ -746,13 +751,20 @@ class DateTimeType extends Type
      */
     public function diffInSeconds($value)
     {
-        if ($this->isNotNull() && isset ($value)) {
-            if ( ! $value instanceof static) {
-                $value = new static($value);
-            }
-
-            return $value->getTimestamp() - $this->getTimestamp();
+        if ($this->isNull()) {
+            return;
         }
+
+        if ($value instanceof DateTime) {
+            return (int) $this->datetime->diff($value, false)->format('%r%s');
+        }
+
+        $value = new static($value);
+        if ($value->isNull()) {
+            return;
+        }
+
+        return $value->getTimestamp() - $this->getTimestamp();
     }
 
     /**
@@ -763,13 +775,16 @@ class DateTimeType extends Type
      */
     public function diffInMicroseconds($value)
     {
-        if ($this->isNotNull() && isset ($value)) {
-            if ( ! $value instanceof static) {
-                $value = new static($value);
-            }
-
-            return $this->diffInSeconds($value) * 1000000 + $value->getMicrosecond() - $this->getMicrosecond();
+        if ($this->isNull()) {
+            return;
         }
+
+        $value = new static($value);
+        if ($value->isNull()) {
+            return;
+        }
+
+        return $this->diffInSeconds($value) * 1000000 + $value->getMicrosecond() - $this->getMicrosecond();
     }
 
     /**
@@ -962,6 +977,8 @@ class DateTimeType extends Type
      */
     public static function checkLeapYear($year)
     {
+        $year = Cast::Int($year);
+
         if ($year === 0) {
             return true;
         } elseif ($year % 4 !== 0) {
@@ -969,8 +986,6 @@ class DateTimeType extends Type
         } elseif ($year % 100 !== 0) {
             return true;
         } elseif ($year % 400 !== 0) {
-            return false;
-        } elseif ($year === 0) {
             return false;
         }
 
