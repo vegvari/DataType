@@ -5,6 +5,7 @@ namespace Data\Type;
 use DateTime;
 use DateTimeZone;
 
+use Exception;
 use InvalidArgumentException;
 
 class DateTimeType extends Type
@@ -27,12 +28,19 @@ class DateTimeType extends Type
      */
     public function __construct($value = null, $timezone = null)
     {
-        if ($timezone === null) {
-            $this->timezone = new DateTimeZone(date_default_timezone_get());
-        } elseif ($timezone instanceof DateTimeZone) {
+        if ($timezone instanceof DateTimeZone) {
             $this->timezone = $timezone;
+            $timezone = $timezone->getName();
         } else {
+            if ($timezone === null) {
+                $timezone = date_default_timezone_get();
+            }
+
             $this->timezone = new DateTimeZone($timezone);
+        }
+
+        if (self::isTimezoneDeprecated($timezone)) {
+            throw new InvalidArgumentException('Timezone is deprecated: "' . $timezone . '"');
         }
 
         $this->set($value);
@@ -75,7 +83,12 @@ class DateTimeType extends Type
             $this->datetime->setTimezone($this->timezone);
             $this->datetime->microsecond = (int) $value->format('u');
         } else {
-            $this->datetime = new DateTime((string) $value, $this->timezone);
+            try {
+                $this->datetime = new DateTime($value, $this->timezone);
+            } catch (Exception $e) {
+                throw new InvalidArgumentException('Invalid datetime: "' . $value . '"');
+            }
+
             $this->datetime->microsecond = (int) $this->datetime->format('u');
         }
 
@@ -125,7 +138,7 @@ class DateTimeType extends Type
         }
 
         try {
-            $year = Cast::Int($year, 0, 9999);
+            $year = Cast::Int($year);
         } catch (InvalidArgumentException $e) {
             throw new InvalidArgumentException('Invalid year: "' . $year . '"');
         }
@@ -169,7 +182,7 @@ class DateTimeType extends Type
         $date = sprintf('%04d', $year) . '-' . sprintf('%02d', $month) . '-' . sprintf('%02d', $day);
         $time = sprintf('%02d', $hour) . ':' . sprintf('%02d', $minute) . ':' . sprintf('%02d', $second) . '.' . sprintf('%06d', $microsecond);
 
-        if ($year !== 0 && ! checkdate($month, $day, $year)) {
+        if ($month === 2 && $day === 29 && ! self::checkLeapYear($year)) {
             throw new InvalidArgumentException('Invalid date (Y-m-d): "' . $date . '"');
         }
 
@@ -288,6 +301,28 @@ class DateTimeType extends Type
     {
         $this->setTime(null, null, null, $value);
         return $this;
+    }
+
+    /**
+     * Get a clone of the timezone
+     *
+     * @return DateTimeZone
+     */
+    public function getTimeZone()
+    {
+        return $this->timezone;
+    }
+
+    /**
+     * Get a clone of the datetime
+     *
+     * @return DateTime|null
+     */
+    public function getDateTime()
+    {
+        if ($this->isNotNull()) {
+            return clone $this->datetime;
+        }
     }
 
     /**
@@ -422,8 +457,11 @@ class DateTimeType extends Type
      */
     public function addYear($value)
     {
-        $value = Cast::Int($value);
-        $this->set($this->datetime->modify($value . ' year'));
+        if ($this->isNotNull()) {
+            $value = Cast::Int($value);
+            $this->set($this->datetime->modify($value . ' year'));
+        }
+
         return $this;
     }
 
@@ -435,8 +473,11 @@ class DateTimeType extends Type
      */
     public function addMonth($value)
     {
-        $value = Cast::Int($value);
-        $this->set($this->datetime->modify($value . ' month'));
+        if ($this->isNotNull()) {
+            $value = Cast::Int($value);
+            $this->set($this->datetime->modify($value . ' month'));
+        }
+
         return $this;
     }
 
@@ -448,8 +489,11 @@ class DateTimeType extends Type
      */
     public function addDay($value)
     {
-        $value = Cast::Int($value);
-        $this->set($this->datetime->modify($value . ' day'));
+        if ($this->isNotNull()) {
+            $value = Cast::Int($value);
+            $this->set($this->datetime->modify($value . ' day'));
+        }
+
         return $this;
     }
 
@@ -461,8 +505,11 @@ class DateTimeType extends Type
      */
     public function addHour($value)
     {
-        $value = Cast::Int($value);
-        $this->set($this->datetime->modify($value . ' hour'));
+        if ($this->isNotNull()) {
+            $value = Cast::Int($value);
+            $this->set($this->datetime->modify($value . ' hour'));
+        }
+
         return $this;
     }
 
@@ -474,8 +521,11 @@ class DateTimeType extends Type
      */
     public function addMinute($value)
     {
-        $value = Cast::Int($value);
-        $this->set($this->datetime->modify($value . ' minute'));
+        if ($this->isNotNull()) {
+            $value = Cast::Int($value);
+            $this->set($this->datetime->modify($value . ' minute'));
+        }
+
         return $this;
     }
 
@@ -487,8 +537,11 @@ class DateTimeType extends Type
      */
     public function addSecond($value)
     {
-        $value = Cast::Int($value);
-        $this->set($this->datetime->modify($value . ' second'));
+        if ($this->isNotNull()) {
+            $value = Cast::Int($value);
+            $this->set($this->datetime->modify($value . ' second'));
+        }
+
         return $this;
     }
 
@@ -500,17 +553,20 @@ class DateTimeType extends Type
      */
     public function addMicrosecond($value)
     {
-        $value = Cast::Int($value) + $this->getMicrosecond();
-        $second = $value / 1000000;
+        if ($this->isNotNull()) {
+            $value = Cast::Int($value) + $this->getMicrosecond();
+            $second = $value / 1000000;
 
-        if ($second >= 1 || $second <= -1) {
-            $second = (int) floor($second);
-            $this->addSecond($second);
+            if ($second >= 1 || $second <= -1) {
+                $second = (int) floor($second);
+                $this->addSecond($second);
 
-            $value = $value - $second * 1000000;
+                $value = $value - $second * 1000000;
+            }
+
+            $this->setMicrosecond($value);
         }
 
-        $this->setMicrosecond($value);
         return $this;
     }
 
@@ -896,5 +952,50 @@ class DateTimeType extends Type
         }
 
         return false;
+    }
+
+    /**
+     * True if it's a leap year
+     *
+     * @param  int  $year
+     * @return bool
+     */
+    public static function checkLeapYear($year)
+    {
+        if ($year === 0) {
+            return true;
+        } elseif ($year % 4 !== 0) {
+            return false;
+        } elseif ($year % 100 !== 0) {
+            return true;
+        } elseif ($year % 400 !== 0) {
+            return false;
+        } elseif ($year === 0) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * True if the timezone is deprecated
+     * http://php.net/manual/en/timezones.others.php
+     *
+     * @param  string|DateTimeZone
+     * @return bool
+     */
+    public static function isTimezoneDeprecated($timezone)
+    {
+        if ($timezone instanceof DateTimeZone) {
+            $timezone = $timezone->getName();
+        }
+
+        foreach (timezone_identifiers_list() as $key => $value) {
+            if ($timezone === $value) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

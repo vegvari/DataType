@@ -3,9 +3,9 @@
 use Data\Type\Cast;
 use Data\Type\IntType;
 use Data\Type\BoolType;
-use Data\Type\TimeType;
 use Data\Type\FloatType;
 use Data\Type\StringType;
+use Data\Type\DateTimeType;
 
 /**
  * @coversDefaultClass \Data\Type\Cast
