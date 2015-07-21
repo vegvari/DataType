@@ -7,6 +7,16 @@ use DateTimeZone;
 
 use Exception;
 use InvalidArgumentException;
+use Data\Type\Exceptions\InvalidDateException;
+use Data\Type\Exceptions\InvalidYearException;
+use Data\Type\Exceptions\InvalidMonthException;
+use Data\Type\Exceptions\InvalidDayException;
+use Data\Type\Exceptions\InvalidHourException;
+use Data\Type\Exceptions\InvalidMinuteException;
+use Data\Type\Exceptions\InvalidSecondException;
+use Data\Type\Exceptions\InvalidMicrosecondException;
+use Data\Type\Exceptions\InvalidDateTimeException;
+use Data\Type\Exceptions\InvalidTimeZoneException;
 
 class DateTimeType extends Type
 {
@@ -40,7 +50,7 @@ class DateTimeType extends Type
         }
 
         if (self::isTimezoneDeprecated($timezone)) {
-            throw new InvalidArgumentException('Timezone is deprecated: "' . $timezone . '"');
+            throw new InvalidTimeZoneException('Timezone is deprecated: "' . $timezone . '"');
         }
 
         $this->set($value);
@@ -99,7 +109,7 @@ class DateTimeType extends Type
             try {
                 $this->datetime = new DateTime($value, $this->timezone);
             } catch (Exception $e) {
-                throw new InvalidArgumentException('Invalid datetime: "' . $value . '"');
+                throw new InvalidDateTimeException('Invalid datetime: "' . $value . '"');
             }
 
             $this->datetime->microsecond = (int) $this->datetime->format('u');
@@ -153,50 +163,50 @@ class DateTimeType extends Type
         try {
             $year = Cast::Int($year);
         } catch (InvalidArgumentException $e) {
-            throw new InvalidArgumentException('Invalid year: "' . $year . '"');
+            throw new InvalidYearException('Invalid year: "' . $year . '"');
         }
 
         try {
             $month = Cast::Int($month, 1, 12);
         } catch (InvalidArgumentException $e) {
-            throw new InvalidArgumentException('Invalid month: "' . $month . '"');
+            throw new InvalidMonthException('Invalid month: "' . $month . '"');
         }
 
         try {
             $day = Cast::Int($day, 1, 31);
         } catch (InvalidArgumentException $e) {
-            throw new InvalidArgumentException('Invalid day: "' . $day . '"');
+            throw new InvalidDayException('Invalid day: "' . $day . '"');
         }
 
         try {
             $hour = Cast::Int($hour, 0, 23);
         } catch (InvalidArgumentException $e) {
-            throw new InvalidArgumentException('Invalid hour: "' . $hour . '"');
+            throw new InvalidHourException('Invalid hour: "' . $hour . '"');
         }
 
         try {
             $minute = Cast::Int($minute, 0, 59);
         } catch (InvalidArgumentException $e) {
-            throw new InvalidArgumentException('Invalid minute: "' . $minute . '"');
+            throw new InvalidMinuteException('Invalid minute: "' . $minute . '"');
         }
 
         try {
             $second = Cast::Int($second, 0, 59);
         } catch (InvalidArgumentException $e) {
-            throw new InvalidArgumentException('Invalid second: "' . $second . '"');
+            throw new InvalidSecondException('Invalid second: "' . $second . '"');
         }
 
         try {
             $microsecond = Cast::Int($microsecond, 0, 999999);
         } catch (InvalidArgumentException $e) {
-            throw new InvalidArgumentException('Invalid microsecond: "' . $microsecond . '"');
+            throw new InvalidMicrosecondException('Invalid microsecond: "' . $microsecond . '"');
         }
 
         $date = sprintf('%04d', $year) . '-' . sprintf('%02d', $month) . '-' . sprintf('%02d', $day);
         $time = sprintf('%02d', $hour) . ':' . sprintf('%02d', $minute) . ':' . sprintf('%02d', $second) . '.' . sprintf('%06d', $microsecond);
 
         if ($month === 2 && $day === 29 && ! self::checkLeapYear($year)) {
-            throw new InvalidArgumentException('Invalid date (Y-m-d): "' . $date . '"');
+            throw new InvalidDateException('Invalid date (Y-m-d): "' . $date . '"');
         }
 
         $this->set(DateTime::createFromFormat('Y-m-d H:i:s.u', $date . ' ' . $time));

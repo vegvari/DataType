@@ -51,7 +51,7 @@ class DateTimeTypeTest extends PHPUnit_Framework_TestCase
      */
     public function constructFail()
     {
-        $this->setExpectedException('InvalidArgumentException');
+        $this->setExpectedException('\Data\Type\Exceptions\InvalidTimeZoneException');
         $instance = new DateTimeType(null, 'GMT');
     }
 
@@ -98,7 +98,7 @@ class DateTimeTypeTest extends PHPUnit_Framework_TestCase
      */
     public function checkFail()
     {
-        $this->setExpectedException('InvalidArgumentException');
+        $this->setExpectedException('\Data\Type\Exceptions\InvalidDateTimeException');
         $instance = new DateTimeType('ASDFASDFASDF');
     }
 
@@ -303,9 +303,9 @@ class DateTimeTypeTest extends PHPUnit_Framework_TestCase
      * @dataProvider setDateTimeFailProvider
      * @covers       ::setDateTime
      */
-    public function setDateTimeFail(array $data)
+    public function setDateTimeFail(array $data, $exception)
     {
-        $this->setExpectedException('InvalidArgumentException');
+        $this->setExpectedException($exception);
         $instance = new DateTimeType();
         $instance->setDateTime($data[0], $data[1], $data[2], $data[3], $data[4], $data[5], $data[6]);
     }
@@ -314,27 +314,27 @@ class DateTimeTypeTest extends PHPUnit_Framework_TestCase
     {
         return [
             // year
-            [['a', 1, 1, 0, 0, 0, 0]],
+            [['a', 1, 1, 0, 0, 0, 0], '\Data\Type\Exceptions\InvalidYearException'],
             // month
-            [[0, 0, 1, 0, 0, 0, 0]],
-            [[0, 13, 1, 0, 0, 0, 0]],
+            [[0, 0, 1, 0, 0, 0, 0], '\Data\Type\Exceptions\InvalidMonthException'],
+            [[0, 13, 1, 0, 0, 0, 0], '\Data\Type\Exceptions\InvalidMonthException'],
             // day
-            [[0, 1, 0, 0, 0, 0, 0]],
-            [[0, 1, 32, 0, 0, 0, 0]],
+            [[0, 1, 0, 0, 0, 0, 0], '\Data\Type\Exceptions\InvalidDayException'],
+            [[0, 1, 32, 0, 0, 0, 0], '\Data\Type\Exceptions\InvalidDayException'],
             // hour
-            [[0, 1, 1, -1, 0, 0, 0]],
-            [[0, 1, 1, 24, 0, 0, 0]],
+            [[0, 1, 1, -1, 0, 0, 0], '\Data\Type\Exceptions\InvalidHourException'],
+            [[0, 1, 1, 24, 0, 0, 0], '\Data\Type\Exceptions\InvalidHourException'],
             // minute
-            [[0, 1, 1, 0, -1, 0, 0]],
-            [[0, 1, 1, 0, 60, 0, 0]],
+            [[0, 1, 1, 0, -1, 0, 0], '\Data\Type\Exceptions\InvalidMinuteException'],
+            [[0, 1, 1, 0, 60, 0, 0], '\Data\Type\Exceptions\InvalidMinuteException'],
             // second
-            [[0, 1, 1, 0, 0, -1, 0]],
-            [[0, 1, 1, 0, 0, 60, 0]],
+            [[0, 1, 1, 0, 0, -1, 0], '\Data\Type\Exceptions\InvalidSecondException'],
+            [[0, 1, 1, 0, 0, 60, 0], '\Data\Type\Exceptions\InvalidSecondException'],
             // microsecond
-            [[0, 1, 1, 0, 0, 0, -1]],
-            [[0, 1, 1, 0, 0, 0, 1000000]],
+            [[0, 1, 1, 0, 0, 0, -1], '\Data\Type\Exceptions\InvalidMicrosecondException'],
+            [[0, 1, 1, 0, 0, 0, 1000000], '\Data\Type\Exceptions\InvalidMicrosecondException'],
             // no leap year
-            [[1, 2, 29, 0, 0, 0, 0]],
+            [[1, 2, 29, 0, 0, 0, 0], '\Data\Type\Exceptions\InvalidDateException'],
         ];
     }
 
