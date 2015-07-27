@@ -154,7 +154,7 @@ class StringType extends Type
     {
         $encoding = strtolower($encoding);
 
-        if (isset (static::supportedEncodings()[$encoding])) {
+        if (isset(static::supportedEncodings()[$encoding])) {
             return true;
         }
 

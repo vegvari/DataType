@@ -53,7 +53,7 @@ class DateTimeType extends Type
             throw new InvalidTimeZoneException('Timezone is deprecated: "' . $timezone . '"');
         }
 
-        $this->set($value);
+        parent::__construct($value);
     }
 
     /**
@@ -805,8 +805,8 @@ class DateTimeType extends Type
      */
     public function eq($value)
     {
-        if ($this->isNotNull() && isset ($value)) {
-            if ( ! $value instanceof static) {
+        if ($this->isNotNull() && isset($value)) {
+            if (! $value instanceof static) {
                 $value = new static($value);
             }
 
@@ -837,8 +837,8 @@ class DateTimeType extends Type
      */
     public function gt($value)
     {
-        if ($this->isNotNull() && isset ($value)) {
-            if ( ! $value instanceof static) {
+        if ($this->isNotNull() && isset($value)) {
+            if (! $value instanceof static) {
                 $value = new static($value);
             }
 
@@ -858,8 +858,8 @@ class DateTimeType extends Type
      */
     public function gte($value)
     {
-        if ($this->isNotNull() && isset ($value)) {
-            if ( ! $value instanceof static) {
+        if ($this->isNotNull() && isset($value)) {
+            if (! $value instanceof static) {
                 $value = new static($value);
             }
 
@@ -881,8 +881,8 @@ class DateTimeType extends Type
      */
     public function lt($value)
     {
-        if ($this->isNotNull() && isset ($value)) {
-            if ( ! $value instanceof static) {
+        if ($this->isNotNull() && isset($value)) {
+            if (! $value instanceof static) {
                 $value = new static($value);
             }
 
@@ -902,8 +902,8 @@ class DateTimeType extends Type
      */
     public function lte($value)
     {
-        if ($this->isNotNull() && isset ($value)) {
-            if ( ! $value instanceof static) {
+        if ($this->isNotNull() && isset($value)) {
+            if (! $value instanceof static) {
                 $value = new static($value);
             }
 
@@ -924,12 +924,12 @@ class DateTimeType extends Type
      */
     public function betweenEqual($a, $b)
     {
-        if ($this->isNotNull() && isset ($a) && isset ($b)) {
-            if ( ! $a instanceof static) {
+        if ($this->isNotNull() && isset($a) && isset($b)) {
+            if (! $a instanceof static) {
                 $a = new static($a);
             }
 
-            if ( ! $b instanceof static) {
+            if (! $b instanceof static) {
                 $b = new static($b);
             }
 
@@ -956,12 +956,12 @@ class DateTimeType extends Type
      */
     public function betweenNotEqual($a, $b)
     {
-        if ($this->isNotNull() && isset ($a) && isset ($b)) {
-            if ( ! $a instanceof static) {
+        if ($this->isNotNull() && isset($a) && isset($b)) {
+            if (! $a instanceof static) {
                 $a = new static($a);
             }
 
-            if ( ! $b instanceof static) {
+            if (! $b instanceof static) {
                 $b = new static($b);
             }
 

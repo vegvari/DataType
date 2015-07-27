@@ -22,7 +22,7 @@ abstract class Cast
             $name = substr($name, 1);
         }
 
-        if ( ! isset ($args[0])) {
+        if (! isset($args[0])) {
             $args[0] = null;
         }
 
@@ -46,7 +46,7 @@ abstract class Cast
                 break;
 
             case 'String':
-                if ( ! isset ($args[1])) {
+                if (! isset($args[1])) {
                     $instance = new StringType($args[0]);
                 } else {
                     $instance = new StringType($args[0], $args[1]);
@@ -54,7 +54,7 @@ abstract class Cast
                 break;
 
             case 'DateTime':
-                if ( ! isset ($args[1])) {
+                if (! isset($args[1])) {
                     $instance = new DateTimeType($args[0]);
                 } else {
                     $instance = new DateTimeType($args[0], $args[1]);
@@ -77,12 +77,12 @@ abstract class Cast
         switch ($name) {
             case 'Float':
                 $min = null;
-                if (isset ($args[1]) && $args[1] !== null) {
+                if (isset($args[1]) && $args[1] !== null) {
                     $min = static::_Float($args[1]);
                 }
 
                 $max = null;
-                if (isset ($args[2])) {
+                if (isset($args[2])) {
                     $max = static::_Float($args[2]);
                 }
 
@@ -119,12 +119,12 @@ abstract class Cast
 
             case 'Int':
                 $min = null;
-                if (isset ($args[1]) && $args[1] !== null) {
+                if (isset($args[1]) && $args[1] !== null) {
                     $min = static::_Int($args[1]);
                 }
 
                 $max = null;
-                if (isset ($args[2])) {
+                if (isset($args[2])) {
                     $max = static::_Int($args[2]);
                 }
 
