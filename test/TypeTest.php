@@ -1,5 +1,6 @@
 <?php
 
+use Data\Type\Type;
 use Data\Type\Cast;
 use Data\Type\IntType;
 use Data\Type\BoolType;
@@ -8,9 +9,9 @@ use Data\Type\StringType;
 use Data\Type\DateTimeType;
 
 /**
- * @coversDefaultClass \Data\Type\BoolType
+ * @coversDefaultClass \Data\Type\Type
  */
-class Type extends PHPUnit_Framework_TestCase
+class TypeTest extends PHPUnit_Framework_TestCase
 {
 	/**
      * @dataProvider instanceProvider
@@ -42,6 +43,9 @@ class Type extends PHPUnit_Framework_TestCase
      * @covers       ::attach
      * @covers       ::detach
      * @covers       ::notify
+     * @covers       ::setStateBeforeChange
+     * @covers       ::setStateAfterChange
+     * @covers       ::getState
      */
     public function observer($instance, array $data)
     {
@@ -56,8 +60,12 @@ class Type extends PHPUnit_Framework_TestCase
         // no update on attach because value is null
         $instance->attach($observer);
 
+        $this->assertSame(Type::STATE_BEFORE_CHANGE, $instance->getState());
+
         // first update
         $instance->set($data[0]);
+
+        $this->assertSame(Type::STATE_AFTER_CHANGE, $instance->getState());
 
         // no update because value is not changed
         $instance->set($data[0]);

@@ -48,9 +48,9 @@ abstract class Type implements SplSubject
         $value = $this->check($value);
 
         if ($value !== $this->value) {
-            $this->setState(self::STATE_BEFORE_CHANGE);
+            $this->setStateBeforeChange();
             $this->value = $value;
-            $this->setState(self::STATE_AFTER_CHANGE);
+            $this->setStateAfterChange();
         }
 
         return $this;
@@ -95,11 +95,7 @@ abstract class Type implements SplSubject
      */
     final public function isNotNull()
     {
-        if ($this->value !== null) {
-            return true;
-        }
-
-        return false;
+        return ! $this->isNull();
     }
 
     /**
@@ -155,17 +151,20 @@ abstract class Type implements SplSubject
     }
 
     /**
-     * Set the state
-     *
-     * @return int|null
+     * Set the state to STATE_BEFORE_CHANGE
      */
-    final protected function setState($state)
+    final protected function setStateBeforeChange()
     {
-        if ($state !== self::STATE_BEFORE_CHANGE && $state !== self::STATE_AFTER_CHANGE) {
-            throw new InvalidArgumentException('Invalid state: "' . $state . '"');
-        }
+        $this->state = self::STATE_BEFORE_CHANGE;
+        $this->notify();
+    }
 
-        $this->state = $state;
+    /**
+     * Set the state to STATE_BEFORE_CHANGE
+     */
+    final protected function setStateAfterChange()
+    {
+        $this->state = self::STATE_AFTER_CHANGE;
         $this->notify();
     }
 
