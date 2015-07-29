@@ -6,7 +6,7 @@ use InvalidArgumentException;
 use \Data\Type\Exceptions\InvalidIntException;
 use \Data\Type\Exceptions\InvalidFloatException;
 
-class IntType extends FloatType
+class IntType extends Number
 {
     /**
      * Check the value
@@ -64,13 +64,7 @@ class IntType extends FloatType
             }
         }
 
-        try {
-            $value = parent::check($value);
-        } catch (InvalidFloatException $e) {
-            throw new InvalidIntException('Invalid int: "' . $value . '"');
-        }
-
-        if (filter_var($value, FILTER_VALIDATE_INT) === false) {
+        if (filter_var($value, FILTER_VALIDATE_FLOAT) === false || filter_var($value, FILTER_VALIDATE_INT) === false) {
             throw new InvalidIntException('Invalid int: "' . $value . '"');
         }
 

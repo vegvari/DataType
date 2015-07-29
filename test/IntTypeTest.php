@@ -74,26 +74,6 @@ class IntTypeTest extends PHPUnit_Framework_TestCase
             ['-1',                -1],
             ['2',                 2],
 
-            ['000',               0],
-            ['000.000',           0],
-            ['-1.00000',          -1],
-            ['2.000000',          2],
-
-            ['1e2',               100],
-            ['-1e2',              -100],
-            ['1E2',               100],
-            ['-1E2',              -100],
-            ['1e+2',              100],
-            ['-1e+2',             -100],
-            ['1E+2',              100],
-            ['-1E+2',             -100],
-
-            ['0e0',               0],
-            ['000e000',           0],
-            ['1e0',               1],
-            ['1e000',             1],
-            ['1e001',             10],
-
             [PHP_INT_MAX,         PHP_INT_MAX],
             [~PHP_INT_MAX,        ~PHP_INT_MAX],
         ];
@@ -136,6 +116,25 @@ class IntTypeTest extends PHPUnit_Framework_TestCase
             ['true',               '\Data\Type\Exceptions\InvalidIntException'],
             ['false',              '\Data\Type\Exceptions\InvalidIntException'],
             ['null',               '\Data\Type\Exceptions\InvalidIntException'],
+            ['000',                '\Data\Type\Exceptions\InvalidIntException'],
+            ['000.000',            '\Data\Type\Exceptions\InvalidIntException'],
+            ['-1.00000',           '\Data\Type\Exceptions\InvalidIntException'],
+            ['2.000000',           '\Data\Type\Exceptions\InvalidIntException'],
+
+            ['1e2',                '\Data\Type\Exceptions\InvalidIntException'],
+            ['-1e2',               '\Data\Type\Exceptions\InvalidIntException'],
+            ['1E2',                '\Data\Type\Exceptions\InvalidIntException'],
+            ['-1E2',               '\Data\Type\Exceptions\InvalidIntException'],
+            ['1e+2',               '\Data\Type\Exceptions\InvalidIntException'],
+            ['-1e+2',              '\Data\Type\Exceptions\InvalidIntException'],
+            ['1E+2',               '\Data\Type\Exceptions\InvalidIntException'],
+            ['-1E+2',              '\Data\Type\Exceptions\InvalidIntException'],
+
+            ['0e0',                '\Data\Type\Exceptions\InvalidIntException'],
+            ['000e000',            '\Data\Type\Exceptions\InvalidIntException'],
+            ['1e0',                '\Data\Type\Exceptions\InvalidIntException'],
+            ['1e000',              '\Data\Type\Exceptions\InvalidIntException'],
+            ['1e001',              '\Data\Type\Exceptions\InvalidIntException'],
         ];
     }
 

@@ -26,7 +26,7 @@ class StringType extends Type
     public function __construct($value = null, $encoding = null)
     {
         $this->setEncoding($encoding);
-        $this->set($value);
+        parent::__construct($value);
     }
 
     /**

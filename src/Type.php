@@ -5,9 +5,13 @@ namespace Data\Type;
 use SplSubject;
 use SplObserver;
 use SplObjectStorage;
+use InvalidArgumentException;
 
 abstract class Type implements SplSubject
 {
+    const STATE_BEFORE_CHANGE = 0;
+    const STATE_AFTER_CHANGE  = 1;
+
     /**
      * @var mixed
      */
@@ -17,6 +21,11 @@ abstract class Type implements SplSubject
      * @var SplObjectStorage
      */
     protected $observers;
+
+    /**
+     * @var string
+     */
+    protected $state = self::STATE_BEFORE_CHANGE;
 
     /**
      * Constructor
@@ -34,13 +43,14 @@ abstract class Type implements SplSubject
      * @param  mixed $value
      * @return this
      */
-    public function set($value)
+    final public function set($value)
     {
         $value = $this->check($value);
 
         if ($value !== $this->value) {
+            $this->setState(self::STATE_BEFORE_CHANGE);
             $this->value = $value;
-            $this->notify();
+            $this->setState(self::STATE_AFTER_CHANGE);
         }
 
         return $this;
@@ -69,7 +79,7 @@ abstract class Type implements SplSubject
      *
      * @return bool
      */
-    public function isNull()
+    final public function isNull()
     {
         if ($this->value === null) {
             return true;
@@ -83,7 +93,7 @@ abstract class Type implements SplSubject
      *
      * @return bool
      */
-    public function isNotNull()
+    final public function isNotNull()
     {
         if ($this->value !== null) {
             return true;
@@ -97,7 +107,7 @@ abstract class Type implements SplSubject
      *
      * @return string
      */
-    public function __toString()
+    final public function __toString()
     {
         if ($this->value === null) {
             return '';
@@ -113,23 +123,19 @@ abstract class Type implements SplSubject
     /**
      * @see SplObserver
      */
-    public function attach(SplObserver $observer)
+    final public function attach(SplObserver $observer)
     {
         if ($this->observers === null) {
             $this->observers = new SplObjectStorage();
         }
 
         $this->observers->attach($observer);
-
-        if ($this->value !== null) {
-            $this->notify();
-        }
     }
 
     /**
      * @see SplObserver
      */
-    public function detach(SplObserver $observer)
+    final public function detach(SplObserver $observer)
     {
         if ($this->observers !== null) {
             $this->observers->detach($observer);
@@ -139,12 +145,37 @@ abstract class Type implements SplSubject
     /**
      * @see SplObserver
      */
-    public function notify()
+    final public function notify()
     {
         if ($this->observers !== null) {
             foreach ($this->observers as $observer) {
                 $observer->update($this);
             }
         }
+    }
+
+    /**
+     * Set the state
+     *
+     * @return int|null
+     */
+    final protected function setState($state)
+    {
+        if ($state !== self::STATE_BEFORE_CHANGE && $state !== self::STATE_AFTER_CHANGE) {
+            throw new InvalidArgumentException('Invalid state: "' . $state . '"');
+        }
+
+        $this->state = $state;
+        $this->notify();
+    }
+
+    /**
+     * Get the state
+     *
+     * @return int|null
+     */
+    final public function getState()
+    {
+        return $this->state;
     }
 }
