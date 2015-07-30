@@ -9,9 +9,6 @@ use InvalidArgumentException;
 
 abstract class Type implements SplSubject
 {
-    const STATE_BEFORE_CHANGE = 0;
-    const STATE_AFTER_CHANGE  = 1;
-
     /**
      * @var mixed
      */
@@ -21,11 +18,6 @@ abstract class Type implements SplSubject
      * @var SplObjectStorage
      */
     protected $observers;
-
-    /**
-     * @var string
-     */
-    protected $state = self::STATE_BEFORE_CHANGE;
 
     /**
      * Constructor
@@ -48,9 +40,8 @@ abstract class Type implements SplSubject
         $value = $this->check($value);
 
         if ($value !== $this->value) {
-            $this->setStateBeforeChange();
             $this->value = $value;
-            $this->setStateAfterChange();
+            $this->notify();
         }
 
         return $this;
@@ -148,33 +139,5 @@ abstract class Type implements SplSubject
                 $observer->update($this);
             }
         }
-    }
-
-    /**
-     * Set the state to STATE_BEFORE_CHANGE
-     */
-    final protected function setStateBeforeChange()
-    {
-        $this->state = self::STATE_BEFORE_CHANGE;
-        $this->notify();
-    }
-
-    /**
-     * Set the state to STATE_BEFORE_CHANGE
-     */
-    final protected function setStateAfterChange()
-    {
-        $this->state = self::STATE_AFTER_CHANGE;
-        $this->notify();
-    }
-
-    /**
-     * Get the state
-     *
-     * @return int|null
-     */
-    final public function getState()
-    {
-        return $this->state;
     }
 }

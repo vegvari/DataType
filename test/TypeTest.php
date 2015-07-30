@@ -43,9 +43,6 @@ class TypeTest extends PHPUnit_Framework_TestCase
      * @covers       ::attach
      * @covers       ::detach
      * @covers       ::notify
-     * @covers       ::setStateBeforeChange
-     * @covers       ::setStateAfterChange
-     * @covers       ::getState
      */
     public function observer($instance, array $data)
     {
@@ -57,35 +54,31 @@ class TypeTest extends PHPUnit_Framework_TestCase
                  ->method('update')
                  ->with($this->equalTo($instance));
 
-        // no update on attach because value is null
+        // no update on attach
         $instance->attach($observer);
-
-        $this->assertSame(Type::STATE_BEFORE_CHANGE, $instance->getState());
 
         // first update
         $instance->set($data[0]);
 
-        $this->assertSame(Type::STATE_AFTER_CHANGE, $instance->getState());
-
         // no update because value is not changed
         $instance->set($data[0]);
 
-        $instance->detach($observer);
-
-        // update, but observer detached
+        // second update
         $instance->set($data[1]);
 
-        // second update on attach because value is not null
-        $instance->attach($observer);
+        // detach and change again without the observers
+        $instance->detach($observer);
+        $instance->set($data[0]);
     }
 
     public function instanceProvider()
     {
     	return [
-    		[new BoolType(),   ['0', '1']],
-    		[new FloatType(),  ['0', '1']],
-    		[new IntType(),    ['0', '1']],
-    		[new StringType(), ['0', '1']],
+    		[new BoolType(),     [0, 1]],
+    		[new FloatType(),    [0, 1]],
+    		[new IntType(),      [0, 1]],
+    		[new StringType(),   [0, 1]],
+            [new DateTimeType(), ['now', 'tomorrow']],
     	];
     }
 }
