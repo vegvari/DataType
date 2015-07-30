@@ -80,16 +80,6 @@ abstract class Type implements SplSubject
     }
 
     /**
-     * True if the value is not null
-     *
-     * @return bool
-     */
-    final public function isNotNull()
-    {
-        return ! $this->isNull();
-    }
-
-    /**
      * Cast instance to string
      *
      * @return string

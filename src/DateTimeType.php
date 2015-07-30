@@ -63,7 +63,7 @@ class DateTimeType extends Type
      */
     public function format($value)
     {
-        if ($this->isNotNull()) {
+        if (! $this->isNull()) {
             return (string) $this->datetime->format($value);
         }
     }
@@ -343,7 +343,7 @@ class DateTimeType extends Type
      */
     public function getDateTime()
     {
-        if ($this->isNotNull()) {
+        if (! $this->isNull()) {
             return clone $this->datetime;
         }
     }
@@ -355,7 +355,7 @@ class DateTimeType extends Type
      */
     public function getYear()
     {
-        if ($this->isNotNull()) {
+        if (! $this->isNull()) {
             return (int) $this->format('Y');
         }
     }
@@ -367,7 +367,7 @@ class DateTimeType extends Type
      */
     public function getMonth()
     {
-        if ($this->isNotNull()) {
+        if (! $this->isNull()) {
             return (int) $this->format('n');
         }
     }
@@ -379,7 +379,7 @@ class DateTimeType extends Type
      */
     public function getDay()
     {
-        if ($this->isNotNull()) {
+        if (! $this->isNull()) {
             return (int) $this->format('j');
         }
     }
@@ -391,7 +391,7 @@ class DateTimeType extends Type
      */
     public function getHour()
     {
-        if ($this->isNotNull()) {
+        if (! $this->isNull()) {
             return (int) $this->format('G');
         }
     }
@@ -403,7 +403,7 @@ class DateTimeType extends Type
      */
     public function getMinute()
     {
-        if ($this->isNotNull()) {
+        if (! $this->isNull()) {
             return (int) $this->format('i');
         }
     }
@@ -415,7 +415,7 @@ class DateTimeType extends Type
      */
     public function getSecond()
     {
-        if ($this->isNotNull()) {
+        if (! $this->isNull()) {
             return (int) $this->format('s');
         }
     }
@@ -427,7 +427,7 @@ class DateTimeType extends Type
      */
     public function getMicrosecond()
     {
-        if ($this->isNotNull()) {
+        if (! $this->isNull()) {
             return $this->datetime->microsecond;
         }
     }
@@ -439,7 +439,7 @@ class DateTimeType extends Type
      */
     public function getTimestamp()
     {
-        if ($this->isNotNull()) {
+        if (! $this->isNull()) {
             return (int) $this->format('U');
         }
     }
@@ -453,7 +453,7 @@ class DateTimeType extends Type
      */
     public function getDayOfWeek()
     {
-        if ($this->isNotNull()) {
+        if (! $this->isNull()) {
             return (int) $this->format('N');
         }
     }
@@ -466,7 +466,7 @@ class DateTimeType extends Type
      */
     public function addYear($value)
     {
-        if ($this->isNotNull()) {
+        if (! $this->isNull()) {
             $value = Cast::Int($value);
             $this->set($this->datetime->modify($value . ' year'));
         }
@@ -482,7 +482,7 @@ class DateTimeType extends Type
      */
     public function addMonth($value)
     {
-        if ($this->isNotNull()) {
+        if (! $this->isNull()) {
             $value = Cast::Int($value);
             $this->set($this->datetime->modify($value . ' month'));
         }
@@ -498,7 +498,7 @@ class DateTimeType extends Type
      */
     public function addDay($value)
     {
-        if ($this->isNotNull()) {
+        if (! $this->isNull()) {
             $value = Cast::Int($value);
             $this->set($this->datetime->modify($value . ' day'));
         }
@@ -514,7 +514,7 @@ class DateTimeType extends Type
      */
     public function addHour($value)
     {
-        if ($this->isNotNull()) {
+        if (! $this->isNull()) {
             $value = Cast::Int($value);
             $this->set($this->datetime->modify($value . ' hour'));
         }
@@ -530,7 +530,7 @@ class DateTimeType extends Type
      */
     public function addMinute($value)
     {
-        if ($this->isNotNull()) {
+        if (! $this->isNull()) {
             $value = Cast::Int($value);
             $this->set($this->datetime->modify($value . ' minute'));
         }
@@ -546,7 +546,7 @@ class DateTimeType extends Type
      */
     public function addSecond($value)
     {
-        if ($this->isNotNull()) {
+        if (! $this->isNull()) {
             $value = Cast::Int($value);
             $this->set($this->datetime->modify($value . ' second'));
         }
@@ -562,7 +562,7 @@ class DateTimeType extends Type
      */
     public function addMicrosecond($value)
     {
-        if ($this->isNotNull()) {
+        if (! $this->isNull()) {
             $value = Cast::Int($value) + $this->getMicrosecond();
             $second = $value / 1000000;
 
@@ -805,7 +805,7 @@ class DateTimeType extends Type
      */
     public function eq($value)
     {
-        if ($this->isNotNull() && isset($value)) {
+        if (! $this->isNull() && isset($value)) {
             if (! $value instanceof static) {
                 $value = new static($value);
             }
@@ -837,7 +837,7 @@ class DateTimeType extends Type
      */
     public function gt($value)
     {
-        if ($this->isNotNull() && isset($value)) {
+        if (! $this->isNull() && isset($value)) {
             if (! $value instanceof static) {
                 $value = new static($value);
             }
@@ -858,7 +858,7 @@ class DateTimeType extends Type
      */
     public function gte($value)
     {
-        if ($this->isNotNull() && isset($value)) {
+        if (! $this->isNull() && isset($value)) {
             if (! $value instanceof static) {
                 $value = new static($value);
             }
@@ -881,7 +881,7 @@ class DateTimeType extends Type
      */
     public function lt($value)
     {
-        if ($this->isNotNull() && isset($value)) {
+        if (! $this->isNull() && isset($value)) {
             if (! $value instanceof static) {
                 $value = new static($value);
             }
@@ -902,7 +902,7 @@ class DateTimeType extends Type
      */
     public function lte($value)
     {
-        if ($this->isNotNull() && isset($value)) {
+        if (! $this->isNull() && isset($value)) {
             if (! $value instanceof static) {
                 $value = new static($value);
             }
@@ -924,7 +924,7 @@ class DateTimeType extends Type
      */
     public function betweenEqual($a, $b)
     {
-        if ($this->isNotNull() && isset($a) && isset($b)) {
+        if (! $this->isNull() && isset($a) && isset($b)) {
             if (! $a instanceof static) {
                 $a = new static($a);
             }
@@ -956,7 +956,7 @@ class DateTimeType extends Type
      */
     public function betweenNotEqual($a, $b)
     {
-        if ($this->isNotNull() && isset($a) && isset($b)) {
+        if (! $this->isNull() && isset($a) && isset($b)) {
             if (! $a instanceof static) {
                 $a = new static($a);
             }

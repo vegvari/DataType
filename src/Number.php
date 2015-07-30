@@ -228,7 +228,7 @@ abstract class Number extends Type
 
         if ($instance->isNull() && $this->isNull()) {
             return true;
-        } elseif ($instance->isNotNull() && $this->isNotNull()) {
+        } elseif (! $instance->isNull() && ! $this->isNull()) {
             if ($this->value() >= $instance->value()) {
                 return true;
             }
@@ -266,7 +266,7 @@ abstract class Number extends Type
 
         if ($instance->isNull() && $this->isNull()) {
             return true;
-        } elseif ($instance->isNotNull() && $this->isNotNull()) {
+        } elseif (! $instance->isNull() && ! $this->isNull()) {
             if ($this->value() <= $instance->value()) {
                 return true;
             }

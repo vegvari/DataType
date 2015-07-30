@@ -25,18 +25,6 @@ class TypeTest extends PHPUnit_Framework_TestCase
 		$this->assertSame(false, $instance->isNull());
 	}
 
-	/**
-     * @dataProvider instanceProvider
-     * @covers       ::isNotNull
-     */
-	public function testIsNotNull($instance, array $data)
-	{
-		$this->assertSame(false, $instance->isNotNull());
-
-		$instance->set($data[0]);
-		$this->assertSame(true, $instance->isNotNull());
-	}
-
     /**
      * @test
      * @dataProvider instanceProvider
