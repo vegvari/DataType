@@ -13,17 +13,17 @@ use Data\Type\DateTimeType;
  */
 class TypeTest extends PHPUnit_Framework_TestCase
 {
-	/**
+    /**
      * @dataProvider instanceProvider
      * @covers       ::isNull
      */
-	public function testIsNull($instance, array $data)
-	{
-		$this->assertSame(true, $instance->isNull());
+    public function testIsNull($instance, array $data)
+    {
+        $this->assertSame(true, $instance->isNull());
 
-		$instance->set($data[0]);
-		$this->assertSame(false, $instance->isNull());
-	}
+        $instance->set($data[0]);
+        $this->assertSame(false, $instance->isNull());
+    }
 
     /**
      * @test
@@ -61,12 +61,12 @@ class TypeTest extends PHPUnit_Framework_TestCase
 
     public function instanceProvider()
     {
-    	return [
-    		[new BoolType(),     [0, 1]],
-    		[new FloatType(),    [0, 1]],
-    		[new IntType(),      [0, 1]],
-    		[new StringType(),   [0, 1]],
+        return [
+            [new BoolType(),     [0, 1]],
+            [new FloatType(),    [0, 1]],
+            [new IntType(),      [0, 1]],
+            [new StringType(),   [0, 1]],
             [new DateTimeType(), ['now', 'tomorrow']],
-    	];
+        ];
     }
 }
