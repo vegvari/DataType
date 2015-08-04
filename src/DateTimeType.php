@@ -40,7 +40,8 @@ class DateTimeType extends Type
     {
         if ($timezone instanceof DateTimeZone) {
             $this->timezone = $timezone;
-            $timezone = $timezone->getName();
+        } elseif ($value instanceof static) {
+            $this->timezone = $value->getTimeZone();
         } else {
             if ($timezone === null) {
                 $timezone = date_default_timezone_get();
@@ -49,11 +50,11 @@ class DateTimeType extends Type
             $this->timezone = new DateTimeZone($timezone);
         }
 
-        if (self::isTimezoneDeprecated($timezone)) {
-            throw new InvalidTimeZoneException('Timezone is deprecated: "' . $timezone . '"');
+        if (self::isTimezoneDeprecated($this->timezone->getName())) {
+            throw new InvalidTimeZoneException('Timezone is deprecated: "' . $this->timezone->getName() . '"');
         }
 
-        parent::__construct($value);
+        $this->set($value);
     }
 
     /**
@@ -78,14 +79,10 @@ class DateTimeType extends Type
     {
         if ($value === null || $value === '') {
             $this->datetime = null;
-            return;
+                return;
         }
 
-        if ($value === 'now') {
-            $microsecond = sprintf('%06d', round((microtime(true) - time()) * 1000000));
-            $this->datetime = DateTime::createFromFormat('Y-m-d H:i:s.u', date('Y-m-d H:i:s.' . $microsecond), $this->timezone);
-            $this->datetime->microsecond = (int) $microsecond;
-        } elseif ($value instanceof static) {
+        if ($value instanceof static) {
             if ($value->isNull()) {
                 $this->datetime = null;
                 return;
@@ -838,10 +835,6 @@ class DateTimeType extends Type
     public function gt($value)
     {
         if (! $this->isNull() && isset($value)) {
-            if (! $value instanceof static) {
-                $value = new static($value);
-            }
-
             if ($this->diffInMicroseconds($value) < 0) {
                 return true;
             }
@@ -859,10 +852,6 @@ class DateTimeType extends Type
     public function gte($value)
     {
         if (! $this->isNull() && isset($value)) {
-            if (! $value instanceof static) {
-                $value = new static($value);
-            }
-
             if ($this->diffInMicroseconds($value) <= 0) {
                 return true;
             }
@@ -882,10 +871,6 @@ class DateTimeType extends Type
     public function lt($value)
     {
         if (! $this->isNull() && isset($value)) {
-            if (! $value instanceof static) {
-                $value = new static($value);
-            }
-
             if ($this->diffInMicroseconds($value) > 0) {
                 return true;
             }
@@ -903,10 +888,6 @@ class DateTimeType extends Type
     public function lte($value)
     {
         if (! $this->isNull() && isset($value)) {
-            if (! $value instanceof static) {
-                $value = new static($value);
-            }
-
             if ($this->diffInMicroseconds($value) >= 0) {
                 return true;
             }
