@@ -31,6 +31,7 @@ class TypeTest extends PHPUnit_Framework_TestCase
      * @covers       ::attach
      * @covers       ::detach
      * @covers       ::notify
+     * @covers       ::__clone
      */
     public function observer($instance, array $data)
     {
@@ -57,6 +58,11 @@ class TypeTest extends PHPUnit_Framework_TestCase
         // detach and change again without the observers
         $instance->detach($observer);
         $instance->set($data[0]);
+
+        // detach observers
+        $clone = clone $instance;
+        $clone->set($data[0]);
+        $clone->set($data[1]);
     }
 
     public function instanceProvider()

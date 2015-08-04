@@ -130,4 +130,12 @@ abstract class Type implements SplSubject
             }
         }
     }
+
+    /**
+     * Delete the observers of the clone
+     */
+    public function __clone()
+    {
+        $this->observers = null;
+    }
 }
