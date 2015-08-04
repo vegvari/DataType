@@ -82,7 +82,14 @@ class DateTimeType extends Type
                 return;
         }
 
-        if ($value instanceof static) {
+        if ($value === 'now') {
+            $microsecond = (int) round((microtime(true) - time()) * 1000000);
+            if ($microsecond >= 1000000) {
+                $microsecond -= 1000000;
+            }
+            $this->datetime = DateTime::createFromFormat('Y-m-d H:i:s.u', date('Y-m-d H:i:s.' . sprintf('%06d', round((microtime(true) - time()) * 1000000))), $this->timezone);
+            $this->datetime->microsecond = $microsecond;
+        } elseif ($value instanceof static) {
             if ($value->isNull()) {
                 $this->datetime = null;
                 return;
