@@ -7,6 +7,11 @@ use \Data\Type\Exceptions\InvalidFloatException;
 class FloatType extends Number
 {
     /**
+     * @var string
+     */
+    const TYPE = 'float';
+
+    /**
      * Check the value
      *
      * @param  mixed      $value

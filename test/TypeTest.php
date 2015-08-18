@@ -13,6 +13,15 @@ use Data\Type\DateTimeType;
  */
 class TypeTest extends PHPUnit_Framework_TestCase
 {
+    public function testType()
+    {
+        $this->assertSame('int', IntType::TYPE);
+        $this->assertSame('bool', BoolType::TYPE);
+        $this->assertSame('float', FloatType::TYPE);
+        $this->assertSame('string', StringType::TYPE);
+        $this->assertSame('string', DateTimeType::TYPE);
+    }
+
     /**
      * @dataProvider instanceProvider
      * @covers       ::isNull

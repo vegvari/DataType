@@ -10,6 +10,11 @@ class StringType extends Type
     /**
      * @var string
      */
+    const TYPE = 'string';
+
+    /**
+     * @var string
+     */
     protected $encoding;
 
     /**

@@ -7,6 +7,11 @@ use Data\Type\Exceptions\InvalidBoolException;
 class BoolType extends Type
 {
     /**
+     * @var string
+     */
+    const TYPE = 'bool';
+
+    /**
      * Check the value
      *
      * @param  mixed     $value

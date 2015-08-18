@@ -21,6 +21,11 @@ use Data\Type\Exceptions\InvalidTimeZoneException;
 class DateTimeType extends Type
 {
     /**
+     * @var string
+     */
+    const TYPE = 'string';
+
+    /**
      * @var DateTimeZone
      */
     protected $timezone;

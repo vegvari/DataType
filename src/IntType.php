@@ -9,6 +9,11 @@ use \Data\Type\Exceptions\InvalidFloatException;
 class IntType extends Number
 {
     /**
+     * @var string
+     */
+    const TYPE = 'int';
+
+    /**
      * Check the value
      *
      * @param  mixed    $value
